@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeoLudo — The World Race</title>
+  <meta name="description" content="A geography board game inspired by Ludo. Roll the dice, find the country on the map, race to the finish.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <!-- ============ SETUP SCREEN ============ -->
+  <section id="setup" class="screen active">
+    <div class="setup-card">
+      <div class="logo">
+        <div class="logo-globe" aria-hidden="true">🌍</div>
+        <h1>Geo<span>Ludo</span></h1>
+        <p class="tagline">Roll the dice · Find the country · Race around the world</p>
+      </div>
+
+      <div class="setup-section">
+        <h2>Players</h2>
+        <div class="count-picker" role="radiogroup" aria-label="Number of players">
+          <button type="button" data-count="2" class="count-btn">2</button>
+          <button type="button" data-count="3" class="count-btn">3</button>
+          <button type="button" data-count="4" class="count-btn active">4</button>
+        </div>
+        <div id="player-inputs" class="player-inputs"></div>
+      </div>
+
+      <div class="setup-section">
+        <h2>Rules</h2>
+        <div class="difficulty-legend">
+          <div class="dl easy"><b>⚀ ⚁</b><span>Easy</span></div>
+          <div class="dl medium"><b>⚂ ⚃</b><span>Medium</span></div>
+          <div class="dl hard"><b>⚄ ⚅</b><span>Hard</span></div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span>Correct answer on a <b>6</b> earns another turn</label>
+        <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span>Exact roll needed to reach the finish</label>
+        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span>30-second answer timer</label>
+      </div>
+
+      <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
+      <details class="howto">
+        <summary>How to play</summary>
+        <ul>
+          <li>Players take turns rolling the dice. The number decides the difficulty of the question.</li>
+          <li>The board rolls away and a world map appears. Click the country you are asked about — by its <b>name</b>, <b>capital city</b> or <b>flag</b>. Scroll or pinch to zoom, drag to pan.</li>
+          <li>Correct answer → move forward by the number rolled. Wrong answer → stay put.</li>
+          <li>Land on a rival's square and send them back home!</li>
+          <li>The first to reach the centre of the board wins.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <section id="game" class="screen">
+    <header class="topbar">
+      <div class="brand">🌍 Geo<span>Ludo</span></div>
+      <div id="turn-pill" class="turn-pill"><span class="dot"></span><span id="turn-name">—</span><span class="turn-label">'s turn</span></div>
+      <div class="top-actions">
+        <button id="sound-btn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
+        <button id="menu-btn" class="icon-btn" title="New game" aria-label="New game">⟲</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <div class="stage" id="stage">
+        <div class="prism" id="prism">
+          <!-- Front face: board -->
+          <div class="face face-board">
+            <div class="board-wrap" id="board-wrap">
+              <svg id="board" viewBox="0 0 600 600" aria-label="Game board"></svg>
+            </div>
+          </div>
+          <!-- Bottom face: map -->
+          <div class="face face-map">
+            <div class="quiz-card" id="quiz-card">
+              <div class="quiz-meta">
+                <span id="q-diff" class="chip">Easy</span>
+                <span id="q-player" class="chip player-chip"></span>
+                <span id="q-steps" class="chip ghost"></span>
+              </div>
+              <div class="quiz-main">
+                <img id="q-flag" class="q-flag" alt="Flag to identify" hidden>
+                <div class="q-text">
+                  <div id="q-kind" class="q-kind">Find the country</div>
+                  <div id="q-prompt" class="q-prompt">France</div>
+                </div>
+                <div class="timer" id="timer" hidden>
+                  <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="t-bg"/><circle cx="22" cy="22" r="19" class="t-fg" id="timer-ring"/></svg>
+                  <span id="timer-num">30</span>
+                </div>
+              </div>
+            </div>
+            <div class="map-wrap" id="map-wrap">
+              <svg id="map" aria-label="World map"></svg>
+              <div class="map-controls">
+                <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+                <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+                <button type="button" data-zoom="reset" aria-label="Reset view">⤢</button>
+              </div>
+              <div class="map-hint">Scroll / pinch to zoom · drag to pan · tiny nations are marked with dots</div>
+              <div class="result" id="result" hidden>
+                <div class="result-icon" id="result-icon">✓</div>
+                <div class="result-text">
+                  <div id="result-title" class="result-title">Correct!</div>
+                  <div id="result-sub" class="result-sub"></div>
+                </div>
+                <button id="continue-btn" class="btn-primary">Continue ⏎</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="panel dice-panel">
+          <div class="dice-scene" id="dice-scene" title="Roll the dice">
+            <div class="dice" id="dice">
+              <div class="df f1"><i></i></div>
+              <div class="df f2"><i></i><i></i></div>
+              <div class="df f3"><i></i><i></i><i></i></div>
+              <div class="df f4"><i></i><i></i><i></i><i></i></div>
+              <div class="df f5"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="df f6"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <button id="roll-btn" class="btn-primary roll-btn">Roll the dice <kbd>Space</kbd></button>
+          <div id="status" class="status">Roll to get a question!</div>
+        </div>
+
+        <div class="panel">
+          <h3>Standings</h3>
+          <ol id="standings" class="standings"></ol>
+        </div>
+
+        <div class="panel log-panel">
+          <h3>Journey log</h3>
+          <ul id="log" class="log"></ul>
+        </div>
+      </aside>
+    </main>
+  </section>
+
+  <!-- ============ WIN OVERLAY ============ -->
+  <div id="win" class="overlay" hidden>
+    <div class="win-card">
+      <div class="trophy">🏆</div>
+      <h2><span id="win-name">Player</span> conquers the world!</h2>
+      <p id="win-stats"></p>
+      <ol id="win-table" class="win-table"></ol>
+      <div class="win-actions">
+        <button id="again-btn" class="btn-primary">Play again</button>
+        <button id="setup-btn" class="btn-ghost">Change players</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="data/world.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
