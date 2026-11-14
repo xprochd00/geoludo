@@ -37,7 +37,12 @@
     [13, 12, 11, 10, 9].map((r) => [7, r]),
   ];
   const YARD = [[120, 120], [480, 120], [480, 480], [120, 480]];
-  const FINISH = [[262, 300], [300, 262], [338, 300], [300, 338]];
+  const FINISH = [[264, 300], [300, 264], [336, 300], [300, 336]];
+  // Yard spots relative to the yard centre, for 1-4 pieces.
+  const SLOTS = {
+    1: [[0, 0]], 2: [[-30, 0], [30, 0]], 3: [[-30, -26], [30, -26], [0, 28]],
+    4: [[-30, -30], [30, -30], [-30, 30], [30, 30]],
+  };
 
   const TRACK_LEN = 51; // squares travelled on the loop
   const FINISH_POS = TRACK_LEN + 5 + 1; // 57
@@ -113,14 +118,13 @@
       el('rect', { x: yx + 4, y: yy + 4, width: 6 * C - 8, height: 6 * C - 8, rx: 22, fill: 'url(#dots)' }, g);
       el('rect', { x: yx + 34, y: yy + 34, width: 6 * C - 68, height: 6 * C - 68, rx: 20, fill: '#fffdf8', stroke: 'rgba(0,0,0,.08)' }, g);
       const [cx, cy] = YARD[seat];
-      el('circle', { cx, cy, r: 46, fill: col.light, opacity: 0.55 }, g);
-      el('circle', { cx, cy, r: 34, fill: 'none', stroke: col.hex, 'stroke-width': 3, 'stroke-dasharray': '6 6', opacity: 0.8 }, g);
-      // little compass ticks
-      for (let i = 0; i < 4; i++) {
-        const a = (i * Math.PI) / 2;
-        el('circle', { cx: cx + Math.cos(a) * 56, cy: cy + Math.sin(a) * 56, r: 4, fill: col.hex, opacity: 0.6 }, g);
-      }
+      el('circle', { cx, cy, r: 62, fill: col.light, opacity: 0.4 }, g);
       const player = players.find((p) => p.seat === seat);
+      const n = player ? player.pieces.length : 4;
+      for (let i = 0; i < n; i++) {
+        const [dx, dy] = SLOTS[n][i];
+        el('circle', { cx: cx + dx, cy: cy + dy + 6, r: 19, fill: '#fff', stroke: col.hex, 'stroke-width': 2.5, 'stroke-dasharray': '5 4', opacity: 0.9 }, g);
+      }
       const label = el('text', {
         x: cx, y: yy + (seat >= 2 ? 6 * C - 12 : 26), 'text-anchor': 'middle', 'font-family': 'Fredoka, sans-serif',
         'font-size': 17, 'font-weight': 600, fill: '#fff',
@@ -177,17 +181,22 @@
     pieceLayer = el('g', {}, svg);
     pieces.clear();
     players.forEach((p) => {
-      const g = makePiece(p);
-      pieceLayer.appendChild(g);
-      pieces.set(p.seat, g);
-      place(p.seat, p.pos, false);
+      p.pieces.forEach((pc, i) => {
+        const g = makePiece(p.seat, i);
+        pieceLayer.appendChild(g);
+        pieces.set(key(p.seat, i), g);
+      });
     });
+    layout(players, false);
   }
 
-  function makePiece(p) {
-    const col = COLORS[p.seat];
-    const g = el('g', { class: 'piece', 'data-seat': p.seat });
+  const key = (seat, idx) => seat * 10 + idx;
+
+  function makePiece(seat, idx) {
+    const col = COLORS[seat];
+    const g = el('g', { class: 'piece', 'data-seat': seat, 'data-idx': idx });
     el('circle', { class: 'halo', cx: 0, cy: 8, r: 16, fill: 'none', stroke: col.hex, 'stroke-width': 3 }, g);
+    el('circle', { class: 'ring', cx: 0, cy: 0, r: 20, fill: 'rgba(255,209,102,.28)', stroke: '#ffb703', 'stroke-width': 3.5 }, g);
     el('ellipse', { cx: 0, cy: 10, rx: 13, ry: 5, fill: 'rgba(0,0,0,.28)' }, g);
     const bob = el('g', { class: 'bob' }, g);
     const body = el('g', { filter: 'url(#pshadow)' }, bob);
@@ -196,65 +205,153 @@
     el('ellipse', { cx: 0, cy: -9, rx: 7, ry: 2.5, fill: col.dark }, body);
     el('circle', { cx: 0, cy: -16, r: 8.5, fill: `url(#pg-${col.key})`, stroke: col.dark, 'stroke-width': 0.8 }, body);
     el('circle', { cx: -2.8, cy: -19, r: 2.4, fill: '#fff', opacity: 0.85 }, body);
+    const num = el('text', { class: 'pnum', x: 0, y: 4, 'text-anchor': 'middle', 'font-size': 9, 'font-weight': 700, 'font-family': 'Inter, sans-serif', fill: '#fff' }, body);
+    num.textContent = idx + 1;
+    // generous invisible hit area
+    el('circle', { class: 'hit', cx: 0, cy: -2, r: 20, fill: 'transparent' }, g);
     return g;
   }
 
-  function place(seat, pos, animate = true) {
-    const g = pieces.get(seat);
-    if (!g) return;
-    const [x, y] = coords(seat, pos);
-    if (!animate) {
-      g.style.transition = 'none';
-      g.style.transform = `translate(${x}px, ${y - 4}px)`;
-      void g.getBoundingClientRect();
-      g.style.transition = '';
-    } else {
-      g.style.transform = `translate(${x}px, ${y - 4}px)`;
+  /** Board coordinates of one piece, ignoring stacking. */
+  function spot(seat, idx, pos, count) {
+    if (pos <= 0) {
+      const [cx, cy] = YARD[seat];
+      const [dx, dy] = SLOTS[count][idx];
+      return [cx + dx, cy + dy];
     }
-    // Keep pieces lower on the board drawn on top.
-    const sorted = [...pieces.entries()].sort((a, b) => {
-      const ya = parseFloat(a[1].style.transform.split(',')[1]) || 0;
-      const yb = parseFloat(b[1].style.transform.split(',')[1]) || 0;
-      return ya - yb;
-    });
-    sorted.forEach(([, node]) => pieceLayer.appendChild(node));
+    return coords(seat, pos);
   }
 
-  async function walk(seat, from, to) {
-    const g = pieces.get(seat);
+  const STACK = {
+    1: [[0, 0]], 2: [[-8, 0], [8, 0]], 3: [[-8, 5], [8, 5], [0, -7]], 4: [[-8, -6], [8, -6], [-8, 6], [8, 6]],
+  };
+
+  function setXY(g, x, y, s, animate) {
+    const t = `translate(${x}px, ${y - 4}px) scale(${s})`;
+    if (!animate) {
+      g.style.transition = 'none';
+      g.style.transform = t;
+      void g.getBoundingClientRect();
+      g.style.transition = '';
+    } else g.style.transform = t;
+    g.dataset.y = y;
+  }
+
+  /** Position every piece, spreading out pieces that share a square. */
+  function layout(players, animate = true) {
+    const groups = new Map();
+    players.forEach((p) => p.pieces.forEach((pc, i) => {
+      const [x, y] = spot(p.seat, i, pc.pos, p.pieces.length);
+      const k = pc.pos >= FINISH_POS ? 'fin' + p.seat : pc.pos <= 0 ? `y${p.seat}-${i}` : `${x},${y}`;
+      if (!groups.has(k)) groups.set(k, { x, y, list: [] });
+      groups.get(k).list.push(key(p.seat, i));
+    }));
+    groups.forEach(({ x, y, list }) => {
+      const n = Math.min(list.length, 4);
+      const offs = STACK[n] || STACK[4];
+      const s = n === 1 ? 1 : n === 2 ? 0.82 : 0.7;
+      list.forEach((k, j) => {
+        const [dx, dy] = offs[j % offs.length];
+        setXY(pieces.get(k), x + dx, y + dy, s, animate);
+      });
+    });
+    restack();
+  }
+
+  // Keep pieces lower on the board drawn on top.
+  function restack() {
+    [...pieces.values()].sort((a, b) => (+a.dataset.y || 0) - (+b.dataset.y || 0)).forEach((g) => pieceLayer.appendChild(g));
+  }
+
+  async function walk(seat, idx, from, to, players) {
+    const g = pieces.get(key(seat, idx));
+    g.classList.add('moving');
+    pieceLayer.appendChild(g);
     for (let p = from + 1; p <= to; p++) {
       g.classList.remove('hop');
       void g.getBoundingClientRect();
       g.classList.add('hop');
-      place(seat, p);
+      const [x, y] = coords(seat, p);
+      setXY(g, x, y, 1, true);
       Sound.step();
       await sleep(260);
     }
-    g.classList.remove('hop');
+    g.classList.remove('hop', 'moving');
+    layout(players);
   }
 
-  async function sendHome(seat) {
-    const g = pieces.get(seat);
+  async function sendHome(seat, idx, players) {
+    const g = pieces.get(key(seat, idx));
     g.classList.add('captured');
     Sound.capture();
     await sleep(400);
     g.classList.add('flying');
-    place(seat, 0);
+    layout(players);
     await sleep(850);
     g.classList.remove('flying', 'captured');
   }
 
-  function setActive(seat) {
-    pieces.forEach((g, s) => g.classList.toggle('active', s === seat));
+  /* ---------- Selection ---------- */
+  let selectHandler = null;
+  let selectable = [];
+
+  function onPieceActivate(e) {
+    const g = e.target.closest && e.target.closest('.piece.selectable');
+    if (!g || !selectHandler) return;
+    const choice = selectable.find((o) => o.seat === +g.dataset.seat && o.idx === +g.dataset.idx);
+    if (choice) { e.preventDefault(); selectHandler(choice); }
   }
 
-  /** Show a pulsing marker at the square a piece would land on. */
+  /** Make the given pieces glow and clickable. options: [{seat, idx, target, label}] */
+  function setSelectable(options, handler) {
+    selectable = options || [];
+    selectHandler = handler || null;
+    pieces.forEach((g) => {
+      g.classList.remove('selectable');
+      g.removeAttribute('tabindex');
+      g.removeAttribute('role');
+      g.removeAttribute('aria-label');
+    });
+    showTarget(null);
+    selectable.forEach((o) => {
+      const g = pieces.get(key(o.seat, o.idx));
+      g.classList.add('selectable');
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', o.label);
+      pieceLayer.appendChild(g);
+    });
+  }
+
+  function initEvents() {
+    svg.addEventListener('click', onPieceActivate);
+    svg.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') onPieceActivate(e); });
+    const preview = (e) => {
+      const g = e.target.closest && e.target.closest('.piece.selectable');
+      const o = g && selectable.find((s) => s.seat === +g.dataset.seat && s.idx === +g.dataset.idx);
+      showTarget(o ? o.seat : null, o ? o.target : null);
+    };
+    svg.addEventListener('pointerover', preview);
+    svg.addEventListener('focusin', preview);
+    svg.addEventListener('pointerleave', () => showTarget(null));
+  }
+
+  /** Pulsing marker at the square a piece would land on. */
   function showTarget(seat, pos) {
+    if (!highlightLayer) return;
     highlightLayer.innerHTML = '';
-    if (pos == null) return;
+    if (seat == null || pos == null) return;
     const [x, y] = coords(seat, pos);
     el('circle', { cx: x, cy: y, r: 17, fill: 'none', stroke: COLORS[seat].hex, 'stroke-width': 4, class: 'cell-target', 'stroke-dasharray': '5 4' }, highlightLayer);
   }
 
-  window.Board = { COLORS, TRACK_LEN, FINISH_POS, render, place, walk, sendHome, setActive, showTarget, trackIndex };
+  let eventsReady = false;
+  function renderBoard(players) {
+    render(players);
+    if (!eventsReady) { initEvents(); eventsReady = true; }
+  }
+
+  window.Board = {
+    COLORS, TRACK_LEN, FINISH_POS, render: renderBoard, layout, walk, sendHome, setSelectable, showTarget, trackIndex,
+  };
 })();

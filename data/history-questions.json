@@ -1,0 +1,2420 @@
+[
+  {
+    "id": "Q002",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country did Russia invade in February 2022?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "Q003",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country did the Berlin Wall stand?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q004",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "In which country is the Kremlin located?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q005",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country did Germany invade on 1 September 1939, starting World War II?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q006",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country attacked the US base at Pearl Harbor in 1941?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q007",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country voted in a 2016 referendum to leave the European Union (Brexit)?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q008",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country has had Donald Trump as president since January 2025?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q009",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Xi Jinping is the president of which country?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q010",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country did the French Revolution break out in 1789?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q011",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country did the October Revolution take place in 1917?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q012",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country are Hiroshima and Nagasaki, the cities hit by atomic bombs?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q013",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country is the birthplace of ancient democracy and the Olympic Games?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q014",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the heart of the Roman Empire, with Rome as its capital?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q015",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country does the Crimean peninsula belong to under international law, despite its 2014 annexation by Russia?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q016",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was led by Mao Zedong from 1949 to 1976?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q017",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country did Fidel Castro lead after the 1959 revolution?",
+    "answer": {
+      "iso2": "CU",
+      "name": "Cuba"
+    }
+  },
+  {
+    "id": "Q018",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country did Mahatma Gandhi lead to independence from Britain?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "Q019",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Vladimir Putin is the president of which country?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q020",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country is ruled by Kim Jong-un?",
+    "answer": {
+      "iso2": "KP",
+      "name": "North Korea"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q021",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country did Napoleon Bonaparte rule as emperor?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q022",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country did the pharaohs rule and the Giza pyramids stand?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q023",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country dropped an atomic bomb on Hiroshima in 1945?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q024",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was led by Adolf Hitler from 1933 to 1945?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q027",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country was the target of the terrorist attacks of 11 September 2001?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q028",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the centre of the largest colonial empire of the 19th century, ruled from London?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q029",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Volodymyr Zelensky is the president of which country?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q032",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the cradle of the Renaissance (Florence, Leonardo, Michelangelo)?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q066",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country did the civil war between North and South break out in 1861?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q201",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country does King Charles III reign over as monarch, with his seat in London?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q202",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Emmanuel Macron is the president of which country?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q203",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country built the Great Wall to defend against northern invaders?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q204",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country put the first man on the Moon in 1969?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q205",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country declared independence on 4 July 1776?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q206",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was divided into East and West after World War II?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q207",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was led by Winston Churchill as prime minister during most of World War II?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q208",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country is the largest in the world by area?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q209",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country has the largest population in the world since 2023?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "Q210",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country is known as the 'Land of the Rising Sun'?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q211",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was ruled by Benito Mussolini, the founder of fascism?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q212",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country is home to the Acropolis and the Parthenon?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q025",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which present-day country is the main legal successor of the USSR?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q026",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was created together with Slovakia when Czechoslovakia split on 1 January 1993?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q030",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country financed Christopher Columbus's 1492 voyage?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q031",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country launched the first artificial satellite, Sputnik, in 1957?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q033",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which modern country is the successor state of the Ottoman Empire?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q034",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Recep Tayyip Erdoğan is the president of which country?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q035",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Narendra Modi is the prime minister of which country?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q036",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Giorgia Meloni is the prime minister of which country?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q037",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did the 1979 Islamic Revolution led by Ayatollah Khomeini take place?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    }
+  },
+  {
+    "id": "Q038",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was ruled under apartheid and later led by Nelson Mandela?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    }
+  },
+  {
+    "id": "Q039",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was ruled by Saddam Hussein until the 2003 invasion?",
+    "answer": {
+      "iso2": "IQ",
+      "name": "Iraq"
+    }
+  },
+  {
+    "id": "Q040",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was the centre of the 1962 missile crisis between the USA and the USSR?",
+    "answer": {
+      "iso2": "CU",
+      "name": "Cuba"
+    }
+  },
+  {
+    "id": "Q041",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which present-day country did the 1986 Chernobyl nuclear disaster happen?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "Q042",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was split into a communist north and a pro-Western south and fought a war with the USA from 1955 to 1975?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    }
+  },
+  {
+    "id": "Q044",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country declared independence in 1948 with David Ben-Gurion as its first prime minister?",
+    "answer": {
+      "iso2": "IL",
+      "name": "Israel"
+    }
+  },
+  {
+    "id": "Q045",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country regained Hong Kong in 1997 after 156 years of British rule?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q046",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was ruled by General Franco after its 1936–1939 civil war?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q047",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "In which country are the headquarters of the European Commission and NATO?",
+    "answer": {
+      "iso2": "BE",
+      "name": "Belgium"
+    }
+  },
+  {
+    "id": "Q048",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country were the first modern Olympic Games held in 1896?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q049",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did the Solidarity movement led by Lech Wałęsa arise in the 1980s?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q051",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "In which country are the cities of Mecca and Medina?",
+    "answer": {
+      "iso2": "SA",
+      "name": "Saudi Arabia"
+    }
+  },
+  {
+    "id": "Q052",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did the 1989 Tiananmen Square protests and massacre take place?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q053",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country funded the Marshall Plan to rebuild postwar Europe?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q054",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was led by Margaret Thatcher as prime minister from 1979 to 1990?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q060",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did Martin Luther start the Reformation in 1517?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q061",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was led by Mustafa Kemal Atatürk?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q062",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country is the Auschwitz concentration camp located?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q063",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country was the Battle of Stalingrad fought in 1942–1943?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q064",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country did Napoleon invade in 1812, suffering a catastrophic defeat?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q065",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country fell to the Taliban in 2021 after US troops withdrew?",
+    "answer": {
+      "iso2": "AF",
+      "name": "Afghanistan"
+    }
+  },
+  {
+    "id": "Q079",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was annexed by Nazi Germany in 1938 (the Anschluss)?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "Q081",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was ruled by Colonel Muammar Gaddafi until 2011?",
+    "answer": {
+      "iso2": "LY",
+      "name": "Libya"
+    }
+  },
+  {
+    "id": "Q088",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did the civil war break out in 1936, with Guernica bombed?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q092",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country has been ruled by Alexander Lukashenko since 1994?",
+    "answer": {
+      "iso2": "BY",
+      "name": "Belarus"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q094",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country is associated with drug lord Pablo Escobar and the FARC rebels?",
+    "answer": {
+      "iso2": "CO",
+      "name": "Colombia"
+    }
+  },
+  {
+    "id": "Q101",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country was the Battle of Marathon fought in 490 BC?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q104",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country saw the disputed 2017 referendum on Catalan independence?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q105",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country is the homeland of Genghis Khan and the Mongol Empire?",
+    "answer": {
+      "iso2": "MN",
+      "name": "Mongolia"
+    }
+  },
+  {
+    "id": "Q107",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which island state with capital Taipei is at the centre of a dispute between Beijing and Washington?",
+    "answer": {
+      "iso2": "TW",
+      "name": "Taiwan"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q126",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country was the Battle of Waterloo fought in 1815?",
+    "answer": {
+      "iso2": "BE",
+      "name": "Belgium"
+    }
+  },
+  {
+    "id": "Q001",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country's prime minister is Robert Fico?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q043",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did the USSR invade in December 1979?",
+    "answer": {
+      "iso2": "AF",
+      "name": "Afghanistan"
+    }
+  },
+  {
+    "id": "Q050",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which is the largest South American country, a Portuguese colony until 1822?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "Q058",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the reformer Jan Hus live and get burned at the stake?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q059",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country, together with Slovakia, experienced the 1989 Velvet Revolution led by Václav Havel?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q068",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Austria-Hungary attack in July 1914, starting World War I?",
+    "answer": {
+      "iso2": "RS",
+      "name": "Serbia"
+    }
+  },
+  {
+    "id": "Q069",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Russia invade in 2008?",
+    "answer": {
+      "iso2": "GE",
+      "name": "Georgia"
+    }
+  },
+  {
+    "id": "Q070",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was Archduke Franz Ferdinand assassinated in 1914?",
+    "answer": {
+      "iso2": "BA",
+      "name": "Bosnia and Herzegovina"
+    }
+  },
+  {
+    "id": "Q071",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country is associated with the Khmer Rouge movement?",
+    "answer": {
+      "iso2": "KH",
+      "name": "Cambodia"
+    }
+  },
+  {
+    "id": "Q072",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was created in 1947 by splitting off from British India as a homeland for Muslims?",
+    "answer": {
+      "iso2": "PK",
+      "name": "Pakistan"
+    }
+  },
+  {
+    "id": "Q073",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the 1994 genocide against the Tutsi take place?",
+    "answer": {
+      "iso2": "RW",
+      "name": "Rwanda"
+    }
+  },
+  {
+    "id": "Q074",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Iraq invade in August 1990, triggering the Gulf War?",
+    "answer": {
+      "iso2": "KW",
+      "name": "Kuwait"
+    }
+  },
+  {
+    "id": "Q075",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which Latin American country invaded the Falkland Islands in 1982?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "Q077",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Javier Milei is the president of which country?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q078",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which was the largest of the ten countries that joined the EU in 2004?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q080",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country was ruled by the Assad family until the regime fell in December 2024?",
+    "answer": {
+      "iso2": "SY",
+      "name": "Syria"
+    }
+  },
+  {
+    "id": "Q082",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was at the centre of the 1956 Suez Crisis after Nasser nationalised the canal?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q083",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country suffered the Great Famine of 1845–1852 and mass emigration to the USA?",
+    "answer": {
+      "iso2": "IE",
+      "name": "Ireland"
+    }
+  },
+  {
+    "id": "Q086",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the Cultural Revolution take place in 1966–1976?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q087",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which former Yugoslav country joined the EU in 2013 as its 28th member?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "Q089",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by Nicolae Ceaușescu until his fall in December 1989?",
+    "answer": {
+      "iso2": "RO",
+      "name": "Romania"
+    }
+  },
+  {
+    "id": "Q090",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did the USSR invade in 1956 to crush an anti-communist uprising?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
+    }
+  },
+  {
+    "id": "Q091",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country (then the Federal Republic of Yugoslavia) was bombed by NATO in 1999?",
+    "answer": {
+      "iso2": "RS",
+      "name": "Serbia"
+    }
+  },
+  {
+    "id": "Q093",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did General Pinochet overthrow Salvador Allende in 1973?",
+    "answer": {
+      "iso2": "CL",
+      "name": "Chile"
+    }
+  },
+  {
+    "id": "Q095",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did the USSR attack in November 1939 in the Winter War?",
+    "answer": {
+      "iso2": "FI",
+      "name": "Finland"
+    }
+  },
+  {
+    "id": "Q096",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country lost its Sudetenland to Germany under the 1938 Munich Agreement?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q097",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was partitioned between Russia, Austria and Prussia in 1772–1795?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q099",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was the cradle of ancient Babylon and Mesopotamia?",
+    "answer": {
+      "iso2": "IQ",
+      "name": "Iraq"
+    }
+  },
+  {
+    "id": "Q103",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country sent the 'Invincible Armada' that was defeated in 1588?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q109",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did the USSR and Warsaw Pact invade in August 1968 to end the Prague Spring?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q116",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country had a military coup in 2021 and the detention of Aung San Suu Kyi?",
+    "answer": {
+      "iso2": "MM",
+      "name": "Myanmar"
+    }
+  },
+  {
+    "id": "Q122",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the 1995 Srebrenica massacre take place?",
+    "answer": {
+      "iso2": "BA",
+      "name": "Bosnia and Herzegovina"
+    }
+  },
+  {
+    "id": "Q123",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country renamed itself North Macedonia in 2019?",
+    "answer": {
+      "iso2": "MK",
+      "name": "North Macedonia"
+    }
+  },
+  {
+    "id": "Q124",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was invaded by Germany in 1940 and led by the collaborator Vidkun Quisling?",
+    "answer": {
+      "iso2": "NO",
+      "name": "Norway"
+    }
+  },
+  {
+    "id": "Q134",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by Robert Mugabe from 1980 to 2017?",
+    "answer": {
+      "iso2": "ZW",
+      "name": "Zimbabwe"
+    }
+  },
+  {
+    "id": "Q137",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the 1975–1990 civil war take place and Hezbollah operates?",
+    "answer": {
+      "iso2": "LB",
+      "name": "Lebanon"
+    }
+  },
+  {
+    "id": "Q144",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country bought Alaska from Russia in 1867?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q145",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country joined NATO in March 2024 as its 32nd member?",
+    "answer": {
+      "iso2": "SE",
+      "name": "Sweden"
+    }
+  },
+  {
+    "id": "Q146",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country adopted the euro most recently, in January 2026?",
+    "answer": {
+      "iso2": "BG",
+      "name": "Bulgaria"
+    }
+  },
+  {
+    "id": "Q151",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the Battle of Verdun fought in 1916?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q056",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the Slovak National Uprising break out in August 1944?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    }
+  },
+  {
+    "id": "Q084",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "In which country does the International Court of Justice sit in The Hague?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    }
+  },
+  {
+    "id": "Q085",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1910–1920 revolution of Pancho Villa and Emiliano Zapata take place?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    }
+  },
+  {
+    "id": "Q098",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which present-day country was the cradle of Kievan Rus'?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "Q100",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was the core of the Persian Empire, with the city of Persepolis?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    }
+  },
+  {
+    "id": "Q102",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of Gettysburg fought in 1863?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q106",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought a war of independence against France in 1954–1962 (capital Algiers)?",
+    "answer": {
+      "iso2": "DZ",
+      "name": "Algeria"
+    }
+  },
+  {
+    "id": "Q108",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which African country was invaded by Mussolini's Italy in 1935?",
+    "answer": {
+      "iso2": "ET",
+      "name": "Ethiopia"
+    }
+  },
+  {
+    "id": "Q112",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "Which country is associated with Patrice Lumumba, first prime minister after independence in 1960?",
+    "answer": {
+      "iso2": "CD",
+      "name": "DR Congo"
+    }
+  },
+  {
+    "id": "Q113",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the Arab Spring begin in December 2010?",
+    "answer": {
+      "iso2": "TN",
+      "name": "Tunisia"
+    }
+  },
+  {
+    "id": "Q115",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country became the world's youngest state in 2011?",
+    "answer": {
+      "iso2": "SS",
+      "name": "South Sudan"
+    }
+  },
+  {
+    "id": "Q117",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country began the Meiji Restoration and modernisation in 1868?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q118",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which Baltic country was the first to declare independence from the USSR, in March 1990?",
+    "answer": {
+      "iso2": "LT",
+      "name": "Lithuania"
+    }
+  },
+  {
+    "id": "Q119",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "Which country contains the breakaway region of Transnistria?",
+    "answer": {
+      "iso2": "MD",
+      "name": "Moldova"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q120",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country retook Nagorno-Karabakh in September 2023?",
+    "answer": {
+      "iso2": "AZ",
+      "name": "Azerbaijan"
+    }
+  },
+  {
+    "id": "Q121",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought a war with Azerbaijan over Nagorno-Karabakh in 1988–1994?",
+    "answer": {
+      "iso2": "AM",
+      "name": "Armenia"
+    }
+  },
+  {
+    "id": "Q127",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of Austerlitz fought in 1805?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q129",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was saved from an Ottoman siege of its capital in 1683?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "Q130",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought Britain, France and the Ottoman Empire in the Crimean War (1853–1856)?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q131",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country defeated Russia in the Russo-Japanese War of 1904–1905?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q132",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of El Alamein fought in 1942?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q133",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1976 Soweto student uprising take place?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    }
+  },
+  {
+    "id": "Q135",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1993 Battle of Mogadishu ('Black Hawk Down') take place?",
+    "answer": {
+      "iso2": "SO",
+      "name": "Somalia"
+    }
+  },
+  {
+    "id": "Q136",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "Which country is in a long-running dispute with the Polisario Front over Western Sahara?",
+    "answer": {
+      "iso2": "MA",
+      "name": "Morocco"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q140",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of Dien Bien Phu fought in 1954?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    }
+  },
+  {
+    "id": "Q141",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which Southeast Asian country was never colonised by Europeans?",
+    "answer": {
+      "iso2": "TH",
+      "name": "Thailand"
+    }
+  },
+  {
+    "id": "Q142",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was the first in the world to give women the vote, in 1893?",
+    "answer": {
+      "iso2": "NZ",
+      "name": "New Zealand"
+    }
+  },
+  {
+    "id": "Q148",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country has the Althing, the world's oldest parliament (founded 930)?",
+    "answer": {
+      "iso2": "IS",
+      "name": "Iceland"
+    }
+  },
+  {
+    "id": "Q149",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country lost two thirds of its territory in the 1920 Treaty of Trianon?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
+    }
+  },
+  {
+    "id": "Q150",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1916 Easter Rising against British rule take place?",
+    "answer": {
+      "iso2": "IE",
+      "name": "Ireland"
+    }
+  },
+  {
+    "id": "Q152",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which modern country did ancient Carthage, Rome's rival, lie?",
+    "answer": {
+      "iso2": "TN",
+      "name": "Tunisia"
+    }
+  },
+  {
+    "id": "Q153",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country declared independence from Yugoslavia in 1991 and fought the Ten-Day War?",
+    "answer": {
+      "iso2": "SI",
+      "name": "Slovenia"
+    }
+  },
+  {
+    "id": "Q155",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country had the 1974 Carnation Revolution?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    }
+  },
+  {
+    "id": "Q168",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was created in 1965 after separating from Malaysia under Lee Kuan Yew?",
+    "answer": {
+      "iso2": "SG",
+      "name": "Singapore"
+    }
+  },
+  {
+    "id": "Q170",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country's territory includes Yalta, where the 1945 conference of the Big Three was held?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    },
+    "contested_territory": true
+  },
+  {
+    "id": "Q171",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "In which country are OPEC and the International Atomic Energy Agency headquartered?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "Q173",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of Grunwald fought in 1410?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q175",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of the Nations (Leipzig) fought in 1813?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q176",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Battle of Kursk fought in 1943?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q178",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was home to the Indus Valley Civilisation (Harappa, Mohenjo-daro)?",
+    "answer": {
+      "iso2": "PK",
+      "name": "Pakistan"
+    }
+  },
+  {
+    "id": "Q055",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by the wartime Slovak State of Jozef Tiso (1939–1945)?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    }
+  },
+  {
+    "id": "Q057",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was Milan Rastislav Štefánik, co-founder of Czechoslovakia, from?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    }
+  },
+  {
+    "id": "Q111",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was the last to leave the Soviet Union, in December 1991?",
+    "answer": {
+      "iso2": "KZ",
+      "name": "Kazakhstan"
+    }
+  },
+  {
+    "id": "Q114",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was occupied by Indonesia from 1975 to 1999 and became independent in 2002?",
+    "answer": {
+      "iso2": "TL",
+      "name": "East Timor"
+    }
+  },
+  {
+    "id": "Q128",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was the Battle of White Mountain fought in 1620?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q154",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by communist leader Todor Zhivkov until 1989?",
+    "answer": {
+      "iso2": "BG",
+      "name": "Bulgaria"
+    }
+  },
+  {
+    "id": "Q156",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by Alberto Fujimori and fought the Shining Path?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
+    "id": "Q157",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country became independent from Ethiopia in 1993 after a referendum?",
+    "answer": {
+      "iso2": "ER",
+      "name": "Eritrea"
+    }
+  },
+  {
+    "id": "Q158",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country became the first sub-Saharan colony to gain independence, in 1957, under Kwame Nkrumah?",
+    "answer": {
+      "iso2": "GH",
+      "name": "Ghana"
+    }
+  },
+  {
+    "id": "Q159",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country fought the 1967–1970 war over Biafra?",
+    "answer": {
+      "iso2": "NG",
+      "name": "Nigeria"
+    }
+  },
+  {
+    "id": "Q160",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which African country was never colonised and was founded by freed American slaves?",
+    "answer": {
+      "iso2": "LR",
+      "name": "Liberia"
+    }
+  },
+  {
+    "id": "Q161",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country suffered a civil war between the MPLA and UNITA after independence in 1975?",
+    "answer": {
+      "iso2": "AO",
+      "name": "Angola"
+    }
+  },
+  {
+    "id": "Q162",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which former German colony saw the genocide of the Herero and Nama peoples?",
+    "answer": {
+      "iso2": "NA",
+      "name": "Namibia"
+    }
+  },
+  {
+    "id": "Q163",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was home to Mansa Musa and the kingdom of Timbuktu?",
+    "answer": {
+      "iso2": "ML",
+      "name": "Mali"
+    }
+  },
+  {
+    "id": "Q164",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the 1980 Gwangju Uprising take place?",
+    "answer": {
+      "iso2": "KR",
+      "name": "South Korea"
+    }
+  },
+  {
+    "id": "Q165",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was the most heavily bombed per capita during the Vietnam War?",
+    "answer": {
+      "iso2": "LA",
+      "name": "Laos"
+    }
+  },
+  {
+    "id": "Q166",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the CIA and MI6 orchestrate the 1953 coup against Prime Minister Mosaddegh?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    }
+  },
+  {
+    "id": "Q167",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was the Buddha born, at Lumbini?",
+    "answer": {
+      "iso2": "NP",
+      "name": "Nepal"
+    }
+  },
+  {
+    "id": "Q169",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country had the Rose Revolution in 2003?",
+    "answer": {
+      "iso2": "GE",
+      "name": "Georgia"
+    }
+  },
+  {
+    "id": "Q172",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "In which country is the African Union headquartered (Addis Ababa)?",
+    "answer": {
+      "iso2": "ET",
+      "name": "Ethiopia"
+    }
+  },
+  {
+    "id": "Q174",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was the Battle of Mohács fought in 1526?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
+    }
+  },
+  {
+    "id": "Q177",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was the heart of the Hittite Empire, with the capital Hattusa?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q179",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was home to the Great Zimbabwe empire?",
+    "answer": {
+      "iso2": "ZW",
+      "name": "Zimbabwe"
+    }
+  },
+  {
+    "id": "Q187",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the 1978 Jonestown mass suicide take place?",
+    "answer": {
+      "iso2": "GY",
+      "name": "Guyana"
+    }
+  },
+  {
+    "id": "Q192",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country threw off French rule and abolished slavery under Toussaint Louverture?",
+    "answer": {
+      "iso2": "HT",
+      "name": "Haiti"
+    }
+  },
+  {
+    "id": "Q195",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was the Battle of Plassey fought in 1757?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "Q200",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "In which country is Interpol headquartered?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q213",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the Sandinistas overthrow the Somoza dictatorship in 1979?",
+    "answer": {
+      "iso2": "NI",
+      "name": "Nicaragua"
+    }
+  },
+  {
+    "id": "Q214",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country had the Cedar Revolution in 2005, after the assassination of Rafik Hariri?",
+    "answer": {
+      "iso2": "LB",
+      "name": "Lebanon"
+    }
+  },
+  {
+    "id": "Q215",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country had the 2007 Saffron Revolution led by Buddhist monks?",
+    "answer": {
+      "iso2": "MM",
+      "name": "Myanmar"
+    }
+  },
+  {
+    "id": "Q216",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by the communist dictator Enver Hoxha?",
+    "answer": {
+      "iso2": "AL",
+      "name": "Albania"
+    }
+  },
+  {
+    "id": "Q217",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country's city of Vukovar was besieged and destroyed in 1991?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "Q218",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country fought the 1879–1883 War of the Pacific and took Bolivia's coastline?",
+    "answer": {
+      "iso2": "CL",
+      "name": "Chile"
+    }
+  },
+  {
+    "id": "Q219",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which was the first Arab country to sign a peace treaty with Israel, in 1979?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q220",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the Zapatista uprising begin in Chiapas in 1994?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    }
+  },
+  {
+    "id": "Q221",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by a military junta in 1976–1983 during the 'Dirty War'?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "Q222",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which modern country was home to the ancient Kingdom of Kush (Nubia)?",
+    "answer": {
+      "iso2": "SD",
+      "name": "Sudan"
+    }
+  },
+  {
+    "id": "Q223",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country had Jomo Kenyatta as its first president after independence?",
+    "answer": {
+      "iso2": "KE",
+      "name": "Kenya"
+    }
+  },
+  {
+    "id": "Q224",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by Idi Amin from 1971 to 1979?",
+    "answer": {
+      "iso2": "UG",
+      "name": "Uganda"
+    }
+  },
+  {
+    "id": "Q225",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did Marshal Mannerheim lead the Whites in the 1918 civil war?",
+    "answer": {
+      "iso2": "FI",
+      "name": "Finland"
+    }
+  },
+  {
+    "id": "Q180",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which Central Asian country suffered a civil war in 1992–1997?",
+    "answer": {
+      "iso2": "TJ",
+      "name": "Tajikistan"
+    }
+  },
+  {
+    "id": "Q181",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country had the Tulip Revolution in 2005?",
+    "answer": {
+      "iso2": "KG",
+      "name": "Kyrgyzstan"
+    }
+  },
+  {
+    "id": "Q182",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country, led by Islam Karimov, saw the 2005 Andijan massacre?",
+    "answer": {
+      "iso2": "UZ",
+      "name": "Uzbekistan"
+    }
+  },
+  {
+    "id": "Q183",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Saparmurat Niyazov, known as Turkmenbashi?",
+    "answer": {
+      "iso2": "TM",
+      "name": "Turkmenistan"
+    }
+  },
+  {
+    "id": "Q184",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country, led by Sékou Touré, was the only one to reject the French Community in 1958?",
+    "answer": {
+      "iso2": "GN",
+      "name": "Guinea"
+    }
+  },
+  {
+    "id": "Q185",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by revolutionary Thomas Sankara (killed in 1987)?",
+    "answer": {
+      "iso2": "BF",
+      "name": "Burkina Faso"
+    }
+  },
+  {
+    "id": "Q186",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was the 'Central African Empire' under Bokassa in 1976–1979?",
+    "answer": {
+      "iso2": "CF",
+      "name": "Central African Republic"
+    }
+  },
+  {
+    "id": "Q188",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by dictator Alfredo Stroessner from 1954 to 1989?",
+    "answer": {
+      "iso2": "PY",
+      "name": "Paraguay"
+    }
+  },
+  {
+    "id": "Q189",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country fought El Salvador in the 1969 'Football War'?",
+    "answer": {
+      "iso2": "HN",
+      "name": "Honduras"
+    }
+  },
+  {
+    "id": "Q190",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was Archbishop Óscar Romero assassinated in 1980?",
+    "answer": {
+      "iso2": "SV",
+      "name": "El Salvador"
+    }
+  },
+  {
+    "id": "Q191",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by dictator Rafael Trujillo from 1930 to 1961?",
+    "answer": {
+      "iso2": "DO",
+      "name": "Dominican Republic"
+    }
+  },
+  {
+    "id": "Q193",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which present-day country contains Fashoda (Kodok), the site of the 1898 Anglo-French crisis?",
+    "answer": {
+      "iso2": "SS",
+      "name": "South Sudan"
+    }
+  },
+  {
+    "id": "Q194",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Isandlwana fought in 1879?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    }
+  },
+  {
+    "id": "Q196",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Kenneth Kaunda from 1964?",
+    "answer": {
+      "iso2": "ZM",
+      "name": "Zambia"
+    }
+  },
+  {
+    "id": "Q197",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Félix Houphouët-Boigny from independence in 1960?",
+    "answer": {
+      "iso2": "CI",
+      "name": "Ivory Coast"
+    }
+  },
+  {
+    "id": "Q198",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was known as Bechuanaland before independence in 1966?",
+    "answer": {
+      "iso2": "BW",
+      "name": "Botswana"
+    }
+  },
+  {
+    "id": "Q199",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country left the Kalmar Union in 1523 under Gustav Vasa?",
+    "answer": {
+      "iso2": "SE",
+      "name": "Sweden"
+    }
+  },
+  {
+    "id": "Q226",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country lost the 1932–1935 Chaco War against Paraguay?",
+    "answer": {
+      "iso2": "BO",
+      "name": "Bolivia"
+    }
+  },
+  {
+    "id": "Q227",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by Hastings Banda from 1964 to 1994?",
+    "answer": {
+      "iso2": "MW",
+      "name": "Malawi"
+    }
+  },
+  {
+    "id": "Q228",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country did the Rif War of the 1920s against Spain and France take place?",
+    "answer": {
+      "iso2": "MA",
+      "name": "Morocco"
+    }
+  },
+  {
+    "id": "Q229",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country signed the 1977 Torrijos–Carter Treaties on its canal?",
+    "answer": {
+      "iso2": "PA",
+      "name": "Panama"
+    }
+  },
+  {
+    "id": "Q230",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country abolished its army after the 1948 civil war?",
+    "answer": {
+      "iso2": "CR",
+      "name": "Costa Rica"
+    }
+  },
+  {
+    "id": "Q231",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was home to the Tupamaros urban guerrillas in the 1960s and 70s?",
+    "answer": {
+      "iso2": "UY",
+      "name": "Uruguay"
+    }
+  },
+  {
+    "id": "Q232",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by Sultan Qaboos from 1970 to 2020?",
+    "answer": {
+      "iso2": "OM",
+      "name": "Oman"
+    }
+  },
+  {
+    "id": "Q233",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was formed in 1964 by the union of Tanganyika and Zanzibar after the Zanzibar Revolution?",
+    "answer": {
+      "iso2": "TZ",
+      "name": "Tanzania"
+    }
+  },
+  {
+    "id": "Q234",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which modern country was the heartland of Tamerlane's empire, with the capital Samarkand?",
+    "answer": {
+      "iso2": "UZ",
+      "name": "Uzbekistan"
+    }
+  },
+  {
+    "id": "Q235",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by King Zog until Italy invaded in 1939?",
+    "answer": {
+      "iso2": "AL",
+      "name": "Albania"
+    }
+  },
+  {
+    "id": "Q236",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which modern country was the 1914 Battle of Tannenberg fought?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q237",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which modern country was the Battle of Manzikert fought in 1071?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q238",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the naval Battle of Navarino fought in 1827?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q239",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Sedan fought in 1870?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q240",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Aljubarrota fought in 1385?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    }
+  },
+  {
+    "id": "Q241",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which modern country was the Battle of Poltava fought in 1709?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "Q242",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Ayacucho fought in 1824, sealing Spanish defeat in South America?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
+    "id": "Q243",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Boyacá fought in 1819?",
+    "answer": {
+      "iso2": "CO",
+      "name": "Colombia"
+    }
+  },
+  {
+    "id": "Q244",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was the Battle of Las Navas de Tolosa fought in 1212?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q245",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which modern country was the Battle of Gaugamela fought in 331 BC?",
+    "answer": {
+      "iso2": "IQ",
+      "name": "Iraq"
+    }
+  },
+  {
+    "id": "Q246",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which modern country was the Battle of Kadesh fought around 1274 BC?",
+    "answer": {
+      "iso2": "SY",
+      "name": "Syria"
+    }
+  },
+  {
+    "id": "Q247",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country's Kingdom of Kandy was the last independent kingdom conquered by the British, in 1815?",
+    "answer": {
+      "iso2": "LK",
+      "name": "Sri Lanka"
+    }
+  },
+  {
+    "id": "Q248",
+    "difficulty": 6,
+    "category": "geopolitics",
+    "question": "Which country was created in 1971 as a federation of emirates under Sheikh Zayed?",
+    "answer": {
+      "iso2": "AE",
+      "name": "United Arab Emirates"
+    }
+  }
+]
