@@ -49,7 +49,7 @@ Every question is answered by clicking the country on the map.
 | Capital | fame + 1 |
 | Major city | fame + 1, + 2 or + 3 for the first, second or third city listed |
 
-All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: 184 famous non-capital cities in 103 countries, listed in the `CITIES` table near the top of `tools/build-data.js`. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
+All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: 216 famous non-capital cities in 102 countries, listed in the `CITIES` table near the top of `tools/build-data.js`. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
 
 **Controls:** <kbd>Space</kbd> rolls the die. <kbd>1</kbd>–<kbd>4</kbd> choose a piece. <kbd>Enter</kbd> continues after an answer. On the map you can scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots.
 
