@@ -37,40 +37,15 @@ const NO_CAPITAL = new Set(['ISR', 'PSE', 'BOL', 'SWZ']);
 // Also playable although world-countries does not flag them as independent.
 const EXTRA_PLAYABLE = new Set(['TWN', 'PSE', 'UNK']);
 
-// Well-known non-capital cities (most famous first).
-const CITIES = {
-  USA: ['New York', 'Los Angeles', 'Chicago'], CAN: ['Toronto', 'Montreal', 'Vancouver'], MEX: ['Guadalajara', 'Monterrey', 'Cancún'],
-  BRA: ['Rio de Janeiro', 'São Paulo', 'Salvador'], ARG: ['Córdoba', 'Rosario', 'Mendoza'], GBR: ['Manchester', 'Liverpool', 'Edinburgh'],
-  FRA: ['Marseille', 'Lyon', 'Nice'], DEU: ['Munich', 'Hamburg', 'Frankfurt'], ITA: ['Milan', 'Venice', 'Naples'],
-  ESP: ['Barcelona', 'Seville', 'Bilbao'], RUS: ['Saint Petersburg', 'Novosibirsk', 'Vladivostok'], CHN: ['Shanghai', 'Guangzhou', 'Shenzhen'],
-  JPN: ['Osaka', 'Kyoto', 'Hiroshima'], IND: ['Mumbai', 'Kolkata', 'Bengaluru'], AUS: ['Sydney', 'Melbourne', 'Perth'],
-  EGY: ['Alexandria', 'Luxor', 'Aswan'], ZAF: ['Cape Town', 'Johannesburg', 'Durban'], TUR: ['Istanbul', 'Izmir', 'Antalya'],
-  GRC: ['Thessaloniki', 'Patras'], PRT: ['Porto', 'Coimbra'], NOR: ['Bergen', 'Trondheim'], SWE: ['Gothenburg', 'Malmö'],
-  POL: ['Kraków', 'Gdańsk', 'Wrocław'], UKR: ['Odesa', 'Kharkiv', 'Lviv'], SAU: ['Jeddah', 'Mecca', 'Medina'],
-  CHL: ['Valparaíso', 'Antofagasta'], PER: ['Cusco', 'Arequipa'], COL: ['Medellín', 'Cartagena', 'Cali'], VEN: ['Maracaibo', 'Valencia'],
-  CUB: ['Santiago de Cuba'], IRL: ['Cork', 'Galway'], FIN: ['Tampere', 'Turku'], NLD: ['Rotterdam', 'The Hague', 'Utrecht'],
-  BEL: ['Antwerp', 'Bruges', 'Ghent'], CHE: ['Zurich', 'Geneva', 'Basel'], AUT: ['Salzburg', 'Innsbruck', 'Graz'],
-  DNK: ['Aarhus', 'Odense'], CZE: ['Brno', 'Ostrava'], HUN: ['Debrecen', 'Szeged'], ROU: ['Cluj-Napoca', 'Timișoara', 'Constanța'],
-  NGA: ['Lagos', 'Kano', 'Ibadan'], KEN: ['Mombasa', 'Kisumu'], MAR: ['Casablanca', 'Marrakesh', 'Fez'], ETH: ['Dire Dawa', 'Gondar'],
-  DZA: ['Oran', 'Constantine'], IRN: ['Isfahan', 'Shiraz', 'Tabriz'], IRQ: ['Basra', 'Mosul', 'Erbil'], ISR: ['Tel Aviv', 'Haifa'],
-  KAZ: ['Almaty', 'Shymkent'], THA: ['Chiang Mai', 'Phuket'], KOR: ['Busan', 'Incheon'], PAK: ['Karachi', 'Lahore', 'Peshawar'],
-  IDN: ['Surabaya', 'Bandung', 'Denpasar'], NZL: ['Auckland', 'Christchurch'], PHL: ['Cebu City', 'Davao City'],
-  VNM: ['Ho Chi Minh City', 'Da Nang'], AFG: ['Kandahar', 'Herat'], BOL: ['Santa Cruz de la Sierra', 'La Paz'],
-  ECU: ['Guayaquil', 'Cuenca'], URY: ['Punta del Este'], SVK: ['Košice', 'Žilina'], BGR: ['Plovdiv', 'Varna'], SRB: ['Novi Sad', 'Niš'],
-  HRV: ['Split', 'Dubrovnik'], BIH: ['Mostar', 'Banja Luka'], SVN: ['Maribor'], LTU: ['Kaunas', 'Klaipėda'], LVA: ['Daugavpils'],
-  EST: ['Tartu'], GEO: ['Batumi', 'Kutaisi'], SYR: ['Aleppo', 'Homs'], JOR: ['Aqaba', 'Petra'], ARE: ['Dubai', 'Sharjah'],
-  UZB: ['Samarkand', 'Bukhara'], MYS: ['George Town', 'Malacca'], MMR: ['Yangon', 'Mandalay'], BGD: ['Chittagong'],
-  LKA: ['Kandy', 'Galle'], LBY: ['Benghazi'], TUN: ['Sfax', 'Kairouan'], SDN: ['Omdurman', 'Port Sudan'], COD: ['Lubumbashi', 'Goma'],
-  AGO: ['Huambo', 'Benguela'], TZA: ['Dar es Salaam', 'Zanzibar City', 'Arusha'], GHA: ['Kumasi'], CMR: ['Douala'],
-  CIV: ['Abidjan'], SEN: ['Saint-Louis', 'Touba'], ZWE: ['Bulawayo'], ZMB: ['Livingstone', 'Ndola'], MOZ: ['Beira'],
-  NAM: ['Swakopmund'], BEN: ['Cotonou'], MLI: ['Timbuktu'], BLR: ['Brest', 'Grodno'], MDA: ['Bălți'], CYP: ['Limassol'],
-  YEM: ['Aden'], NPL: ['Pokhara'], KHM: ['Siem Reap'], TWN: ['Kaohsiung'], PNG: ['Lae'],
-};
+// Non-capital cities come from data/cities.json (city, iso2, lat, lon, tier 1-6).
+const CITY_FILE = path.join(__dirname, '..', 'data/cities.json');
 
 const byNum = new Map(countries.filter(c => c.ccn3).map(c => [c.ccn3, c]));
 const byName = new Map(countries.map(c => [c.name.common, c]));
 const NAME_FIX = { 'Kosovo': 'Kosovo' };
-const MERGE = { 'Somaliland': '706', 'N. Cyprus': '196' };
+// Merged into their parent state: de-facto regions into the UN-recognised state, and China's special
+// administrative regions (the city list puts Hong Kong and Macau in China).
+const MERGE = { 'Somaliland': '706', 'N. Cyprus': '196', 'Hong Kong': '156', 'Macao': '156' };
 
 // Presimplify
 let t = simp.presimplify(atlas);
@@ -142,7 +117,9 @@ for (const f of features) {
     d,
     c: [Math.round(cx * 10) / 10, Math.round(cy * 10) / 10],
     b: b.map(p => p.map(v => Math.round(v))),
-    small: area < 6 ? 1 : 0,
+    // Marked with a clickable dot: tiny countries, and archipelagos whose islands are all small
+    // (Solomon Islands, Bahamas, Vanuatu, New Caledonia ...), which are hard to hit at world zoom.
+    small: area < 10 || (bestA < 15 && polys.length >= 3) ? 1 : 0,
   };
   const playable = c && (c.independent || EXTRA_PLAYABLE.has(c.cca3)) && c.capital && c.capital.length;
   if (playable) {
@@ -156,7 +133,6 @@ for (const f of features) {
     rec.region = c.subregion || c.region;
     rec.fame = fameOf[c.cca3] || 4;
     if (!fameOf[c.cca3]) console.warn('defaulted fame 4:', c.cca3, c.name.common);
-    if (CITIES[c.cca3]) rec.cities = CITIES[c.cca3];
   }
   out.push(rec);
 }
@@ -171,10 +147,21 @@ for (const c of countries) {
     iso2: c.cca2, region: c.subregion || c.region, fame: fameOf[c.cca3] || 4 });
 }
 for (const id of Object.keys(fameOf)) if (!out.find(o => o.id === id && o.fame)) console.warn('fame list entry not on map', id);
-for (const id of Object.keys(CITIES)) if (!fameOf[id]) console.warn('cities for unknown', id);
+// Cities: projected position + the country they belong to.
+const byIso2 = new Map(out.filter(o => o.iso2).map(o => [o.iso2, o]));
+const cityList = [];
+for (const c of JSON.parse(fs.readFileSync(CITY_FILE, 'utf8'))) {
+  const country = byIso2.get(c.iso2);
+  if (!country) throw new Error(`city ${c.city}: no playable country with ISO code ${c.iso2}`);
+  if (!(c.tier >= 1 && c.tier <= 6)) throw new Error(`city ${c.city}: tier must be 1-6`);
+  const [x, y] = proj([c.lon, c.lat]);
+  const rec = { id: c.id, name: c.city, country: country.id, tier: c.tier, p: [Math.round(x * 10) / 10, Math.round(y * 10) / 10] };
+  if (c.note) rec.note = c.note;
+  cityList.push(rec);
+}
 out.sort((a, b) => a.name.localeCompare(b.name));
-const data = { w: W, h: H, graticule, outline, countries: out };
+const data = { w: W, h: H, graticule, outline, countries: out, cities: cityList };
 fs.writeFileSync(path.join(OUT, 'data/world.js'), '// Generated by tools/build-data.js from world-atlas (Natural Earth) + world-countries. Do not edit.\nwindow.WORLD = ' + JSON.stringify(data) + ';\n');
 const tiers = [1, 2, 3, 4, 5].map(n => out.filter(o => o.fame === n).length);
-console.log('countries', out.length, 'playable tiers', tiers, 'H', H, 'size', fs.statSync(path.join(OUT, 'data/world.js')).size);
+console.log('cities', cityList.length, 'countries', out.length, 'playable tiers', tiers, 'H', H, 'size', fs.statSync(path.join(OUT, 'data/world.js')).size);
 console.log('non-playable:', out.filter(o => !o.fame).map(o => o.name).join(', '));

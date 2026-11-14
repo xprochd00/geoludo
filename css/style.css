@@ -168,7 +168,7 @@ kbd {
 .howto ul { padding-left: 20px; line-height: 1.6; }
 
 /* mode picker */
-.mode-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mode-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .mode-card {
   display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding: 12px 8px;
   border-radius: 14px; border: 1px solid var(--panel-border); background: rgba(0,0,0,.2); color: var(--text);
@@ -355,6 +355,9 @@ kbd {
   fill: #ffd166; stroke: rgba(10,30,60,.9); cursor: pointer; opacity: .9;
 }
 #map .dot:hover { fill: #fff3b0; }
+#map .dot.np { fill: #c7d0dc; opacity: .8; }
+#map .citypin { fill: #fff; stroke: #ef476f; pointer-events: none; }
+#map .citylabel { fill: #ffe08a; }
 #map.locked .country, #map.locked .dot { cursor: default; }
 #map.locked .country:hover { fill: inherit; }
 #map .country.correct, #map .dot.correct { fill: var(--ok) !important; animation: glow-ok 1.2s ease-in-out infinite; }
@@ -448,7 +451,7 @@ kbd {
 
 .standings { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .standings li {
-  display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px; padding: 8px 10px;
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px;
   border-radius: 12px; background: rgba(0,0,0,.18); border: 1px solid transparent; transition: all .3s;
 }
 .standings li.active { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 16%, transparent); }
@@ -456,6 +459,33 @@ kbd {
 .standings .nm { font-weight: 700; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .standings .bar { height: 6px; border-radius: 99px; background: rgba(255,255,255,.1); margin-top: 5px; overflow: hidden; }
 .standings .bar i { display: block; height: 100%; background: var(--pc); border-radius: inherit; transition: width .6s; }
+/* progress bar with rescue-difficulty zones */
+.standings .pinfo { min-width: 0; }
+.pbar { position: relative; height: 12px; margin: 6px 0 4px; border-radius: 99px; background: rgba(255,255,255,.08); }
+.pbar .z { position: absolute; top: 3px; bottom: 3px; background: var(--zc); opacity: .8; }
+.pbar .z:first-child { border-radius: 99px 0 0 99px; }
+.pbar .z.safe {
+  border-radius: 0 99px 99px 0; opacity: .5;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.55) 0 3px, rgba(255,255,255,.15) 3px 6px);
+}
+.pbar .pm {
+  position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%;
+  background: var(--pc); border: 2px solid var(--zc, #fff); box-shadow: 0 0 0 1.5px rgba(0,0,0,.45), 0 0 8px var(--zc, transparent);
+  font: 700 9px/12px var(--font-body); font-style: normal; color: #fff; text-align: center; transition: left .6s;
+}
+.pbar .pm.fin { border-color: #fff; }
+.rinfo { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: center; }
+.rinfo .ri { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.rinfo .pd { width: 7px; height: 7px; border-width: 1.5px; }
+.zone-legend { display: flex; align-items: center; gap: 6px; margin: -4px 0 10px; font-size: 11px; color: var(--muted); }
+.zone-legend .zl { flex: 1; display: flex; height: 8px; border-radius: 99px; overflow: hidden; }
+.zone-legend .zl i { flex: 1; background: var(--zc); }
+.zone-legend .zl i.safe { flex: .6; background: repeating-linear-gradient(135deg, rgba(255,255,255,.55) 0 3px, rgba(255,255,255,.15) 3px 6px); }
+
+/* rescue question styling */
+.quiz-card.rescue { border-color: #ef476f; box-shadow: 0 0 0 2px rgba(239,71,111,.35), 0 10px 30px rgba(0,0,0,.3); background: linear-gradient(135deg, rgba(60,10,30,.9), rgba(20,35,80,.85)); }
+.quiz-card.rescue .q-kind { color: #ffb3c4; font-weight: 600; }
+
 .standings .dots { display: flex; gap: 4px; margin-top: 5px; }
 .standings .pd { width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--pc); }
 .standings .pd.out { background: var(--pc); }

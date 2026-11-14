@@ -46,8 +46,9 @@
       'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.6,
     }, land);
     const n = { path: p, dot: null };
-    if (c.small && c.fame) {
-      n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot', 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
+    // Dots for tiny countries and island territories (grey when the territory is not a playable country).
+    if (c.small && !c.id.startsWith('X')) {
+      n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot' + (c.fame ? '' : ' np'), 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
     }
     nodes.set(c.id, n);
   }
@@ -77,6 +78,7 @@
       t.setAttribute('stroke-width', 4 * u);
     });
     fxLayer.querySelectorAll('.ping').forEach((c) => c.setAttribute('stroke-width', 3 * u));
+    fxLayer.querySelectorAll('.citypin').forEach((c) => { c.setAttribute('r', 6 * u); c.setAttribute('stroke-width', 2.5 * u); });
   }
   function setVB(v) { vb = clampVB(v); apply(); }
 
@@ -277,7 +279,8 @@
     return { x: x0 - pad, y: y0 - pad, w: x1 - x0 + pad * 2, h: y1 - y0 + pad * 2 };
   }
 
-  async function reveal(correctId, clickedId) {
+  /** Reveal the answer. pin (optional): { p: [x, y], name } marks a city's real location. */
+  async function reveal(correctId, clickedId, pin) {
     locked = true;
     svg.classList.add('locked');
     const ok = correctId === clickedId;
@@ -294,8 +297,21 @@
     const c = byId.get(correctId);
     const ring = el('circle', { cx: c.c[0], cy: c.c[1], r: 1, class: 'ping' }, fxLayer);
     const box = focusBox(ids);
+    if (pin) {
+      // make sure the city is inside the view too
+      const [px, py] = pin.p;
+      const x0 = Math.min(box.x, px - 20), y0 = Math.min(box.y, py - 20);
+      box.w = Math.max(box.x + box.w, px + 20) - x0; box.h = Math.max(box.y + box.h, py + 20) - y0;
+      box.x = x0; box.y = y0;
+    }
     await animateTo(box, 900);
     ids.forEach(label);
+    if (pin) {
+      el('circle', { cx: pin.p[0], cy: pin.p[1], r: 1, class: 'citypin' }, fxLayer);
+      const t = el('text', { x: pin.p[0], y: pin.p[1], class: 'label citylabel', dy: '-0.9em' }, labelLayer);
+      t.textContent = '📍 ' + pin.name;
+      apply();
+    }
     const u = unitsPerPx();
     const t0 = performance.now();
     (function grow(now) {

@@ -287,15 +287,22 @@
     layout(players);
   }
 
+  /** Fly a piece in one arc to wherever its current position says it should be. */
+  async function flyTo(seat, idx, players) {
+    const g = pieces.get(key(seat, idx));
+    g.classList.add('flying');
+    layout(players);
+    await sleep(850);
+    g.classList.remove('flying');
+  }
+
   async function sendHome(seat, idx, players) {
     const g = pieces.get(key(seat, idx));
     g.classList.add('captured');
     Sound.capture();
     await sleep(400);
-    g.classList.add('flying');
-    layout(players);
-    await sleep(850);
-    g.classList.remove('flying', 'captured');
+    await flyTo(seat, idx, players);
+    g.classList.remove('captured');
   }
 
   /* ---------- Selection ---------- */
@@ -359,6 +366,6 @@
   }
 
   window.Board = {
-    COLORS, TRACK_LEN, FINISH_POS, render: renderBoard, layout, isSafe, walk, sendHome, setSelectable, showTarget, trackIndex,
+    COLORS, TRACK_LEN, FINISH_POS, render: renderBoard, layout, isSafe, flyTo, walk, sendHome, setSelectable, showTarget, trackIndex,
   };
 })();
