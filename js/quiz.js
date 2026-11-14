@@ -2,7 +2,9 @@
  * Every question has a difficulty level 1-6 (the dice value, or the rescue level of a threatened piece).
  *  - Geography: country fame level (1-5) + an offset for the question type; cities use their own tier.
  *  - History & Geopolitics and Sports & Culture: the difficulty ratings from the question files.
- * Questions are drawn at random without repeats until a level's pool is used up. */
+ * Questions are drawn at random from those not asked yet. The record of asked questions is kept across
+ * games (and page reloads, via localStorage); once a level's pool has been used up, new draws come from
+ * the least recently asked half, so recent questions never come straight back. */
 (function () {
   const LEVELS = {
     1: { label: 'Very easy' }, 2: { label: 'Easy' }, 3: { label: 'Moderate' },
@@ -26,6 +28,9 @@
     const a = norm(place), b = norm(c.name);
     return a.includes(b) || b.includes(a) || a.split(/[\s-]/)[0] === b.split(/[\s-]/)[0];
   };
+  // History and culture questions are keyed by their text, so the same question appearing in both
+  // files (e.g. the Taj Mahal) counts as one question.
+  const textKey = (q) => 'q:' + norm(q).replace(/[^a-z0-9]/g, '');
   const emptyPools = () => ({ 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] });
 
   /* ---------- Pools ---------- */
@@ -44,41 +49,57 @@
     add('geo', city.tier, { type: 'city', c, city, key: 'y:' + city.id });
   }
   for (const h of window.HISTORY_QUESTIONS || []) {
-    if (byId.has(h.a)) add('history', h.lvl, { type: 'history', c: byId.get(h.a), h, key: 'h:' + h.id });
+    if (byId.has(h.a)) add('history', h.lvl, { type: 'history', c: byId.get(h.a), h, key: textKey(h.q) });
   }
   for (const h of window.CULTURE_QUESTIONS || []) {
-    if (byId.has(h.a)) add('culture', h.lvl, { type: 'culture', c: byId.get(h.a), h, key: 'k:' + h.id });
+    if (byId.has(h.a)) add('culture', h.lvl, { type: 'culture', c: byId.get(h.a), h, key: textKey(h.q) });
   }
 
-  /* ---------- Drawing ---------- */
-  const used = new Set();
+  /* ---------- Asked-question history (persists across games) ---------- */
+  const STORE = 'geoludo.asked.v1';
+  let history = { seq: 0, keys: {} };
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE));
+    if (saved && saved.keys) history = saved;
+  } catch (e) { /* storage unavailable: keep the history in memory only */ }
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
+
   const catCount = { geo: 0, history: 0, culture: 0 };
-  let lastCountry = null;
+  const RECENT = 8; // avoid answer countries used in the last few questions
+  let recent = [];
   let lastType = null;
 
   function draw(pool) {
-    let fresh = pool.filter((q) => !used.has(q.key));
-    if (!fresh.length) { pool.forEach((q) => used.delete(q.key)); fresh = pool.slice(); }
-    // Prefer a different country (and, for geography, a different question type) than last time.
-    const varied = fresh.filter((q) => q.c.id !== lastCountry && (q.type !== lastType || !['name', 'flag', 'capital', 'city'].includes(q.type)));
-    const list = varied.length ? varied : fresh;
-    const q = list[(Math.random() * list.length) | 0];
-    used.add(q.key);
-    lastCountry = q.c.id;
+    const seen = (q) => history.keys[q.key];
+    let candidates = pool.filter((q) => seen(q) == null);
+    if (!candidates.length) {
+      // Everything at this level has been asked: draw from the least recently asked half.
+      const sorted = pool.slice().sort((a, b) => seen(a) - seen(b));
+      candidates = sorted.slice(0, Math.max(1, Math.ceil(sorted.length / 2)));
+    }
+    // Prefer an answer country not used recently and (for geography) a different question type.
+    const geoTypes = ['name', 'flag', 'capital', 'city'];
+    const varied = candidates.filter((q) => !recent.includes(q.c.id) && (q.type !== lastType || !geoTypes.includes(q.type)));
+    const list = varied.length ? varied : candidates;
+    const q = list[Math.floor(Math.random() * list.length)];
+    history.keys[q.key] = ++history.seq;
+    save();
+    recent = [q.c.id, ...recent].slice(0, RECENT);
     lastType = q.type;
     return q;
   }
 
-  /** Mixed mode: pick randomly among the categories asked least so far, so each gets about a third. */
-  function pickCategory(level) {
-    const avail = CATEGORIES.filter((cat) => POOLS[cat][level].length);
+  /** Mixed mode: pick randomly among the chosen categories asked least so far, so each gets an equal share. */
+  function pickCategory(level, cats) {
+    const avail = cats.filter((cat) => POOLS[cat] && POOLS[cat][level].length);
     const min = Math.min(...avail.map((cat) => catCount[cat]));
     const behind = avail.filter((cat) => catCount[cat] === min);
-    return behind[(Math.random() * behind.length) | 0];
+    return behind[Math.floor(Math.random() * behind.length)];
   }
 
-  function next(level, mode) {
-    const cat = mode === 'mixed' ? pickCategory(level) : (POOLS[mode] ? mode : 'geo');
+  /** cats: the categories combined in Mixed mode (default: all three). */
+  function next(level, mode, cats = CATEGORIES) {
+    const cat = mode === 'mixed' ? pickCategory(level, cats) : (POOLS[mode] ? mode : 'geo');
     catCount[cat]++;
     const pick = draw(POOLS[cat][level]);
     const c = pick.c;
@@ -103,13 +124,22 @@
     return q;
   }
 
-  function resetUsed() {
-    used.clear();
-    lastCountry = lastType = null;
+  /** A new game: reset the category balance, but keep the record of asked questions. */
+  function newGame() {
+    recent = [];
+    lastType = null;
     CATEGORIES.forEach((cat) => { catCount[cat] = 0; });
   }
+  /** Forget every asked question (all questions become "new" again). */
+  function clearHistory() {
+    history = { seq: 0, keys: {} };
+    save();
+  }
+  const allKeys = new Set(CATEGORIES.flatMap((cat) => [1, 2, 3, 4, 5, 6].flatMap((l) => POOLS[cat][l].map((q) => q.key))));
+  const unseenCount = () => [...allKeys].filter((k) => history.keys[k] == null).length;
+  const totalCount = () => allKeys.size;
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, geo: POOLS.geo[l].length, history: POOLS.history[l].length, culture: POOLS.culture[l].length }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { next, LEVELS, MODES, resetUsed, poolSizes, stats, skippedCities };
+  window.Quiz = { next, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();

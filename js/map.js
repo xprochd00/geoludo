@@ -46,9 +46,9 @@
       'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.6,
     }, land);
     const n = { path: p, dot: null };
-    // Dots for tiny countries and island territories (grey when the territory is not a playable country).
-    if (c.small && !c.id.startsWith('X')) {
-      n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot' + (c.fame ? '' : ' np'), 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
+    // Clickable dots only for tiny countries that can be an answer (territories get none).
+    if (c.small && c.fame) {
+      n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot', 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
     }
     nodes.set(c.id, n);
   }
@@ -232,7 +232,9 @@
       });
       id = best;
     }
-    if (!id) return; // clicked the ocean: ignore
+    // Only countries in the game's database (name + flag + capital) can be picked; the ocean and
+    // territories such as Greenland or New Caledonia are ignored.
+    if (!id || !(byId.get(id) || {}).fame) return;
     if (onPick) onPick(id);
   }
 

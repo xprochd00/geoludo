@@ -46,8 +46,17 @@
             <span class="mode-icon">🎭</span><b>Sports &amp; Culture</b><small>Stars, music, film, art &amp; games</small>
           </button>
           <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Mixed</b><small>All three, in equal measure</small>
+            <span class="mode-icon">🎲</span><b>Mixed</b><small>Combine two or three categories</small>
           </button>
+        </div>
+        <div id="mix-options" class="mix-options" hidden>
+          <div class="mix-title">Combine in Mixed mode <small>(choose at least two)</small></div>
+          <div class="mix-chips" role="group" aria-label="Categories in Mixed mode">
+            <button type="button" class="mix-chip active" data-cat="geo" aria-pressed="true">🗺️ Geography</button>
+            <button type="button" class="mix-chip active" data-cat="history" aria-pressed="true">📜 History &amp; Geopolitics</button>
+            <button type="button" class="mix-chip active" data-cat="culture" aria-pressed="true">🎭 Sports &amp; Culture</button>
+          </div>
+          <div id="mix-hint" class="mix-hint">All three categories, about a third each.</div>
         </div>
       </div>
 
@@ -67,6 +76,7 @@
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
+      <div class="history-note"><span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
       <details class="howto">
         <summary>How to play</summary>
         <ul>
