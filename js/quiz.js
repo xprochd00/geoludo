@@ -1,51 +1,86 @@
-/* Question generation. Dice 1-2 → easy, 3-4 → medium, 5-6 → hard. */
+/* Question generation.
+ * The dice value is the difficulty level (1-6).
+ * Geography questions: difficulty = country fame level (1-5) + offset for the question type.
+ * History / geopolitics questions come from data/history.js with their own difficulty ratings. */
 (function () {
   const LEVELS = {
-    easy: { label: 'Easy', tier: 1, weights: { name: 5, flag: 3, capital: 2 } },
-    medium: { label: 'Medium', tier: 2, weights: { name: 4, flag: 3, capital: 3 } },
-    hard: { label: 'Hard', tier: 3, weights: { name: 3, flag: 3, capital: 4 } },
+    1: { label: 'Very easy' }, 2: { label: 'Easy' }, 3: { label: 'Moderate' },
+    4: { label: 'Tricky' }, 5: { label: 'Hard' }, 6: { label: 'Expert' },
   };
-  const levelForRoll = (n) => (n <= 2 ? 'easy' : n <= 4 ? 'medium' : 'hard');
+  const MODES = {
+    geo: { label: 'Geography' },
+    history: { label: 'History & Geopolitics' },
+    mixed: { label: 'Mixed' },
+  };
 
-  const pool = window.WORLD.countries.filter((c) => c.tier);
+  const countries = window.WORLD.countries.filter((c) => c.fame);
+  const byId = new Map(window.WORLD.countries.map((c) => [c.id, c]));
   const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-  // A capital question is pointless if the capital gives the country away (e.g. "Kuwait City").
-  const capitalGivesAway = (c) => {
-    const a = norm(c.capital), b = norm(c.name);
+  // A capital / city question is pointless if the place name gives the country away (e.g. "Kuwait City").
+  const givesAway = (place, c) => {
+    const a = norm(place), b = norm(c.name);
     return a.includes(b) || b.includes(a) || a.split(/[\s-]/)[0] === b.split(/[\s-]/)[0];
   };
 
-  const used = new Set();
-  let lastType = null;
-
-  function weightedType(weights, c) {
-    const opts = Object.entries(weights).filter(([t]) => !(t === 'capital' && capitalGivesAway(c)));
-    // gently avoid repeating the same question type twice in a row
-    const adj = opts.map(([t, w]) => [t, t === lastType ? w * 0.5 : w]);
-    let r = Math.random() * adj.reduce((s, [, w]) => s + w, 0);
-    for (const [t, w] of adj) { if ((r -= w) <= 0) return t; }
-    return adj[0][0];
+  /* ---------- Geography pool ---------- */
+  const GEO = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+  const add = (lvl, q) => { if (lvl >= 1 && lvl <= 6) GEO[lvl].push(q); };
+  for (const c of countries) {
+    add(c.fame, { type: 'name', c, key: 'n:' + c.id });
+    add(c.fame + 1, { type: 'flag', c, key: 'f:' + c.id });
+    if (!c.noCap && !givesAway(c.capital, c)) add(c.fame + 1, { type: 'capital', c, key: 'c:' + c.id });
+    (c.cities || []).forEach((city, i) => {
+      if (!givesAway(city, c)) add(c.fame + 1 + i, { type: 'city', c, city, key: 'y:' + city });
+    });
   }
 
-  function next(level) {
-    const L = LEVELS[level];
-    let candidates = pool.filter((c) => c.tier === L.tier && !used.has(c.id));
-    if (!candidates.length) {
-      pool.filter((c) => c.tier === L.tier).forEach((c) => used.delete(c.id));
-      candidates = pool.filter((c) => c.tier === L.tier);
-    }
-    const country = candidates[(Math.random() * candidates.length) | 0];
-    used.add(country.id);
-    const type = weightedType(L.weights, country);
-    lastType = type;
-    const q = { level, levelLabel: L.label, country, type };
-    if (type === 'name') { q.kind = 'Find this country on the map'; q.prompt = country.name; }
-    else if (type === 'capital') { q.kind = 'Which country has this capital city?'; q.prompt = country.capital; }
-    else { q.kind = 'Which country does this flag belong to?'; q.prompt = 'Find its country'; q.flag = `flags/${country.flag}.svg`; }
+  /* ---------- History pool ---------- */
+  const HIST = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+  for (const h of window.HISTORY_QUESTIONS || []) {
+    if (byId.has(h.a)) HIST[h.lvl].push({ type: 'history', c: byId.get(h.a), h, key: 'h:' + h.id });
+  }
+
+  const used = new Set();
+  let lastCountry = null;
+  let lastType = null;
+
+  function draw(pool) {
+    let fresh = pool.filter((q) => !used.has(q.key));
+    if (!fresh.length) { pool.forEach((q) => used.delete(q.key)); fresh = pool.slice(); }
+    // Prefer a different country (and, for geography, a different question type) than last time.
+    const varied = fresh.filter((q) => q.c.id !== lastCountry && (q.type === 'history' || q.type !== lastType));
+    const list = varied.length ? varied : fresh;
+    const q = list[(Math.random() * list.length) | 0];
+    used.add(q.key);
+    lastCountry = q.c.id;
+    lastType = q.type;
     return q;
   }
 
-  function resetUsed() { used.clear(); lastType = null; }
+  function next(level, mode) {
+    const useHistory = mode === 'history' || (mode === 'mixed' && Math.random() < 0.5);
+    const pick = draw(useHistory && HIST[level].length ? HIST[level] : GEO[level]);
+    const c = pick.c;
+    const q = { level, levelLabel: LEVELS[level].label, country: c, type: pick.type };
+    switch (pick.type) {
+      case 'name':
+        q.kind = 'Find this country on the map'; q.prompt = c.name; q.tag = 'Country'; break;
+      case 'capital':
+        q.kind = 'Which country has this capital city?'; q.prompt = c.capital; q.tag = 'Capital'; break;
+      case 'city':
+        q.kind = 'In which country is this city?'; q.prompt = pick.city; q.city = pick.city; q.tag = 'City'; break;
+      case 'flag':
+        q.kind = 'Which country does this flag belong to?'; q.prompt = 'Click its country'; q.flag = `flags/${c.flag}.svg`; q.tag = 'Flag'; break;
+      case 'history':
+        q.tag = pick.h.cat === 'geopolitics' ? 'Geopolitics' : 'History';
+        q.kind = 'Click the answer on the map';
+        q.prompt = pick.h.q; q.history = pick.h; break;
+    }
+    return q;
+  }
 
-  window.Quiz = { next, levelForRoll, LEVELS, resetUsed };
+  function resetUsed() { used.clear(); lastCountry = lastType = null; }
+  const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, geo: GEO[l].length, history: HIST[l].length }));
+
+  window.Quiz = { next, LEVELS, MODES, resetUsed, poolSizes };
 })();

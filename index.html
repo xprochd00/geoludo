@@ -24,7 +24,7 @@
       </div>
 
       <div class="setup-section">
-        <h2>Players</h2>
+        <h2>Players <span class="h2-note">· pieces each</span></h2>
         <div class="count-picker" role="radiogroup" aria-label="Number of players">
           <button type="button" data-count="2" class="count-btn">2</button>
           <button type="button" data-count="3" class="count-btn">3</button>
@@ -34,26 +34,45 @@
       </div>
 
       <div class="setup-section">
-        <h2>Rules</h2>
-        <div class="difficulty-legend">
-          <div class="dl easy"><b>⚀ ⚁</b><span>Easy</span></div>
-          <div class="dl medium"><b>⚂ ⚃</b><span>Medium</span></div>
-          <div class="dl hard"><b>⚄ ⚅</b><span>Hard</span></div>
+        <h2>Game mode</h2>
+        <div class="mode-picker" role="radiogroup" aria-label="Game mode">
+          <button type="button" class="mode-card active" data-mode="geo" role="radio" aria-checked="true">
+            <span class="mode-icon">🗺️</span><b>Geography</b><small>Countries, capitals, cities &amp; flags</small>
+          </button>
+          <button type="button" class="mode-card" data-mode="history" role="radio" aria-checked="false">
+            <span class="mode-icon">📜</span><b>History &amp; Geopolitics</b><small>Events, leaders &amp; world affairs</small>
+          </button>
+          <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
+            <span class="mode-icon">🎲</span><b>Mixed</b><small>A bit of everything</small>
+          </button>
         </div>
-        <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span>Correct answer on a <b>6</b> earns another turn</label>
-        <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span>Exact roll needed to reach the finish</label>
-        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span>30-second answer timer</label>
+      </div>
+
+      <div class="setup-section">
+        <h2>Rules</h2>
+        <div class="difficulty-legend" aria-label="The dice roll sets the question difficulty">
+          <div class="dl" style="--c:var(--l1)"><b>⚀</b><span>Very easy</span></div>
+          <div class="dl" style="--c:var(--l2)"><b>⚁</b><span>Easy</span></div>
+          <div class="dl" style="--c:var(--l3)"><b>⚂</b><span>Moderate</span></div>
+          <div class="dl" style="--c:var(--l4)"><b>⚃</b><span>Tricky</span></div>
+          <div class="dl" style="--c:var(--l5)"><b>⚄</b><span>Hard</span></div>
+          <div class="dl" style="--c:var(--l6)"><b>⚅</b><span>Expert</span></div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span><span>A <b>6</b> earns another roll (after bringing a piece out or a correct answer)</span></label>
+        <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
+        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for history)</span></label>
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
       <details class="howto">
         <summary>How to play</summary>
         <ul>
-          <li>Players take turns rolling the dice. The number decides the difficulty of the question.</li>
-          <li>The board rolls away and a world map appears. Click the country you are asked about — by its <b>name</b>, <b>capital city</b> or <b>flag</b>. Scroll or pinch to zoom, drag to pan.</li>
-          <li>Correct answer → move forward by the number rolled. Wrong answer → stay put.</li>
-          <li>Land on a rival's square and send them back home!</li>
-          <li>The first to reach the centre of the board wins.</li>
+          <li>Each player chooses how many pieces (1–4) to race. All pieces start at home.</li>
+          <li>A piece can only leave home on a <b>6</b>. Bringing a piece out needs no question.</li>
+          <li>After every roll, the pieces that can move glow. Click the one you want (or press its number key).</li>
+          <li>Moving a piece already on the board needs a correct answer. The number rolled is the difficulty (1 = very easy … 6 = expert). The board rolls away and a world map appears: click the right country. A wrong answer leaves the piece where it is.</li>
+          <li>Land on a rival piece to send it back home. The first player to get <b>all</b> their pieces to the centre wins.</li>
+          <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots.</li>
         </ul>
       </details>
     </div>
@@ -62,7 +81,7 @@
   <!-- ============ GAME SCREEN ============ -->
   <section id="game" class="screen">
     <header class="topbar">
-      <div class="brand">🌍 Geo<span>Ludo</span></div>
+      <div class="brand"><span class="brand-name">🌍 Geo<span>Ludo</span></span> <small id="mode-chip" class="mode-chip"></small></div>
       <div id="turn-pill" class="turn-pill"><span class="dot"></span><span id="turn-name">—</span><span class="turn-label">'s turn</span></div>
       <div class="top-actions">
         <button id="sound-btn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
@@ -72,18 +91,19 @@
 
     <main class="layout">
       <div class="stage" id="stage">
-        <div class="prism" id="prism">
+        <div class="prism flat" id="prism">
           <!-- Front face: board -->
           <div class="face face-board">
             <div class="board-wrap" id="board-wrap">
-              <svg id="board" viewBox="0 0 600 600" aria-label="Game board"></svg>
+              <svg id="board" viewBox="-16 -16 632 632" aria-label="Game board"></svg>
             </div>
           </div>
           <!-- Bottom face: map -->
           <div class="face face-map">
             <div class="quiz-card" id="quiz-card">
               <div class="quiz-meta">
-                <span id="q-diff" class="chip">Easy</span>
+                <span id="q-diff" class="chip lvl">Easy</span>
+                <span id="q-tag" class="chip ghost tag">Country</span>
                 <span id="q-player" class="chip player-chip"></span>
                 <span id="q-steps" class="chip ghost"></span>
               </div>
@@ -166,6 +186,7 @@
   <canvas id="confetti" aria-hidden="true"></canvas>
 
   <script src="data/world.js"></script>
+  <script src="data/history.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/board.js"></script>
   <script src="js/map.js"></script>

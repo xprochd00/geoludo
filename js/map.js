@@ -40,13 +40,13 @@
   const labelLayer = el('g', {}, svg);
 
   for (const c of W.countries) {
-    const fill = c.tier ? LAND[hash(c.id) % LAND.length] : '#c7d0dc';
+    const fill = c.fame ? LAND[hash(c.id) % LAND.length] : '#c7d0dc';
     const p = el('path', {
-      d: c.d, class: 'country' + (c.tier ? '' : ' np'), fill, 'data-id': c.id,
+      d: c.d, class: 'country' + (c.fame ? '' : ' np'), fill, 'data-id': c.id,
       'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.6,
     }, land);
     const n = { path: p, dot: null };
-    if (c.small && c.tier) {
+    if (c.small && c.fame) {
       n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot', 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
     }
     nodes.set(c.id, n);
@@ -71,7 +71,7 @@
   function apply() {
     svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
     const u = unitsPerPx();
-    nodes.forEach((n) => { if (n.dot) n.dot.setAttribute('r', 4.5 * u); });
+    nodes.forEach((n) => { if (n.dot) n.dot.setAttribute('r', 4 * u); });
     labelLayer.querySelectorAll('text').forEach((t) => {
       t.setAttribute('font-size', 15 * u);
       t.setAttribute('stroke-width', 4 * u);
@@ -204,13 +204,24 @@
 
   function pick(x, y) {
     if (locked) return;
-    let t = document.elementFromPoint(x, y);
+    const stack = document.elementsFromPoint(x, y);
+    let t = stack[0];
+    let onDot = t && t.classList && t.classList.contains('dot');
+    if (onDot) {
+      // A dot only wins near its centre; on its rim, prefer the country outline underneath
+      // (e.g. Luxembourg's dot overlaps Belgium at world zoom).
+      const r = t.getBoundingClientRect();
+      const d = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+      const under = stack.find((e) => e.classList && e.classList.contains('country'));
+      if (d > r.width * 0.3 && under) { t = under; onDot = false; }
+    }
     let id = t && t.getAttribute && t.getAttribute('data-id');
-    if (!id) {
+    // Over the ocean or on a dot: choose the nearest dot centre (dots overlap where islands cluster).
+    if (!id || onDot) {
       // Generous hit test for tiny nations: nearest dot within 14px.
       const u = unitsPerPx();
       const p = toSvg(x, y);
-      let best = null, bd = 14 * u;
+      let best = onDot ? id : null, bd = 14 * u;
       nodes.forEach((n, nid) => {
         if (!n.dot) return;
         const c = byId.get(nid).c;
