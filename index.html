@@ -42,8 +42,11 @@
           <button type="button" class="mode-card" data-mode="history" role="radio" aria-checked="false">
             <span class="mode-icon">📜</span><b>History &amp; Geopolitics</b><small>Events, leaders &amp; world affairs</small>
           </button>
+          <button type="button" class="mode-card" data-mode="culture" role="radio" aria-checked="false">
+            <span class="mode-icon">🎭</span><b>Sports &amp; Culture</b><small>Stars, music, film, art &amp; games</small>
+          </button>
           <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Mixed</b><small>A bit of everything</small>
+            <span class="mode-icon">🎲</span><b>Mixed</b><small>All three, in equal measure</small>
           </button>
         </div>
       </div>
@@ -60,7 +63,7 @@
         </div>
         <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span><span>A <b>6</b> earns another roll (after bringing a piece out or a correct answer)</span></label>
         <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
-        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for history)</span></label>
+        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for history &amp; culture questions)</span></label>
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
@@ -70,9 +73,10 @@
           <li>Each player chooses how many pieces (1–4) to race. All pieces start at home.</li>
           <li>A piece can only leave home on a <b>6</b>. Bringing a piece out needs no question. With no piece on the board you get <b>3 attempts</b> to roll that 6.</li>
           <li>🛡️ Each player's first square (marked with a shield) is a <b>safe zone</b>: pieces there can't be sent home.</li>
+          <li>⚔️ Land on a rival piece and its owner gets a <b>rescue question</b>. The further that piece has travelled, the harder the question (see the coloured zones on the progress bars). A correct answer pushes the attacker back to where it came from; a wrong one sends the rival piece home.</li>
           <li>If only one piece can move, it is picked automatically. Otherwise the pieces that can move glow: click the one you want (or press its number key).</li>
           <li>Moving a piece already on the board needs a correct answer. The number rolled is the difficulty (1 = very easy … 6 = expert). The board rolls away and a world map appears: click the right country. A wrong answer leaves the piece where it is.</li>
-          <li>Land on a rival piece to send it back home. The first player to get <b>all</b> their pieces to the centre wins.</li>
+          <li>The first player to get <b>all</b> their pieces to the centre wins.</li>
           <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots.</li>
         </ul>
       </details>
@@ -159,6 +163,9 @@
 
         <div class="panel">
           <h3>Standings</h3>
+          <div class="zone-legend" title="Difficulty of the rescue question if a rival lands on your piece, from start to finish">
+            🛡️ <span>start</span><span class="zl"><i style="--zc:var(--l1)"></i><i style="--zc:var(--l2)"></i><i style="--zc:var(--l3)"></i><i style="--zc:var(--l4)"></i><i style="--zc:var(--l5)"></i><i style="--zc:var(--l6)"></i><i class="safe"></i></span><span>finish</span>
+          </div>
           <ol id="standings" class="standings"></ol>
         </div>
 
@@ -188,6 +195,7 @@
 
   <script src="data/world.js"></script>
   <script src="data/history.js"></script>
+  <script src="data/culture.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/board.js"></script>
   <script src="js/map.js"></script>
