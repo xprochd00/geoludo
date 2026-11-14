@@ -8,6 +8,7 @@
   const DEFAULT_NAMES = ['Magellan', 'Earhart', 'Ibn Battuta', 'Zheng He'];
   const TIMER_SECS = 30;
   const ROLL_MS = 1150;
+  const MAX_ATTEMPTS = 3; // rolls allowed to get a 6 when no piece is on the board
 
   /* ================= SETUP ================= */
   let count = 4;
@@ -176,7 +177,11 @@
     renderStandings();
     Board.setSelectable([]);
     $('roll-btn').disabled = false;
-    status(`<b>${esc(p.name)}</b>, roll the dice!`);
+    state.attempts = 0;
+    const noneActive = !p.pieces.some((pc) => pc.pos > 0 && pc.pos < FIN);
+    status(noneActive
+      ? `<b>${esc(p.name)}</b>, roll a <b>6</b> to bring a piece out — ${MAX_ATTEMPTS} attempts.`
+      : `<b>${esc(p.name)}</b>, roll the dice!`);
   }
 
   /** The moves the current player may make with roll n. */
@@ -184,7 +189,10 @@
     const out = [];
     p.pieces.forEach((pc, idx) => {
       if (pc.pos <= 0) {
-        if (n === 6) out.push({ seat: p.seat, idx, action: 'enter', target: 1, label: `Bring piece ${idx + 1} onto the board` });
+        // Pieces at home are interchangeable, so only one of them is offered.
+        if (n === 6 && !out.some((o) => o.action === 'enter')) {
+          out.push({ seat: p.seat, idx, action: 'enter', target: 1, label: `Bring piece ${idx + 1} onto the board` });
+        }
       } else if (pc.pos < FIN) {
         if (state.opts.exact && pc.pos + n > FIN) return;
         const target = Math.min(FIN, pc.pos + n);
@@ -206,6 +214,22 @@
     const opts = optionsFor(p, n);
     const lvl = `<span class="lvl-text" style="color:var(--l${n})">${Quiz.LEVELS[n].label}</span>`;
 
+    const noneActive = !p.pieces.some((pc) => pc.pos > 0 && pc.pos < FIN);
+    if (!opts.length && noneActive && p.pieces.some((pc) => pc.pos <= 0)) {
+      // Nothing on the board: up to 3 attempts to roll the 6 that unlocks a piece.
+      state.attempts++;
+      if (state.attempts < MAX_ATTEMPTS) {
+        status(`Rolled <b>${n}</b> — no 6. Attempt <b>${state.attempts + 1}</b> of ${MAX_ATTEMPTS}: roll again!`);
+        state.phase = 'roll';
+        $('roll-btn').disabled = false;
+        return;
+      }
+      log(`🎲 <b>${esc(p.name)}</b> didn't roll a 6 in ${MAX_ATTEMPTS} attempts.`, p.seat);
+      status(`No 6 in ${MAX_ATTEMPTS} attempts — turn passes.`);
+      await sleep(1700);
+      return nextTurn(false);
+    }
+
     if (!opts.length) {
       const atHome = p.pieces.every((pc) => pc.pos <= 0 || pc.pos >= FIN);
       const why = atHome ? 'needs a <b>6</b> to bring a piece out' : `can't move ${n} (an exact roll is needed to finish)`;
@@ -219,11 +243,17 @@
     const canEnter = opts.some((o) => o.action === 'enter');
     const canMove = opts.some((o) => o.action === 'move');
     let msg = `Rolled <b>${n}</b> → `;
-    if (canEnter && canMove) msg += `click a <b>home</b> piece to bring it out (no question) or a piece on the board to move it (${lvl} question).`;
-    else if (canEnter) msg += 'click a glowing piece to bring it onto the board — no question needed!';
-    else msg += `click the piece you want to move. Moving needs a ${lvl} question.`;
-    status(msg);
+    if (canEnter) msg += `click the glowing <b>home</b> piece to bring it out (no question) or a piece on the board to move it (${lvl} question).`;
+    else msg += `click the piece you want to move. Moving needs ${/^[AEIOU]/.test(Quiz.LEVELS[n].label) ? 'an' : 'a'} ${lvl} question.`;
     Board.setSelectable(opts, choose);
+    if (opts.length === 1) {
+      // Only one possible piece: select it automatically.
+      const o = opts[0];
+      status(`Rolled <b>${n}</b> → ${o.action === 'enter' ? 'bringing a piece onto the board' : `moving piece ${o.idx + 1} (${lvl} question)`}…`);
+      await sleep(800);
+      return choose(o);
+    }
+    status(msg);
   }
 
   async function choose(o) {
@@ -395,6 +425,13 @@
   async function captureAt(p, idx) {
     const sq = Board.trackIndex(p.seat, p.pieces[idx].pos);
     if (sq < 0) return;
+    if (Board.isSafe(sq)) {
+      const sharing = state.players.filter((o) => o !== p && o.pieces.some((pc) => Board.trackIndex(o.seat, pc.pos) === sq));
+      if (sharing.length) {
+        log(`🛡️ <b>${esc(p.name)}</b> shares a safe square with ${sharing.map((o) => `<b>${esc(o.name)}</b>`).join(', ')}. No capture.`, p.seat);
+      }
+      return;
+    }
     for (const o of state.players) {
       if (o === p) continue;
       for (let j = 0; j < o.pieces.length; j++) {

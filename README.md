@@ -12,8 +12,8 @@ There's nothing to install or build. Either:
 ## Rules
 
 - 2–4 players take turns on one computer (hot seat). Each player picks how many pieces (1–4) they race with. All pieces start in the home yard.
-- **Leaving home:** a piece can only come out on a **6**. Bringing a piece out needs no question.
-- **Choosing a piece:** after every roll, the pieces that can move glow. Click the one you want, or press its number key. A piece is never picked for you. On a 6 you can either bring out a new piece or move one already on the board.
+- **Leaving home:** a piece can only come out on a **6**. Bringing a piece out needs no question. With no piece on the board, you get **3 attempts** to roll that 6.
+- **Choosing a piece:** if only one piece can move, it is picked automatically. Otherwise the pieces that can move glow: click the one you want, or press its number key. On a 6 you can either bring out a new piece or move one already on the board. Pieces at home count as one choice, because they are interchangeable.
 - **Moving:** moving a piece on the board needs a correct answer. The number rolled is the difficulty:
 
   | Dice | 1 | 2 | 3 | 4 | 5 | 6 |
@@ -22,6 +22,7 @@ There's nothing to install or build. Either:
 
   The board rolls away and a world map rolls into view. Click the right country to move the piece forward. A wrong click or running out of time leaves it where it is.
 - **Capturing:** land on a rival's square to send every rival piece on it back home. Your own pieces can share a square.
+- **Safe squares:** each player's first square, marked with a 🛡️ shield, is a safe zone. Pieces standing there can't be captured, so rivals simply share the square.
 - **Winning:** the first player to bring **all** their pieces to the centre wins (51 squares round the loop, then 5 up your home column).
 
 Optional rules, set on the start screen:
@@ -34,7 +35,7 @@ Optional rules, set on the start screen:
 | Mode | Questions |
 |------|-----------|
 | 🗺️ Geography | Find a country by its **name**, **flag**, **capital** or a **major city** |
-| 📜 History & Geopolitics | The 240 questions in `data/history-questions.json` (40 per difficulty level) |
+| 📜 History & Geopolitics | The 360 questions in `data/history-questions.json` (60 per difficulty level) |
 | 🎲 Mixed | Each question is randomly geography or history |
 
 Every question is answered by clicking the country on the map.
@@ -48,7 +49,7 @@ Every question is answered by clicking the country on the map.
 | Capital | fame + 1 |
 | Major city | fame + 1, + 2 or + 3 for the first, second or third city listed |
 
-All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. About 200 famous non-capital cities are also included. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
+All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: 184 famous non-capital cities in 103 countries, listed in the `CITIES` table near the top of `tools/build-data.js`. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
 
 **Controls:** <kbd>Space</kbd> rolls the die. <kbd>1</kbd>–<kbd>4</kbd> choose a piece. <kbd>Enter</kbd> continues after an answer. On the map you can scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots.
 
