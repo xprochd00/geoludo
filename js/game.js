@@ -112,12 +112,31 @@
   function status(html) { $('status').innerHTML = html; }
   function esc(s) { return String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
 
-  function pieceDots(p) {
-    return p.pieces.map((pc) => {
-      const cls = pc.pos >= FIN ? 'done' : pc.pos > 0 ? 'out' : 'home';
-      const t = pc.pos >= FIN ? 'finished' : pc.pos > 0 ? `${pc.pos}/${FIN}` : 'at home';
-      return `<i class="pd ${cls}" title="${t}"></i>`;
+  /* Progress bar: the loop is split into 6 zones, one per rescue difficulty (start → finish),
+   * then the home column, where pieces are safe. Each piece is a marker on the bar. */
+  const ZONES = [1, 2, 3, 4, 5, 6].map((lvl) => {
+    let a = 1;
+    while (rescueLevel(a) !== lvl) a++;
+    let b = a;
+    while (b < Board.TRACK_LEN && rescueLevel(b + 1) === lvl) b++;
+    return { lvl, a, b };
+  });
+  const pct = (pos) => (pos / FIN) * 100;
+
+  function progressBar(p) {
+    const zones = ZONES.map((z) => `<span class="z" style="left:${pct(z.a - 1)}%;width:${pct(z.b - z.a + 1)}%;--zc:var(--l${z.lvl})" title="Squares ${z.a}–${z.b}: ${Quiz.LEVELS[z.lvl].label} rescue question"></span>`).join('')
+      + `<span class="z safe" style="left:${pct(Board.TRACK_LEN)}%;width:${pct(FIN - Board.TRACK_LEN)}%" title="Home column: safe"></span>`;
+    const markers = p.pieces.map((pc, i) => {
+      if (pc.pos <= 0) return '';
+      const lvl = rescueLevel(pc.pos);
+      return `<i class="pm${pc.pos >= FIN ? ' fin' : ''}" style="left:${pct(pc.pos - 0.5)}%;${lvl ? `--zc:var(--l${lvl})` : ''}">${i + 1}</i>`;
     }).join('');
+    const info = p.pieces.map((pc, i) => {
+      const lvl = rescueLevel(pc.pos);
+      const what = pc.pos <= 0 ? 'home' : pc.pos >= FIN ? '🏁' : lvl ? `<b style="color:var(--l${lvl})">${Quiz.LEVELS[lvl].label}</b>` : 'safe';
+      return `<span class="ri"><i class="pd ${pc.pos >= FIN ? 'done' : pc.pos > 0 ? 'out' : 'home'}"></i>${i + 1}: ${what}</span>`;
+    }).join('');
+    return `<div class="pbar">${zones}${markers}</div><div class="rinfo" title="Rescue question difficulty if a rival lands on the piece">🛡️ ${info}</div>`;
   }
 
   function renderStandings() {
@@ -127,20 +146,19 @@
       const li = document.createElement('li');
       li.style.setProperty('--pc', COLORS[p.seat].hex);
       li.classList.toggle('active', i === state.turn && state.phase !== 'over');
-      const total = p.pieces.reduce((s, pc) => s + pc.pos, 0);
-      const pct = Math.round((total / (FIN * p.pieces.length)) * 100);
       li.innerHTML = `<span class="pawn-icon"></span>
-        <div><div class="nm"></div><div class="bar"><i style="width:${pct}%"></i></div><div class="dots">${pieceDots(p)}</div></div>
+        <div class="pinfo"><div class="nm"></div>${progressBar(p)}</div>
         <div class="sc"><b>${finishedCount(p)}</b>/${p.pieces.length} 🏁<br>${p.correct}/${p.asked} ✓</div>`;
       li.querySelector('.nm').textContent = p.name;
       ol.appendChild(li);
     });
   }
 
-  function setTurnPill() {
-    const p = current();
+  function setTurnPill(who, prefix = '', suffix = "'s turn") {
+    const p = who || current();
     $('turn-pill').style.setProperty('--pc', COLORS[p.seat].hex);
-    $('turn-name').textContent = p.name;
+    $('turn-name').textContent = prefix + p.name;
+    document.querySelector('#turn-pill .turn-label').textContent = suffix;
   }
 
   /* ---------- Board ⇄ map roll ---------- */
@@ -262,37 +280,70 @@
     state.choice = o;
     Board.setSelectable([]);
     const p = current();
+    const pc = p.pieces[o.idx];
     if (o.action === 'enter') {
       log(`🚩 <b>${esc(p.name)}</b> brings piece ${o.idx + 1} onto the board.`, p.seat);
       status(`<b>${esc(p.name)}</b> brings a piece out!`);
-      p.pieces[o.idx].pos = 1;
+      pc.pos = 1;
       await Board.walk(p.seat, o.idx, 0, 1, state.players);
-      await captureAt(p, o.idx);
+      await resolveLanding(p, o.idx, 0);
       renderStandings();
       return endOfMove(true);
     }
     Board.showTarget(p.seat, o.target);
     await sleep(500);
-    askQuestion(state.roll);
+    const ok = await quiz({ kind: 'move', player: p, idx: o.idx, level: state.roll, moves: o.target - pc.pos });
+    Board.showTarget(null);
+    if (ok) {
+      const from = pc.pos;
+      status(`<b>${esc(p.name)}</b> moves piece ${o.idx + 1}…`);
+      pc.pos = o.target;
+      await Board.walk(p.seat, o.idx, from, o.target, state.players);
+      renderStandings();
+      await resolveLanding(p, o.idx, from);
+      if (pc.pos >= FIN) {
+        log(`🏁 <b>${esc(p.name)}</b>'s piece ${o.idx + 1} reached the finish!`, p.seat);
+        if (finishedCount(p) === p.pieces.length) return win(p);
+      }
+    } else {
+      status(`<b>${esc(p.name)}</b>'s piece stays put.`);
+      await sleep(500);
+    }
+    endOfMove(ok);
+  }
+
+  /* ---------- Questions ----------
+   * quiz(ctx) rolls the board away, asks one question and resolves with true/false once the player
+   * has pressed Continue and the board is back.
+   * ctx: { kind: 'move' | 'rescue', player, idx (piece), level, moves?, attacker? } */
+  function quiz(ctx) {
+    return new Promise((resolve) => {
+      state.pending = { ctx, resolve };
+      askQuestion(ctx);
+    });
   }
 
   let timerHandle = null;
-  async function askQuestion(level) {
-    const p = current();
-    const q = Quiz.next(level, state.mode);
+  async function askQuestion(ctx) {
+    const p = ctx.player;
+    const q = Quiz.next(ctx.level, state.mode);
     state.q = q;
     state.phase = 'question';
+    const rescue = ctx.kind === 'rescue';
 
+    $('quiz-card').classList.toggle('rescue', rescue);
     const diff = $('q-diff');
     diff.className = 'chip lvl';
-    diff.style.setProperty('--c', `var(--l${level})`);
-    diff.textContent = `${level} · ${q.levelLabel}`;
+    diff.style.setProperty('--c', `var(--l${ctx.level})`);
+    diff.textContent = `${ctx.level} · ${q.levelLabel}`;
     $('q-tag').textContent = q.tag;
     const pc = $('q-player');
     pc.style.setProperty('--pc', COLORS[p.seat].hex);
-    pc.textContent = `${p.name} · piece ${state.choice.idx + 1}`;
-    $('q-steps').textContent = `🎲 ${state.roll} → move ${state.choice.target - p.pieces[state.choice.idx].pos} if correct`;
-    $('q-kind').textContent = q.kind;
+    pc.textContent = `${p.name} · piece ${ctx.idx + 1}`;
+    $('q-steps').textContent = rescue
+      ? `🛡️ Rescue — answer correctly to stop ${ctx.attacker.name}'s capture`
+      : `🎲 ${state.roll} → move ${ctx.moves} if correct`;
+    $('q-kind').textContent = (rescue ? `🛡️ ${p.name}, defend your piece! ` : '') + q.kind;
     const prompt = $('q-prompt');
     prompt.textContent = q.prompt;
     prompt.classList.toggle('long', q.prompt.length > 48);
@@ -305,6 +356,7 @@
       flag.hidden = true;
       flag.removeAttribute('src');
     }
+    if (rescue) setTurnPill(p, '🛡️ ', ' defends');
     $('timer').hidden = !state.opts.timer;
     $('result').hidden = true;
     WorldMap.prepare(answer);
@@ -322,8 +374,8 @@
     if (!state.opts.timer) { t.hidden = true; return; }
     t.hidden = false;
     t.classList.remove('low');
-    // History questions are long to read: give them a little more time.
-    const total = state.q.type === 'history' ? TIMER_SECS + 15 : TIMER_SECS;
+    // Long text questions (history, culture) get a little more time to read.
+    const total = ['history', 'culture'].includes(state.q.type) ? TIMER_SECS + 15 : TIMER_SECS;
     let left = total;
     const ring = $('timer-ring');
     const CIRC = 119.4;
@@ -347,7 +399,7 @@
       case 'capital': return `The capital of <b>${esc(c.name)}</b> is <b>${esc(c.capital)}</b>.`;
       case 'city': return `<b>${esc(q.city)}</b> is in <b>${esc(c.name)}</b>.`;
       case 'flag': return `That's the flag of <b>${esc(c.name)}</b>.`;
-      case 'history': return `The answer is <b>${esc(c.name)}</b>.`;
+      case 'history': case 'culture': return `The answer is <b>${esc(c.name)}</b>.`;
       default: return `<b>${esc(c.name)}</b>` + (c.noCap ? '.' : ` — capital: ${esc(c.capital)}.`);
     }
   }
@@ -356,34 +408,36 @@
     if (!state || state.phase !== 'question') return;
     clearInterval(timerHandle);
     state.phase = 'result';
-    const p = current();
+    const { ctx } = state.pending;
+    const p = ctx.player;
     const q = state.q;
     const c = q.country;
     const ok = clickedId === c.id;
+    const rescue = ctx.kind === 'rescue';
     p.asked++;
     if (ok) p.correct++;
     state.outcome = ok;
 
-    WorldMap.reveal(c.id, clickedId);
+    WorldMap.reveal(c.id, clickedId, q.pin ? { p: q.pin, name: q.city } : null);
 
     const res = $('result');
     res.classList.toggle('bad', !ok);
-    $('result-icon').textContent = ok ? '✓' : clickedId ? '✗' : '⏱';
+    $('result-icon').textContent = ok ? (rescue ? '🛡' : '✓') : clickedId ? '✗' : '⏱';
     const clicked = clickedId ? WorldMap.byId.get(clickedId) : null;
-    const pc = p.pieces[state.choice.idx];
+    const extra = q.type === 'capital' ? ` (capital: ${esc(c.capital)})` : q.type === 'city' ? ` (${esc(q.city)})` : '';
+    const missed = (clicked ? `You picked <b>${esc(clicked.name)}</b>. ` : '') + `The answer was <b>${esc(c.name)}</b>${extra}.`;
     if (ok) {
-      const moves = state.choice.target - pc.pos;
-      $('result-title').textContent = ['Correct!', 'Spot on!', 'Brilliant!', 'Well navigated!'][(Math.random() * 4) | 0];
-      $('result-sub').innerHTML = `${factFor(q)} Piece ${state.choice.idx + 1} moves <b>${moves}</b> space${moves === 1 ? '' : 's'}.`;
+      $('result-title').textContent = rescue ? 'Rescued!' : ['Correct!', 'Spot on!', 'Brilliant!', 'Well navigated!'][(Math.random() * 4) | 0];
+      $('result-sub').innerHTML = `${factFor(q)} ` + (rescue
+        ? `${esc(ctx.attacker.name)}'s piece is pushed back.`
+        : `Piece ${ctx.idx + 1} moves <b>${ctx.moves}</b> space${ctx.moves === 1 ? '' : 's'}.`);
       Sound.correct();
       const r = $('map-wrap').getBoundingClientRect();
       Confetti.burst(r.left + r.width / 2, r.top + r.height * 0.75, 60, 0.8);
-      log(`✓ <b>${esc(p.name)}</b> found ${esc(c.name)} <small>(${q.tag}, level ${q.level})</small>`, p.seat);
+      log(`${rescue ? '🛡️' : '✓'} <b>${esc(p.name)}</b> found ${esc(c.name)} <small>(${q.tag}, level ${q.level})</small>`, p.seat);
     } else {
-      $('result-title').textContent = clickedId ? 'Not quite!' : "Time's up!";
-      const extra = q.type === 'capital' ? ` (capital: ${esc(c.capital)})` : q.type === 'city' ? ` (${esc(q.city)})` : '';
-      $('result-sub').innerHTML = (clicked ? `You picked <b>${esc(clicked.name)}</b>. ` : '') +
-        `The answer was <b>${esc(c.name)}</b>${extra}. The piece stays put.`;
+      $('result-title').textContent = rescue ? (clickedId ? 'Captured!' : "Time's up — captured!") : clickedId ? 'Not quite!' : "Time's up!";
+      $('result-sub').innerHTML = missed + (rescue ? ' Your piece goes home.' : ' The piece stays put.');
       Sound.wrong();
       log(`✗ <b>${esc(p.name)}</b> missed ${esc(c.name)}${clicked ? ` (picked ${esc(clicked.name)})` : ' (time ran out)'}`, p.seat);
     }
@@ -398,52 +452,56 @@
     $('result').hidden = true;
     WorldMap.lock();
     await showBoard();
-    const p = current();
-    const ok = state.outcome;
-    const o = state.choice;
-    Board.showTarget(null);
-    if (ok) {
-      const pc = p.pieces[o.idx];
-      const from = pc.pos;
-      status(`<b>${esc(p.name)}</b> moves piece ${o.idx + 1}…`);
-      pc.pos = o.target;
-      await Board.walk(p.seat, o.idx, from, o.target, state.players);
-      renderStandings();
-      await captureAt(p, o.idx);
-      if (pc.pos >= FIN) {
-        log(`🏁 <b>${esc(p.name)}</b>'s piece ${o.idx + 1} reached the finish!`, p.seat);
-        if (finishedCount(p) === p.pieces.length) return win(p);
-      }
-    } else {
-      status(`<b>${esc(p.name)}</b>'s piece stays put.`);
-      await sleep(500);
-    }
-    endOfMove(ok);
+    setTurnPill();
+    const { resolve } = state.pending;
+    state.pending = null;
+    resolve(state.outcome);
   }
 
-  /** Send home every rival piece on the square the given piece now occupies. */
-  async function captureAt(p, idx) {
+  /** Difficulty of the rescue question for a piece at this progress (1-51 on the loop), else null. */
+  function rescueLevel(pos) {
+    return pos >= 1 && pos <= Board.TRACK_LEN ? Math.min(6, 1 + Math.floor(((pos - 1) * 6) / Board.TRACK_LEN)) : null;
+  }
+
+  /**
+   * A piece has just landed. Rival pieces on the same square (unless it is a safe square) are under
+   * attack: each defending player gets a rescue question at the difficulty of the threatened piece's
+   * progress. A correct rescue sends the attacker back to `from` and cancels the capture.
+   */
+  async function resolveLanding(p, idx, from) {
     const sq = Board.trackIndex(p.seat, p.pieces[idx].pos);
     if (sq < 0) return;
+    const groups = state.players.filter((o) => o !== p)
+      .map((o) => ({ o, js: o.pieces.map((_, j) => j).filter((j) => Board.trackIndex(o.seat, o.pieces[j].pos) === sq) }))
+      .filter((g) => g.js.length);
+    if (!groups.length) return;
     if (Board.isSafe(sq)) {
-      const sharing = state.players.filter((o) => o !== p && o.pieces.some((pc) => Board.trackIndex(o.seat, pc.pos) === sq));
-      if (sharing.length) {
-        log(`🛡️ <b>${esc(p.name)}</b> shares a safe square with ${sharing.map((o) => `<b>${esc(o.name)}</b>`).join(', ')}. No capture.`, p.seat);
-      }
+      log(`🛡️ <b>${esc(p.name)}</b> shares a safe square with ${groups.map((g) => `<b>${esc(g.o.name)}</b>`).join(', ')}. No capture.`, p.seat);
       return;
     }
-    for (const o of state.players) {
-      if (o === p) continue;
-      for (let j = 0; j < o.pieces.length; j++) {
-        if (Board.trackIndex(o.seat, o.pieces[j].pos) === sq) {
-          p.captures++;
-          log(`💥 <b>${esc(p.name)}</b> landed on <b>${esc(o.name)}</b>'s piece and sent it home!`, p.seat);
-          status(`💥 <b>${esc(o.name)}</b>'s piece is sent back home!`);
-          o.pieces[j].pos = 0;
-          await Board.sendHome(o.seat, j, state.players);
-          renderStandings();
-        }
+    for (const { o, js } of groups) {
+      const lvl = rescueLevel(o.pieces[js[0]].pos);
+      const label = Quiz.LEVELS[lvl].label;
+      const pieces = js.length > 1 ? `pieces ${js.map((j) => j + 1).join(' & ')}` : `piece ${js[0] + 1}`;
+      log(`⚔️ <b>${esc(p.name)}</b> attacks <b>${esc(o.name)}</b>'s ${pieces}! Rescue question: level ${lvl} (${label}).`, p.seat);
+      status(`⚔️ <b>${esc(o.name)}</b>, your ${pieces} ${js.length > 1 ? 'are' : 'is'} under attack! Answer ${/^[AEIOU]/.test(label) ? 'an' : 'a'} <span class="lvl-text" style="color:var(--l${lvl})">${label}</span> rescue question.`);
+      Sound.capture();
+      await sleep(1400);
+      const saved = await quiz({ kind: 'rescue', player: o, idx: js[0], level: lvl, attacker: p });
+      if (saved) {
+        log(`🛡️ <b>${esc(o.name)}</b> fought off the attack! <b>${esc(p.name)}</b>'s piece ${idx + 1} goes back to where it came from.`, o.seat);
+        status(`🛡️ <b>${esc(o.name)}</b> saved the piece — <b>${esc(p.name)}</b> is pushed back!`);
+        p.pieces[idx].pos = from;
+        await Board.flyTo(p.seat, idx, state.players);
+        renderStandings();
+        return;
       }
+      p.captures++;
+      log(`💥 <b>${esc(p.name)}</b> captured <b>${esc(o.name)}</b>'s ${pieces} and sent ${js.length > 1 ? 'them' : 'it'} home!`, p.seat);
+      status(`💥 <b>${esc(o.name)}</b>'s ${pieces} ${js.length > 1 ? 'are' : 'is'} sent back home!`);
+      js.forEach((j) => { o.pieces[j].pos = 0; });
+      for (const j of js) await Board.sendHome(o.seat, j, state.players);
+      renderStandings();
     }
   }
 
