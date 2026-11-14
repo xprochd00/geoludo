@@ -480,7 +480,7 @@
     "id": "Q256",
     "difficulty": 1,
     "category": "geopolitics",
-    "question": "Which country hosted the 2008 Summer Olympics in Beijing?",
+    "question": "Which country speaks Mandarin?",
     "answer": {
       "iso2": "CN",
       "name": "China"
@@ -620,7 +620,7 @@
     "id": "Q026",
     "difficulty": 2,
     "category": "history",
-    "question": "Which country was created together with Slovakia when Czechoslovakia split on 1 January 1993?",
+    "question": "Which country was created together with Slovakia on 1 January 1993?",
     "answer": {
       "iso2": "CZ",
       "name": "Czechia"
@@ -1045,7 +1045,7 @@
     "id": "Q262",
     "difficulty": 2,
     "category": "geopolitics",
-    "question": "Which country hosted the 2022 FIFA World Cup?",
+    "question": "Which small Gulf country, home to the TV network Al Jazeera, was under a diplomatic and trade blockade by Saudi Arabia and its allies from 2017 to 2021?",
     "answer": {
       "iso2": "QA",
       "name": "Qatar"
@@ -1105,7 +1105,7 @@
     "id": "Q268",
     "difficulty": 2,
     "category": "geopolitics",
-    "question": "Which country hosted the 2016 Summer Olympics in Rio de Janeiro?",
+    "question": "Which country has had Luiz Inácio Lula da Silva as president?",
     "answer": {
       "iso2": "BR",
       "name": "Brazil"
@@ -1507,7 +1507,7 @@
     "id": "Q109",
     "difficulty": 3,
     "category": "history",
-    "question": "Which country did the USSR and Warsaw Pact invade in August 1968 to end the Prague Spring?",
+    "question": "Which country, together with Slovakia, did the USSR and Warsaw Pact invade in August 1968 to end the Prague Spring?",
     "answer": {
       "iso2": "CZ",
       "name": "Czechia"
@@ -1815,7 +1815,7 @@
   },
   {
     "id": "Q056",
-    "difficulty": 4,
+    "difficulty": 3,
     "category": "history",
     "question": "In which country did the Slovak National Uprising break out in August 1944?",
     "answer": {
