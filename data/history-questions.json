@@ -407,6 +407,206 @@
     }
   },
   {
+    "id": "Q249",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was Joan of Arc, the heroine of the Hundred Years' War, from?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q250",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which country is the Taj Mahal?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "Q251",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was ruled by Queen Cleopatra?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q252",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "In which country is the headquarters of the United Nations?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q253",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was led by Abraham Lincoln during its civil war?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q254",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Scotland is part of which sovereign country?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q255",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "In which country is the Eiffel Tower?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q256",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Which country hosted the 2008 Summer Olympics in Beijing?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "Q257",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was Leonardo da Vinci from?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q258",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "In which country is the Great Barrier Reef?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    }
+  },
+  {
+    "id": "Q309",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Barack Obama was the president of which country?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "Q310",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Queen Elizabeth II reigned over which country from 1952 to 2022?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q311",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Julius Caesar was a leader of ancient Rome, which was based in which modern country?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q312",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Marie Antoinette was queen of which country?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q313",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Vladimir Lenin led the revolution that made which country communist in 1917?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q314",
+    "difficulty": 1,
+    "category": "history",
+    "question": "King Henry VIII, who founded the Church of England, ruled which country?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q315",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the composer Mozart from?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "Q316",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the composer Beethoven born in?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q317",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which country was the painter Pablo Picasso from?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q318",
+    "difficulty": 1,
+    "category": "geopolitics",
+    "question": "Justin Trudeau was the prime minister of which country from 2015 to 2025?",
+    "answer": {
+      "iso2": "CA",
+      "name": "Canada"
+    }
+  },
+  {
     "id": "Q025",
     "difficulty": 2,
     "category": "history",
@@ -812,6 +1012,206 @@
     }
   },
   {
+    "id": "Q259",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country is Machu Picchu, the famous Inca citadel?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
+    "id": "Q260",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which present-day country includes Moscow, host city of the boycotted 1980 Summer Olympics?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q261",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country did the 2011 Fukushima nuclear disaster occur?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "Q262",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country hosted the 2022 FIFA World Cup?",
+    "answer": {
+      "iso2": "QA",
+      "name": "Qatar"
+    }
+  },
+  {
+    "id": "Q263",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country is the Hagia Sophia, a former Byzantine cathedral?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q264",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country was Pope Francis born in?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "Q265",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was Pope John Paul II from?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q266",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was ruled by the 'Sun King' Louis XIV?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q267",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Angela Merkel was chancellor of which country from 2005 to 2021?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q268",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Which country hosted the 2016 Summer Olympics in Rio de Janeiro?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "Q319",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was led by Ho Chi Minh during the fight for independence from France?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    }
+  },
+  {
+    "id": "Q320",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which present-day country was Mikhail Gorbachev, the last Soviet leader, born?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q321",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Charles de Gaulle led the Free French in WWII and later became president of which country?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q322",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Otto von Bismarck was the 'Iron Chancellor' of which country?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q323",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country was Karl Marx, author of 'The Communist Manifesto', born?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q324",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Benjamin Netanyahu has repeatedly served as prime minister of which country?",
+    "answer": {
+      "iso2": "IL",
+      "name": "Israel"
+    }
+  },
+  {
+    "id": "Q325",
+    "difficulty": 2,
+    "category": "geopolitics",
+    "question": "Tony Blair was prime minister of which country from 1997 to 2007?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q326",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which country was Albert Einstein born?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q327",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was the composer Frédéric Chopin from?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q328",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which country was led by Prime Minister Indira Gandhi until her assassination in 1984?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
     "id": "Q001",
     "difficulty": 3,
     "category": "geopolitics",
@@ -1211,6 +1611,206 @@
     "answer": {
       "iso2": "FR",
       "name": "France"
+    }
+  },
+  {
+    "id": "Q269",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the Battle of Thermopylae fought in 480 BC?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q270",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was Che Guevara born in?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "Q271",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was hit hardest by the 2004 Indian Ocean tsunami, especially its Aceh province?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    }
+  },
+  {
+    "id": "Q272",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country has been the base of the jihadist group Boko Haram?",
+    "answer": {
+      "iso2": "NG",
+      "name": "Nigeria"
+    }
+  },
+  {
+    "id": "Q273",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country lost Alsace-Lorraine to Germany after the war of 1870–71?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q274",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did 'The Troubles' take place between 1969 and 1998?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q275",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country had the Orange Revolution in 2004?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "Q276",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "In which country was the 1957 Treaty of Rome, which founded the EEC, signed?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "Q277",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "In which country was the 1992 Maastricht Treaty, which created the European Union, signed?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    }
+  },
+  {
+    "id": "Q278",
+    "difficulty": 3,
+    "category": "geopolitics",
+    "question": "Which country hosted the secret negotiations that led to the 1993 Oslo Accords?",
+    "answer": {
+      "iso2": "NO",
+      "name": "Norway"
+    }
+  },
+  {
+    "id": "Q329",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was Eva Perón the First Lady of?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "Q330",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was Osama bin Laden born?",
+    "answer": {
+      "iso2": "SA",
+      "name": "Saudi Arabia"
+    }
+  },
+  {
+    "id": "Q331",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was led by President Anwar Sadat, who signed the 1979 peace treaty with Israel?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q332",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the physicist Marie Curie born?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q333",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which present-day country includes Wallachia, ruled by Vlad the Impaler, the inspiration for Dracula?",
+    "answer": {
+      "iso2": "RO",
+      "name": "Romania"
+    }
+  },
+  {
+    "id": "Q334",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Suleiman the Magnificent was the greatest sultan of the empire based in which modern country?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "Q335",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which present-day country was the core of the kingdom of Prussia under Frederick the Great?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q336",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which modern country includes England, where Oliver Cromwell ruled as Lord Protector?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q337",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was led by Hugo Chávez from 1999 to 2013?",
+    "answer": {
+      "iso2": "VE",
+      "name": "Venezuela"
+    }
+  },
+  {
+    "id": "Q338",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country's leader Deng Xiaoping launched the 'reform and opening up' policy in 1978?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
     }
   },
   {
@@ -1618,6 +2218,206 @@
     }
   },
   {
+    "id": "Q279",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country did the USA invade in December 1989 to remove its leader Manuel Noriega?",
+    "answer": {
+      "iso2": "PA",
+      "name": "Panama"
+    }
+  },
+  {
+    "id": "Q280",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1810 'Grito de Dolores' start the war of independence from Spain?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    }
+  },
+  {
+    "id": "Q281",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the 1918 armistice that ended World War I signed in a railway carriage?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    }
+  },
+  {
+    "id": "Q282",
+    "difficulty": 4,
+    "category": "geopolitics",
+    "question": "In which country is the village of Schengen, which gave its name to the border-free area?",
+    "answer": {
+      "iso2": "LU",
+      "name": "Luxembourg"
+    }
+  },
+  {
+    "id": "Q283",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did Reagan and Gorbachev hold their 1986 summit?",
+    "answer": {
+      "iso2": "IS",
+      "name": "Iceland"
+    }
+  },
+  {
+    "id": "Q284",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the 1988 Lockerbie bombing of Pan Am Flight 103 occur?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    }
+  },
+  {
+    "id": "Q285",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was attacked by Egypt and Syria in October 1973 in the Yom Kippur War?",
+    "answer": {
+      "iso2": "IL",
+      "name": "Israel"
+    }
+  },
+  {
+    "id": "Q286",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by the 'Regime of the Colonels' military junta from 1967 to 1974?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "Q287",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which European country's king personally owned the Congo Free State?",
+    "answer": {
+      "iso2": "BE",
+      "name": "Belgium"
+    }
+  },
+  {
+    "id": "Q288",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ceded by Spain to the USA in 1898 together with Guam and Puerto Rico?",
+    "answer": {
+      "iso2": "PH",
+      "name": "Philippines"
+    }
+  },
+  {
+    "id": "Q339",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was Simón Bolívar, the 'Liberator' of South America, born?",
+    "answer": {
+      "iso2": "VE",
+      "name": "Venezuela"
+    }
+  },
+  {
+    "id": "Q340",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was led by Benazir Bhutto, the first woman to head a Muslim-majority democracy?",
+    "answer": {
+      "iso2": "PK",
+      "name": "Pakistan"
+    }
+  },
+  {
+    "id": "Q341",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country elected Evo Morales as its first indigenous president in 2005?",
+    "answer": {
+      "iso2": "BO",
+      "name": "Bolivia"
+    }
+  },
+  {
+    "id": "Q342",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country's prime minister Olof Palme was assassinated in Stockholm in 1986?",
+    "answer": {
+      "iso2": "SE",
+      "name": "Sweden"
+    }
+  },
+  {
+    "id": "Q343",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was led by Marshal Józef Piłsudski in the interwar period?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q344",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was Alexander Dubček, leader of the 1968 Prague Spring, born?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    }
+  },
+  {
+    "id": "Q345",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by the dictator António de Oliveira Salazar?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    }
+  },
+  {
+    "id": "Q346",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was led by Éamon de Valera as Taoiseach and president?",
+    "answer": {
+      "iso2": "IE",
+      "name": "Ireland"
+    }
+  },
+  {
+    "id": "Q347",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by General Suharto from 1967 to 1998?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    }
+  },
+  {
+    "id": "Q348",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by Ferdinand Marcos from 1965 to 1986?",
+    "answer": {
+      "iso2": "PH",
+      "name": "Philippines"
+    }
+  },
+  {
     "id": "Q055",
     "difficulty": 5,
     "category": "history",
@@ -2018,6 +2818,206 @@
     }
   },
   {
+    "id": "Q289",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did Lt. Col. Tejero storm the parliament in a failed coup attempt in 1981?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "Q290",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which European country gave women the right to vote in federal elections only in 1971?",
+    "answer": {
+      "iso2": "CH",
+      "name": "Switzerland"
+    }
+  },
+  {
+    "id": "Q291",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country became independent from Portugal in 1975 after a decade-long war?",
+    "answer": {
+      "iso2": "MZ",
+      "name": "Mozambique"
+    }
+  },
+  {
+    "id": "Q292",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the 1988 mass song festivals of the 'Singing Revolution' begin in Tallinn?",
+    "answer": {
+      "iso2": "EE",
+      "name": "Estonia"
+    }
+  },
+  {
+    "id": "Q293",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country annexed Goa from Portugal in 1961?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "Q294",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was known as Dutch Guiana until its independence in 1975?",
+    "answer": {
+      "iso2": "SR",
+      "name": "Suriname"
+    }
+  },
+  {
+    "id": "Q295",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was called British Honduras until 1973?",
+    "answer": {
+      "iso2": "BZ",
+      "name": "Belize"
+    }
+  },
+  {
+    "id": "Q296",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country had Sukarno as its first president after independence from the Dutch?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    }
+  },
+  {
+    "id": "Q297",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "Which country agreed in 2025 to receive sovereignty of the Chagos Islands from the United Kingdom?",
+    "answer": {
+      "iso2": "MU",
+      "name": "Mauritius"
+    }
+  },
+  {
+    "id": "Q298",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was called Upper Volta until 1984?",
+    "answer": {
+      "iso2": "BF",
+      "name": "Burkina Faso"
+    }
+  },
+  {
+    "id": "Q349",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by Ahmed Ben Bella after its 1962 independence from France?",
+    "answer": {
+      "iso2": "DZ",
+      "name": "Algeria"
+    }
+  },
+  {
+    "id": "Q350",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by Habib Bourguiba, its first president after independence?",
+    "answer": {
+      "iso2": "TN",
+      "name": "Tunisia"
+    }
+  },
+  {
+    "id": "Q351",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by King Hussein from 1952 to 1999?",
+    "answer": {
+      "iso2": "JO",
+      "name": "Jordan"
+    }
+  },
+  {
+    "id": "Q352",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by Julius Nyerere, its first president?",
+    "answer": {
+      "iso2": "TZ",
+      "name": "Tanzania"
+    }
+  },
+  {
+    "id": "Q353",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by Getúlio Vargas during the 'Estado Novo' period?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "Q354",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was led by Benito Juárez, its first indigenous president?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    }
+  },
+  {
+    "id": "Q355",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which present-day country was the inventor Nikola Tesla born?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "Q356",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "Which country was UN Secretary-General Kofi Annan from?",
+    "answer": {
+      "iso2": "GH",
+      "name": "Ghana"
+    }
+  },
+  {
+    "id": "Q357",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "Which country was UN Secretary-General Ban Ki-moon from?",
+    "answer": {
+      "iso2": "KR",
+      "name": "South Korea"
+    }
+  },
+  {
+    "id": "Q358",
+    "difficulty": 5,
+    "category": "geopolitics",
+    "question": "Which country was the UN Secretary-General Dag Hammarskjöld from?",
+    "answer": {
+      "iso2": "SE",
+      "name": "Sweden"
+    }
+  },
+  {
     "id": "Q180",
     "difficulty": 6,
     "category": "history",
@@ -2415,6 +3415,206 @@
     "answer": {
       "iso2": "AE",
       "name": "United Arab Emirates"
+    }
+  },
+  {
+    "id": "Q299",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was home to the medieval Kingdom of Benin, famous for its bronzes?",
+    "answer": {
+      "iso2": "NG",
+      "name": "Nigeria"
+    }
+  },
+  {
+    "id": "Q300",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was an empire under Emperor Pedro II until 1889?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "Q301",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Chancellor Engelbert Dollfuss, assassinated by Nazis in 1934?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "Q302",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by Regent Miklós Horthy from 1920 to 1944?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
+    }
+  },
+  {
+    "id": "Q303",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Marshal Ion Antonescu during World War II?",
+    "answer": {
+      "iso2": "RO",
+      "name": "Romania"
+    }
+  },
+  {
+    "id": "Q304",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by the Ustaše leader Ante Pavelić during World War II?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "Q305",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by Field Marshal Ayub Khan from 1958 to 1969?",
+    "answer": {
+      "iso2": "PK",
+      "name": "Pakistan"
+    }
+  },
+  {
+    "id": "Q306",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was ruled by Park Chung-hee from 1961 until his assassination in 1979?",
+    "answer": {
+      "iso2": "KR",
+      "name": "South Korea"
+    }
+  },
+  {
+    "id": "Q307",
+    "difficulty": 6,
+    "category": "geopolitics",
+    "question": "Which country has sovereignty over the demilitarised autonomous Åland Islands?",
+    "answer": {
+      "iso2": "FI",
+      "name": "Finland"
+    }
+  },
+  {
+    "id": "Q308",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country lost most of its male population in the War of the Triple Alliance (1864–1870)?",
+    "answer": {
+      "iso2": "PY",
+      "name": "Paraguay"
+    }
+  },
+  {
+    "id": "Q359",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which present-day country was Mother Teresa born in Skopje?",
+    "answer": {
+      "iso2": "MK",
+      "name": "North Macedonia"
+    }
+  },
+  {
+    "id": "Q360",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was US Secretary of State Madeleine Albright born?",
+    "answer": {
+      "iso2": "CZ",
+      "name": "Czechia"
+    }
+  },
+  {
+    "id": "Q361",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was US Secretary of State Henry Kissinger born?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "Q362",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which country was US national security adviser Zbigniew Brzezinski born?",
+    "answer": {
+      "iso2": "PL",
+      "name": "Poland"
+    }
+  },
+  {
+    "id": "Q363",
+    "difficulty": 6,
+    "category": "geopolitics",
+    "question": "Which country was the UN Secretary-General Boutros Boutros-Ghali from?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q364",
+    "difficulty": 6,
+    "category": "geopolitics",
+    "question": "Which country was the UN Secretary-General U Thant from?",
+    "answer": {
+      "iso2": "MM",
+      "name": "Myanmar"
+    }
+  },
+  {
+    "id": "Q365",
+    "difficulty": 6,
+    "category": "geopolitics",
+    "question": "Which country was the first UN Secretary-General, Trygve Lie, from?",
+    "answer": {
+      "iso2": "NO",
+      "name": "Norway"
+    }
+  },
+  {
+    "id": "Q366",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by President Ngô Đình Diệm until his 1963 overthrow?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    }
+  },
+  {
+    "id": "Q367",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which present-day country was Yugoslav leader Josip Broz Tito born?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "Q368",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which country was led by Lajos Kossuth in the 1848 revolution?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
     }
   }
 ]

@@ -49,6 +49,10 @@
 
   const cellCenter = ([c, r]) => [c * C + C / 2, r * C + C / 2];
 
+  // Each player's first square is a safe zone: pieces standing on it cannot be captured.
+  const SAFE = new Set(START);
+  const isSafe = (trackIdx) => SAFE.has(trackIdx);
+
   /** Absolute loop index for a given seat/progress (1..51), else -1. */
   function trackIndex(seat, pos) {
     if (pos < 1 || pos > TRACK_LEN) return -1;
@@ -139,10 +143,13 @@
       const fill = seat >= 0 ? `url(#yg-${COLORS[seat].key})` : 'url(#cellg)';
       el('rect', { x: c * C + 1.5, y: r * C + 1.5, width: C - 3, height: C - 3, rx: 7, fill, stroke: 'rgba(40,30,70,.18)' }, cells);
       if (seat >= 0) {
-        // start arrow
+        // Start square = safe zone: a shield with an arrow showing the direction of travel.
         const [x, y] = cellCenter([c, r]);
         const rot = [0, 90, 180, 270][seat];
-        el('path', { d: 'M-8,-7 L8,0 L-8,7 L-4,0 Z', fill: '#fff', transform: `translate(${x},${y}) rotate(${rot})`, opacity: 0.95 }, cells);
+        const badge = el('g', { transform: `translate(${x},${y})` }, cells);
+        el('path', { d: 'M0,-14 L11,-9.5 L11,0.5 C11,7.5 5.5,11.8 0,14 C-5.5,11.8 -11,7.5 -11,0.5 L-11,-9.5 Z', fill: '#fff', opacity: 0.95 }, badge);
+        el('path', { d: 'M-5,-4.5 L5.5,0 L-5,4.5 L-2.5,0 Z', fill: COLORS[seat].hex, transform: `rotate(${rot})` }, badge);
+        el('title', {}, badge).textContent = 'Safe square: pieces here cannot be captured';
       }
     });
     // Home columns
@@ -352,6 +359,6 @@
   }
 
   window.Board = {
-    COLORS, TRACK_LEN, FINISH_POS, render: renderBoard, layout, walk, sendHome, setSelectable, showTarget, trackIndex,
+    COLORS, TRACK_LEN, FINISH_POS, render: renderBoard, layout, isSafe, walk, sendHome, setSelectable, showTarget, trackIndex,
   };
 })();
