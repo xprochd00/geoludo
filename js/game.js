@@ -49,9 +49,47 @@
       renderInputs();
     });
   });
+  /* Mixed mode: which categories to combine (at least two). */
+  const CAT_NAMES = { geo: 'Geography', history: 'History & Geopolitics', culture: 'Sports & Culture' };
+  let mixCats = ['geo', 'history', 'culture'];
+  function syncMix() {
+    $('mix-options').hidden = mode !== 'mixed';
+    document.querySelectorAll('.mix-chip').forEach((c) => {
+      const on = mixCats.includes(c.dataset.cat);
+      c.classList.toggle('active', on);
+      c.setAttribute('aria-pressed', on);
+    });
+    $('mix-hint').textContent = mixCats.length === 3
+      ? 'All three categories, about a third each.'
+      : `${mixCats.map((c) => CAT_NAMES[c]).join(' + ')}, about half each.`;
+  }
+  document.querySelectorAll('.mix-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.cat;
+      if (mixCats.includes(cat)) {
+        if (mixCats.length <= 2) {
+          // need at least two categories to mix
+          chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+          $('mix-hint').textContent = 'Mixed mode needs at least two categories. Pick a single-category mode for just one.';
+          return;
+        }
+        mixCats = mixCats.filter((c) => c !== cat);
+      } else {
+        mixCats = Quiz.CATEGORIES.filter((c) => c === cat || mixCats.includes(c));
+      }
+      syncMix();
+    });
+  });
+  function syncUnseen() {
+    $('unseen-note').textContent = `${Quiz.unseenCount()} of ${Quiz.totalCount()} questions not asked yet.`;
+  }
+  $('forget-btn').addEventListener('click', () => { Quiz.clearHistory(); syncUnseen(); });
+  syncUnseen();
+
   document.querySelectorAll('.mode-card').forEach((b) => {
     b.addEventListener('click', () => {
       mode = b.dataset.mode;
+      syncMix();
       document.querySelectorAll('.mode-card').forEach((x) => {
         x.classList.toggle('active', x === b);
         x.setAttribute('aria-checked', x === b);
@@ -78,13 +116,14 @@
       turn: 0,
       phase: 'roll',
       mode,
+      cats: mode === 'mixed' ? mixCats.slice() : [mode],
       opts: { six: $('opt-six').checked, exact: $('opt-exact').checked, timer: $('opt-timer').checked },
       roll: 0,
       choice: null,
       q: null,
       outcome: null,
     };
-    Quiz.resetUsed();
+    Quiz.newGame(); // keeps the record of questions asked in earlier games
     $('setup').classList.remove('active');
     $('game').classList.add('active');
     $('win').hidden = true;
@@ -93,9 +132,12 @@
     prism.classList.remove('show-map', 'settled');
     prism.classList.add('flat');
     $('result').hidden = true;
-    $('mode-chip').textContent = Quiz.MODES[mode].label;
+    const modeLabel = mode === 'mixed' && mixCats.length < 3
+      ? `Mixed: ${mixCats.map((c) => CAT_NAMES[c].split(' ')[0]).join(' + ')}`
+      : Quiz.MODES[mode].label;
+    $('mode-chip').textContent = modeLabel;
     Board.render(state.players);
-    log(`🌍 A ${Quiz.MODES[mode].label.toLowerCase()} race begins! ${state.players.length} explorers set off. Roll a <b>6</b> to bring a piece onto the board.`);
+    log(`🌍 A ${modeLabel.toLowerCase()} race begins! ${state.players.length} explorers set off. Roll a <b>6</b> to bring a piece onto the board.`);
     beginTurn();
   }
 
@@ -326,7 +368,7 @@
   let timerHandle = null;
   async function askQuestion(ctx) {
     const p = ctx.player;
-    const q = Quiz.next(ctx.level, state.mode);
+    const q = Quiz.next(ctx.level, state.mode, state.cats);
     state.q = q;
     state.phase = 'question';
     const rescue = ctx.kind === 'rescue';
@@ -563,6 +605,7 @@
     $('game').classList.remove('active');
     $('setup').classList.add('active');
     renderInputs();
+    syncUnseen();
   }
   document.addEventListener('keydown', (e) => {
     if (!state || !$('game').classList.contains('active')) return;

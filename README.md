@@ -44,9 +44,11 @@ Optional rules, set on the start screen:
 | 🗺️ Geography | Find a country by its **name**, **flag**, **capital** or a **major city** |
 | 📜 History & Geopolitics | The 360 questions in `data/history-questions.json` (60 per difficulty level) |
 | 🎭 Sports & Culture | The 420 questions in `data/culture-questions.json` (70 per level): music, film, art, sport, literature and games |
-| 🎲 Mixed | All three categories in equal measure: each question comes at random from whichever categories have been asked least so far |
+| 🎲 Mixed | Combine two or all three categories (chosen on the start screen). Each chosen category gets an equal share: each question comes at random from whichever chosen categories have been asked least so far |
 
 Every question is answered by clicking the country on the map.
+
+**No repeats:** questions are drawn at random from those not asked yet. The record of asked questions is kept in the browser (`localStorage`), so it carries over between games and page reloads. Once every question at a level has been asked, new draws come from the least recently asked half. The game also avoids answer countries used in the last 8 questions. The start screen shows how many questions haven't been asked yet and has a **Reset question history** link.
 
 **Geography difficulty:** every country has a *fame level* from 1 (everyone knows it) to 5 (an obscure micro-state). A question's level is the fame level plus a step for harder question types:
 
@@ -102,7 +104,8 @@ To add or change questions, edit `data/history-questions.json` or `data/culture-
 Map notes:
 - Crimea is shown as part of Ukraine, as recognised under international law and as the history questions expect. Natural Earth draws it as Russian.
 - Somaliland is merged into Somalia and Northern Cyprus into Cyprus. Hong Kong and Macau are merged into China, where the city list places them.
-- Tiny countries and island archipelagos (Bahamas, Solomon Islands, Vanuatu, Fiji …) are marked with gold dots so they can be clicked at world zoom. Island territories such as New Caledonia have grey dots: they can be clicked, but they're never an answer.
+- Only the 197 countries in the game's database (each with a name, flag and capital) can be clicked. Territories such as Greenland, New Caledonia or Western Sahara are drawn but can't be clicked.
+- Tiny countries and island archipelagos (Bahamas, Solomon Islands, Vanuatu, Fiji …) are marked with gold dots so they can be clicked at world zoom. Territories get no dots.
 
 ## Credits
 
