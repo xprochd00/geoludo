@@ -1,0 +1,523 @@
+[
+  {
+    "id": "G001",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country is home to Mount Fuji?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    }
+  },
+  {
+    "id": "G002",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which is the largest country in South America by area?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "G003",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country is the second largest in the world by area?",
+    "answer": {
+      "iso2": "CA",
+      "name": "Canada"
+    }
+  },
+  {
+    "id": "G036",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "In which country is the Grand Canyon?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    }
+  },
+  {
+    "id": "G037",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "In which country are the Pyramids of Giza?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "Q208",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country is the largest in the world by area?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "Q209",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country has the largest population in the world since 2023?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    },
+    "time_sensitive": true
+  },
+  {
+    "id": "Q258",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "In which country is the Great Barrier Reef?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    }
+  },
+  {
+    "id": "G004",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the sandstone monolith Uluru?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    }
+  },
+  {
+    "id": "G005",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the active volcano Mount Etna?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "G006",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country has the largest population in the European Union?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "G007",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country do the Galápagos Islands belong to?",
+    "answer": {
+      "iso2": "EC",
+      "name": "Ecuador"
+    }
+  },
+  {
+    "id": "G008",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is Lake Baikal, the world's deepest lake?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    }
+  },
+  {
+    "id": "G038",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the Inca citadel of Machu Picchu?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
+    "id": "G039",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country is nicknamed the 'Land of Fire and Ice'?",
+    "answer": {
+      "iso2": "IS",
+      "name": "Iceland"
+    }
+  },
+  {
+    "id": "G040",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is Table Mountain, overlooking Cape Town?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    }
+  },
+  {
+    "id": "G009",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is Mount Kilimanjaro, Africa's highest peak?",
+    "answer": {
+      "iso2": "TZ",
+      "name": "Tanzania"
+    }
+  },
+  {
+    "id": "G010",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is the Atacama Desert, one of the driest places on Earth?",
+    "answer": {
+      "iso2": "CL",
+      "name": "Chile"
+    }
+  },
+  {
+    "id": "G011",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is the rock-cut city of Petra?",
+    "answer": {
+      "iso2": "JO",
+      "name": "Jordan"
+    }
+  },
+  {
+    "id": "G012",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which is the largest landlocked country in the world by area?",
+    "answer": {
+      "iso2": "KZ",
+      "name": "Kazakhstan"
+    }
+  },
+  {
+    "id": "G013",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country has the largest population in Africa?",
+    "answer": {
+      "iso2": "NG",
+      "name": "Nigeria"
+    }
+  },
+  {
+    "id": "G014",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which is the largest island country in the world by area?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    }
+  },
+  {
+    "id": "G015",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country are the Cliffs of Moher?",
+    "answer": {
+      "iso2": "IE",
+      "name": "Ireland"
+    }
+  },
+  {
+    "id": "G016",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which is the largest country lying entirely in Europe?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    }
+  },
+  {
+    "id": "G017",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which is the largest country in Africa by area?",
+    "answer": {
+      "iso2": "DZ",
+      "name": "Algeria"
+    }
+  },
+  {
+    "id": "G041",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is Mount Olympus, the highest mountain in the country and home of the gods in myth?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "G042",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is Mount Ararat, the traditional resting place of Noah's Ark?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "G018",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Angel Falls, the world's highest uninterrupted waterfall?",
+    "answer": {
+      "iso2": "VE",
+      "name": "Venezuela"
+    }
+  },
+  {
+    "id": "G019",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Aconcagua, the highest peak in the Americas?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "G020",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which country has the most islands in the world?",
+    "answer": {
+      "iso2": "SE",
+      "name": "Sweden"
+    }
+  },
+  {
+    "id": "G021",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Plitvice Lakes National Park, known for its terraced lakes and waterfalls?",
+    "answer": {
+      "iso2": "HR",
+      "name": "Croatia"
+    }
+  },
+  {
+    "id": "G022",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country are the Lofoten islands, famous for their fjords and fishing villages?",
+    "answer": {
+      "iso2": "NO",
+      "name": "Norway"
+    }
+  },
+  {
+    "id": "G023",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which landlocked country has the largest population in the world?",
+    "answer": {
+      "iso2": "ET",
+      "name": "Ethiopia"
+    }
+  },
+  {
+    "id": "G024",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Ha Long Bay, known for its limestone islands?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    }
+  },
+  {
+    "id": "G043",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Lake Turkana, the world's largest permanent desert lake?",
+    "answer": {
+      "iso2": "KE",
+      "name": "Kenya"
+    }
+  },
+  {
+    "id": "G044",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Mount Kinabalu, the highest peak on the island of Borneo?",
+    "answer": {
+      "iso2": "MY",
+      "name": "Malaysia"
+    }
+  },
+  {
+    "id": "G045",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Mount Damavand, the highest peak in the Middle East?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    }
+  },
+  {
+    "id": "G025",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is the Salar de Uyuni, the world's largest salt flat?",
+    "answer": {
+      "iso2": "BO",
+      "name": "Bolivia"
+    }
+  },
+  {
+    "id": "G026",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is the Okavango Delta, a large inland delta?",
+    "answer": {
+      "iso2": "BW",
+      "name": "Botswana"
+    }
+  },
+  {
+    "id": "G027",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "Which country contains most of the Danube Delta?",
+    "answer": {
+      "iso2": "RO",
+      "name": "Romania"
+    }
+  },
+  {
+    "id": "G030",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Tonlé Sap, Southeast Asia's largest freshwater lake?",
+    "answer": {
+      "iso2": "KH",
+      "name": "Cambodia"
+    }
+  },
+  {
+    "id": "G046",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Bwindi Impenetrable Forest, home to about half of the world's mountain gorillas?",
+    "answer": {
+      "iso2": "UG",
+      "name": "Uganda"
+    }
+  },
+  {
+    "id": "G047",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Kaieteur Falls, one of the world's most powerful single-drop waterfalls?",
+    "answer": {
+      "iso2": "GY",
+      "name": "Guyana"
+    }
+  },
+  {
+    "id": "G048",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Mount Toubkal, the highest peak in the Atlas Mountains?",
+    "answer": {
+      "iso2": "MA",
+      "name": "Morocco"
+    }
+  },
+  {
+    "id": "G049",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Mount Triglav, the highest peak in the Julian Alps?",
+    "answer": {
+      "iso2": "SI",
+      "name": "Slovenia"
+    }
+  },
+  {
+    "id": "G031",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "Which country does the island of Socotra, known for its dragon's blood trees, belong to?",
+    "answer": {
+      "iso2": "YE",
+      "name": "Yemen"
+    }
+  },
+  {
+    "id": "G032",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is Lake Assal, the lowest point in Africa?",
+    "answer": {
+      "iso2": "DJ",
+      "name": "Djibouti"
+    }
+  },
+  {
+    "id": "G033",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is the high-altitude lake Issyk-Kul?",
+    "answer": {
+      "iso2": "KG",
+      "name": "Kyrgyzstan"
+    }
+  },
+  {
+    "id": "G035",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is the Skeleton Coast, famous for its shipwrecks and fog?",
+    "answer": {
+      "iso2": "NA",
+      "name": "Namibia"
+    }
+  },
+  {
+    "id": "G050",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is Hkakabo Razi, the highest mountain in Southeast Asia?",
+    "answer": {
+      "iso2": "MM",
+      "name": "Myanmar"
+    }
+  },
+  {
+    "id": "G051",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "Which is the westernmost country on mainland Africa?",
+    "answer": {
+      "iso2": "SN",
+      "name": "Senegal"
+    }
+  },
+  {
+    "id": "G052",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "Which country contains the Wakhan Corridor, a narrow strip reaching to China?",
+    "answer": {
+      "iso2": "AF",
+      "name": "Afghanistan"
+    }
+  }
+]

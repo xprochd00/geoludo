@@ -1,5 +1,6 @@
 [
   {
+    "id": "M001",
     "city": "Barcelona",
     "country": "Spain",
     "iso2": "ES",
@@ -7,10 +8,21 @@
     "lon": 2.17,
     "type": "European city",
     "tier": 1,
-    "id": "M001",
     "note": ""
   },
   {
+    "id": "M033",
+    "city": "Boston",
+    "country": "United States",
+    "iso2": "US",
+    "lat": 42.36,
+    "lon": -71.06,
+    "type": "world city",
+    "tier": 1,
+    "note": ""
+  },
+  {
+    "id": "M011",
     "city": "Chicago",
     "country": "United States",
     "iso2": "US",
@@ -18,10 +30,10 @@
     "lon": -87.63,
     "type": "world city",
     "tier": 1,
-    "id": "M011",
     "note": ""
   },
   {
+    "id": "M002",
     "city": "Dubai",
     "country": "United Arab Emirates",
     "iso2": "AE",
@@ -29,10 +41,10 @@
     "lon": 55.27,
     "type": "world city",
     "tier": 1,
-    "id": "M002",
     "note": ""
   },
   {
+    "id": "M012",
     "city": "Florence",
     "country": "Italy",
     "iso2": "IT",
@@ -40,18 +52,6 @@
     "lon": 11.26,
     "type": "European city",
     "tier": 1,
-    "id": "M012",
-    "note": ""
-  },
-  {
-    "city": "Guangzhou",
-    "country": "China",
-    "iso2": "CN",
-    "lat": 23.13,
-    "lon": 113.26,
-    "type": "world city",
-    "tier": 1,
-    "id": "M036",
     "note": ""
   },
   {
@@ -66,6 +66,7 @@
     "note": ""
   },
   {
+    "id": "M003",
     "city": "Hong Kong",
     "country": "China",
     "iso2": "CN",
@@ -73,10 +74,10 @@
     "lon": 114.17,
     "type": "world city",
     "tier": 1,
-    "id": "M003",
     "note": "Special administrative region of China"
   },
   {
+    "id": "M004",
     "city": "Istanbul",
     "country": "Turkey",
     "iso2": "TR",
@@ -84,10 +85,10 @@
     "lon": 28.98,
     "type": "world city",
     "tier": 1,
-    "id": "M004",
     "note": ""
   },
   {
+    "id": "M013",
     "city": "Johannesburg",
     "country": "South Africa",
     "iso2": "ZA",
@@ -95,10 +96,10 @@
     "lon": 28.05,
     "type": "world city",
     "tier": 1,
-    "id": "M013",
     "note": ""
   },
   {
+    "id": "M014",
     "city": "Kolkata",
     "country": "India",
     "iso2": "IN",
@@ -106,10 +107,10 @@
     "lon": 88.36,
     "type": "world city",
     "tier": 1,
-    "id": "M014",
     "note": ""
   },
   {
+    "id": "M015",
     "city": "Kyoto",
     "country": "Japan",
     "iso2": "JP",
@@ -117,10 +118,10 @@
     "lon": 135.77,
     "type": "world city",
     "tier": 1,
-    "id": "M015",
     "note": ""
   },
   {
+    "id": "M016",
     "city": "Lagos",
     "country": "Nigeria",
     "iso2": "NG",
@@ -128,7 +129,6 @@
     "lon": 3.38,
     "type": "world city",
     "tier": 1,
-    "id": "M016",
     "note": ""
   },
   {
@@ -143,6 +143,7 @@
     "note": ""
   },
   {
+    "id": "M005",
     "city": "Los Angeles",
     "country": "United States",
     "iso2": "US",
@@ -150,10 +151,10 @@
     "lon": -118.24,
     "type": "world city",
     "tier": 1,
-    "id": "M005",
     "note": ""
   },
   {
+    "id": "M017",
     "city": "Marrakesh",
     "country": "Morocco",
     "iso2": "MA",
@@ -161,10 +162,10 @@
     "lon": -7.99,
     "type": "world city",
     "tier": 1,
-    "id": "M017",
     "note": ""
   },
   {
+    "id": "M018",
     "city": "Mecca",
     "country": "Saudi Arabia",
     "iso2": "SA",
@@ -172,10 +173,10 @@
     "lon": 39.86,
     "type": "world city",
     "tier": 1,
-    "id": "M018",
     "note": ""
   },
   {
+    "id": "M019",
     "city": "Melbourne",
     "country": "Australia",
     "iso2": "AU",
@@ -183,10 +184,10 @@
     "lon": 144.96,
     "type": "world city",
     "tier": 1,
-    "id": "M019",
     "note": ""
   },
   {
+    "id": "M044",
     "city": "Miami",
     "country": "United States",
     "iso2": "US",
@@ -194,10 +195,10 @@
     "lon": -80.19,
     "type": "world city",
     "tier": 1,
-    "id": "M044",
     "note": ""
   },
   {
+    "id": "M020",
     "city": "Milan",
     "country": "Italy",
     "iso2": "IT",
@@ -205,10 +206,10 @@
     "lon": 9.19,
     "type": "European city",
     "tier": 1,
-    "id": "M020",
     "note": ""
   },
   {
+    "id": "M006",
     "city": "Mumbai",
     "country": "India",
     "iso2": "IN",
@@ -216,10 +217,10 @@
     "lon": 72.88,
     "type": "world city",
     "tier": 1,
-    "id": "M006",
     "note": ""
   },
   {
+    "id": "M021",
     "city": "Munich",
     "country": "Germany",
     "iso2": "DE",
@@ -227,10 +228,10 @@
     "lon": 11.58,
     "type": "European city",
     "tier": 1,
-    "id": "M021",
     "note": ""
   },
   {
+    "id": "M046",
     "city": "Naples",
     "country": "Italy",
     "iso2": "IT",
@@ -238,10 +239,10 @@
     "lon": 14.27,
     "type": "European city",
     "tier": 1,
-    "id": "M046",
     "note": ""
   },
   {
+    "id": "M007",
     "city": "New York",
     "country": "United States",
     "iso2": "US",
@@ -249,10 +250,10 @@
     "lon": -74.01,
     "type": "world city",
     "tier": 1,
-    "id": "M007",
     "note": ""
   },
   {
+    "id": "M022",
     "city": "Osaka",
     "country": "Japan",
     "iso2": "JP",
@@ -260,10 +261,10 @@
     "lon": 135.5,
     "type": "world city",
     "tier": 1,
-    "id": "M022",
     "note": ""
   },
   {
+    "id": "M008",
     "city": "Rio de Janeiro",
     "country": "Brazil",
     "iso2": "BR",
@@ -271,10 +272,10 @@
     "lon": -43.17,
     "type": "world city",
     "tier": 1,
-    "id": "M008",
     "note": ""
   },
   {
+    "id": "M023",
     "city": "Saint Petersburg",
     "country": "Russia",
     "iso2": "RU",
@@ -282,10 +283,10 @@
     "lon": 30.34,
     "type": "European city",
     "tier": 1,
-    "id": "M023",
     "note": ""
   },
   {
+    "id": "M024",
     "city": "San Francisco",
     "country": "United States",
     "iso2": "US",
@@ -293,10 +294,10 @@
     "lon": -122.42,
     "type": "world city",
     "tier": 1,
-    "id": "M024",
     "note": ""
   },
   {
+    "id": "M009",
     "city": "Shanghai",
     "country": "China",
     "iso2": "CN",
@@ -304,10 +305,10 @@
     "lon": 121.47,
     "type": "world city",
     "tier": 1,
-    "id": "M009",
     "note": ""
   },
   {
+    "id": "M010",
     "city": "Sydney",
     "country": "Australia",
     "iso2": "AU",
@@ -315,10 +316,10 @@
     "lon": 151.21,
     "type": "world city",
     "tier": 1,
-    "id": "M010",
     "note": ""
   },
   {
+    "id": "M025",
     "city": "São Paulo",
     "country": "Brazil",
     "iso2": "BR",
@@ -326,10 +327,10 @@
     "lon": -46.63,
     "type": "world city",
     "tier": 1,
-    "id": "M025",
     "note": ""
   },
   {
+    "id": "M026",
     "city": "Toronto",
     "country": "Canada",
     "iso2": "CA",
@@ -337,10 +338,10 @@
     "lon": -79.38,
     "type": "world city",
     "tier": 1,
-    "id": "M026",
     "note": ""
   },
   {
+    "id": "M027",
     "city": "Venice",
     "country": "Italy",
     "iso2": "IT",
@@ -348,10 +349,10 @@
     "lon": 12.32,
     "type": "European city",
     "tier": 1,
-    "id": "M027",
     "note": ""
   },
   {
+    "id": "M028",
     "city": "Xi'an",
     "country": "China",
     "iso2": "CN",
@@ -359,7 +360,6 @@
     "lon": 108.94,
     "type": "world city",
     "tier": 1,
-    "id": "M028",
     "note": ""
   },
   {
@@ -374,6 +374,7 @@
     "note": ""
   },
   {
+    "id": "M029",
     "city": "Agra",
     "country": "India",
     "iso2": "IN",
@@ -381,10 +382,10 @@
     "lon": 78.02,
     "type": "world city",
     "tier": 2,
-    "id": "M029",
     "note": ""
   },
   {
+    "id": "M030",
     "city": "Alexandria",
     "country": "Egypt",
     "iso2": "EG",
@@ -392,10 +393,10 @@
     "lon": 29.92,
     "type": "world city",
     "tier": 2,
-    "id": "M030",
     "note": ""
   },
   {
+    "id": "M031",
     "city": "Auckland",
     "country": "New Zealand",
     "iso2": "NZ",
@@ -403,10 +404,10 @@
     "lon": 174.76,
     "type": "world city",
     "tier": 2,
-    "id": "M031",
     "note": ""
   },
   {
+    "id": "M032",
     "city": "Bengaluru",
     "country": "India",
     "iso2": "IN",
@@ -414,18 +415,6 @@
     "lon": 77.59,
     "type": "world city",
     "tier": 2,
-    "id": "M032",
-    "note": ""
-  },
-  {
-    "city": "Boston",
-    "country": "United States",
-    "iso2": "US",
-    "lat": 42.36,
-    "lon": -71.06,
-    "type": "world city",
-    "tier": 2,
-    "id": "M033",
     "note": ""
   },
   {
@@ -462,6 +451,7 @@
     "note": ""
   },
   {
+    "id": "M035",
     "city": "Frankfurt",
     "country": "Germany",
     "iso2": "DE",
@@ -469,7 +459,17 @@
     "lon": 8.68,
     "type": "European city",
     "tier": 2,
-    "id": "M035",
+    "note": ""
+  },
+  {
+    "id": "M036",
+    "city": "Guangzhou",
+    "country": "China",
+    "iso2": "CN",
+    "lat": 23.13,
+    "lon": 113.26,
+    "type": "world city",
+    "tier": 2,
     "note": ""
   },
   {
@@ -484,6 +484,7 @@
     "note": ""
   },
   {
+    "id": "M037",
     "city": "Hamburg",
     "country": "Germany",
     "iso2": "DE",
@@ -491,7 +492,6 @@
     "lon": 9.99,
     "type": "European city",
     "tier": 2,
-    "id": "M037",
     "note": ""
   },
   {
@@ -517,6 +517,7 @@
     "note": ""
   },
   {
+    "id": "M038",
     "city": "Karachi",
     "country": "Pakistan",
     "iso2": "PK",
@@ -524,10 +525,10 @@
     "lon": 67.01,
     "type": "world city",
     "tier": 2,
-    "id": "M038",
     "note": ""
   },
   {
+    "id": "M039",
     "city": "Kraków",
     "country": "Poland",
     "iso2": "PL",
@@ -535,10 +536,10 @@
     "lon": 19.94,
     "type": "European city",
     "tier": 2,
-    "id": "M039",
     "note": ""
   },
   {
+    "id": "M040",
     "city": "Liverpool",
     "country": "United Kingdom",
     "iso2": "GB",
@@ -546,10 +547,10 @@
     "lon": -2.98,
     "type": "European city",
     "tier": 2,
-    "id": "M040",
     "note": ""
   },
   {
+    "id": "M041",
     "city": "Luxor",
     "country": "Egypt",
     "iso2": "EG",
@@ -557,7 +558,6 @@
     "lon": 32.64,
     "type": "world city",
     "tier": 2,
-    "id": "M041",
     "note": ""
   },
   {
@@ -583,6 +583,7 @@
     "note": ""
   },
   {
+    "id": "M042",
     "city": "Manchester",
     "country": "United Kingdom",
     "iso2": "GB",
@@ -590,10 +591,10 @@
     "lon": -2.24,
     "type": "European city",
     "tier": 2,
-    "id": "M042",
     "note": ""
   },
   {
+    "id": "M043",
     "city": "Marseille",
     "country": "France",
     "iso2": "FR",
@@ -601,7 +602,6 @@
     "lon": 5.37,
     "type": "European city",
     "tier": 2,
-    "id": "M043",
     "note": ""
   },
   {
@@ -627,6 +627,7 @@
     "note": ""
   },
   {
+    "id": "M045",
     "city": "Montreal",
     "country": "Canada",
     "iso2": "CA",
@@ -634,10 +635,10 @@
     "lon": -73.57,
     "type": "world city",
     "tier": 2,
-    "id": "M045",
     "note": ""
   },
   {
+    "id": "M047",
     "city": "New Orleans",
     "country": "United States",
     "iso2": "US",
@@ -645,7 +646,6 @@
     "lon": -90.07,
     "type": "world city",
     "tier": 2,
-    "id": "M047",
     "note": ""
   },
   {
@@ -671,6 +671,7 @@
     "note": ""
   },
   {
+    "id": "M048",
     "city": "Seville",
     "country": "Spain",
     "iso2": "ES",
@@ -678,10 +679,10 @@
     "lon": -5.98,
     "type": "European city",
     "tier": 2,
-    "id": "M048",
     "note": ""
   },
   {
+    "id": "M049",
     "city": "Tel Aviv",
     "country": "Israel",
     "iso2": "IL",
@@ -689,10 +690,10 @@
     "lon": 34.78,
     "type": "world city",
     "tier": 2,
-    "id": "M049",
     "note": ""
   },
   {
+    "id": "M050",
     "city": "Vancouver",
     "country": "Canada",
     "iso2": "CA",
@@ -700,10 +701,10 @@
     "lon": -123.12,
     "type": "world city",
     "tier": 2,
-    "id": "M050",
     "note": ""
   },
   {
+    "id": "M051",
     "city": "Varanasi",
     "country": "India",
     "iso2": "IN",
@@ -711,10 +712,10 @@
     "lon": 82.97,
     "type": "world city",
     "tier": 2,
-    "id": "M051",
     "note": ""
   },
   {
+    "id": "M052",
     "city": "Zurich",
     "country": "Switzerland",
     "iso2": "CH",
@@ -722,10 +723,10 @@
     "lon": 8.54,
     "type": "European city",
     "tier": 2,
-    "id": "M052",
     "note": ""
   },
   {
+    "id": "M053",
     "city": "Aleppo",
     "country": "Syria",
     "iso2": "SY",
@@ -733,10 +734,10 @@
     "lon": 37.16,
     "type": "world city",
     "tier": 3,
-    "id": "M053",
     "note": ""
   },
   {
+    "id": "M054",
     "city": "Almaty",
     "country": "Kazakhstan",
     "iso2": "KZ",
@@ -744,7 +745,6 @@
     "lon": 76.89,
     "type": "world city",
     "tier": 3,
-    "id": "M054",
     "note": ""
   },
   {
@@ -781,6 +781,7 @@
     "note": "Capital of Northern Ireland"
   },
   {
+    "id": "M055",
     "city": "Birmingham",
     "country": "United Kingdom",
     "iso2": "GB",
@@ -788,10 +789,10 @@
     "lon": -1.89,
     "type": "European city",
     "tier": 3,
-    "id": "M055",
     "note": ""
   },
   {
+    "id": "M056",
     "city": "Bologna",
     "country": "Italy",
     "iso2": "IT",
@@ -799,10 +800,10 @@
     "lon": 11.34,
     "type": "European city",
     "tier": 3,
-    "id": "M056",
     "note": ""
   },
   {
+    "id": "M057",
     "city": "Bukhara",
     "country": "Uzbekistan",
     "iso2": "UZ",
@@ -810,10 +811,10 @@
     "lon": 64.42,
     "type": "world city",
     "tier": 3,
-    "id": "M057",
     "note": ""
   },
   {
+    "id": "M058",
     "city": "Busan",
     "country": "South Korea",
     "iso2": "KR",
@@ -821,7 +822,17 @@
     "lon": 129.08,
     "type": "world city",
     "tier": 3,
-    "id": "M058",
+    "note": ""
+  },
+  {
+    "id": "M205",
+    "city": "Cali",
+    "country": "Colombia",
+    "iso2": "CO",
+    "lat": 3.45,
+    "lon": -76.53,
+    "type": "world city",
+    "tier": 3,
     "note": ""
   },
   {
@@ -836,17 +847,7 @@
     "note": "Capital of Wales"
   },
   {
-    "id": "M147",
-    "city": "Cartagena",
-    "country": "Colombia",
-    "iso2": "CO",
-    "lat": 10.39,
-    "lon": -75.51,
-    "type": "world city",
-    "tier": 3,
-    "note": ""
-  },
-  {
+    "id": "M059",
     "city": "Casablanca",
     "country": "Morocco",
     "iso2": "MA",
@@ -854,10 +855,21 @@
     "lon": -7.59,
     "type": "world city",
     "tier": 3,
-    "id": "M059",
     "note": ""
   },
   {
+    "id": "M209",
+    "city": "Cebu City",
+    "country": "Philippines",
+    "iso2": "PH",
+    "lat": 10.32,
+    "lon": 123.89,
+    "type": "world city",
+    "tier": 3,
+    "note": ""
+  },
+  {
+    "id": "M034",
     "city": "Cologne",
     "country": "Germany",
     "iso2": "DE",
@@ -865,10 +877,10 @@
     "lon": 6.96,
     "type": "European city",
     "tier": 3,
-    "id": "M034",
     "note": ""
   },
   {
+    "id": "M060",
     "city": "Cusco",
     "country": "Peru",
     "iso2": "PE",
@@ -876,10 +888,10 @@
     "lon": -71.97,
     "type": "world city",
     "tier": 3,
-    "id": "M060",
     "note": ""
   },
   {
+    "id": "M061",
     "city": "Dar es Salaam",
     "country": "Tanzania",
     "iso2": "TZ",
@@ -887,7 +899,6 @@
     "lon": 39.21,
     "type": "world city",
     "tier": 3,
-    "id": "M061",
     "note": ""
   },
   {
@@ -902,6 +913,18 @@
     "note": "Capital of Scotland"
   },
   {
+    "id": "M206",
+    "city": "Fortaleza",
+    "country": "Brazil",
+    "iso2": "BR",
+    "lat": -3.73,
+    "lon": -38.53,
+    "type": "world city",
+    "tier": 3,
+    "note": ""
+  },
+  {
+    "id": "M062",
     "city": "Geneva",
     "country": "Switzerland",
     "iso2": "CH",
@@ -909,10 +932,10 @@
     "lon": 6.14,
     "type": "European city",
     "tier": 3,
-    "id": "M062",
     "note": ""
   },
   {
+    "id": "M063",
     "city": "Glasgow",
     "country": "United Kingdom",
     "iso2": "GB",
@@ -920,10 +943,10 @@
     "lon": -4.25,
     "type": "European city",
     "tier": 3,
-    "id": "M063",
     "note": ""
   },
   {
+    "id": "M064",
     "city": "Gothenburg",
     "country": "Sweden",
     "iso2": "SE",
@@ -931,10 +954,10 @@
     "lon": 11.97,
     "type": "European city",
     "tier": 3,
-    "id": "M064",
     "note": ""
   },
   {
+    "id": "M065",
     "city": "Ho Chi Minh City",
     "country": "Vietnam",
     "iso2": "VN",
@@ -942,10 +965,10 @@
     "lon": 106.63,
     "type": "world city",
     "tier": 3,
-    "id": "M065",
     "note": ""
   },
   {
+    "id": "M066",
     "city": "Isfahan",
     "country": "Iran",
     "iso2": "IR",
@@ -953,10 +976,10 @@
     "lon": 51.67,
     "type": "world city",
     "tier": 3,
-    "id": "M066",
     "note": ""
   },
   {
+    "id": "M067",
     "city": "Lahore",
     "country": "Pakistan",
     "iso2": "PK",
@@ -964,10 +987,10 @@
     "lon": 74.34,
     "type": "world city",
     "tier": 3,
-    "id": "M067",
     "note": ""
   },
   {
+    "id": "M068",
     "city": "Lyon",
     "country": "France",
     "iso2": "FR",
@@ -975,10 +998,10 @@
     "lon": 4.84,
     "type": "European city",
     "tier": 3,
-    "id": "M068",
     "note": ""
   },
   {
+    "id": "M069",
     "city": "Medellín",
     "country": "Colombia",
     "iso2": "CO",
@@ -986,10 +1009,10 @@
     "lon": -75.58,
     "type": "world city",
     "tier": 3,
-    "id": "M069",
     "note": ""
   },
   {
+    "id": "M070",
     "city": "Nice",
     "country": "France",
     "iso2": "FR",
@@ -997,7 +1020,6 @@
     "lon": 7.27,
     "type": "European city",
     "tier": 3,
-    "id": "M070",
     "note": ""
   },
   {
@@ -1012,6 +1034,7 @@
     "note": ""
   },
   {
+    "id": "M071",
     "city": "Porto",
     "country": "Portugal",
     "iso2": "PT",
@@ -1019,10 +1042,10 @@
     "lon": -8.61,
     "type": "European city",
     "tier": 3,
-    "id": "M071",
     "note": ""
   },
   {
+    "id": "M072",
     "city": "Rotterdam",
     "country": "Netherlands",
     "iso2": "NL",
@@ -1030,21 +1053,10 @@
     "lon": 4.48,
     "type": "European city",
     "tier": 3,
-    "id": "M072",
     "note": ""
   },
   {
-    "city": "Salvador",
-    "country": "Brazil",
-    "iso2": "BR",
-    "lat": -12.97,
-    "lon": -38.51,
-    "type": "world city",
-    "tier": 3,
-    "id": "M073",
-    "note": ""
-  },
-  {
+    "id": "M074",
     "city": "Samarkand",
     "country": "Uzbekistan",
     "iso2": "UZ",
@@ -1052,10 +1064,10 @@
     "lon": 66.96,
     "type": "world city",
     "tier": 3,
-    "id": "M074",
     "note": ""
   },
   {
+    "id": "M075",
     "city": "Thessaloniki",
     "country": "Greece",
     "iso2": "GR",
@@ -1063,10 +1075,10 @@
     "lon": 22.94,
     "type": "European city",
     "tier": 3,
-    "id": "M075",
     "note": ""
   },
   {
+    "id": "M076",
     "city": "Turin",
     "country": "Italy",
     "iso2": "IT",
@@ -1074,10 +1086,10 @@
     "lon": 7.69,
     "type": "European city",
     "tier": 3,
-    "id": "M076",
     "note": ""
   },
   {
+    "id": "M077",
     "city": "Valencia",
     "country": "Spain",
     "iso2": "ES",
@@ -1085,10 +1097,10 @@
     "lon": -0.38,
     "type": "European city",
     "tier": 3,
-    "id": "M077",
     "note": ""
   },
   {
+    "id": "M079",
     "city": "Aarhus",
     "country": "Denmark",
     "iso2": "DK",
@@ -1096,7 +1108,6 @@
     "lon": 10.2,
     "type": "European city",
     "tier": 4,
-    "id": "M079",
     "note": ""
   },
   {
@@ -1111,6 +1122,7 @@
     "note": ""
   },
   {
+    "id": "M080",
     "city": "Antwerp",
     "country": "Belgium",
     "iso2": "BE",
@@ -1118,10 +1130,10 @@
     "lon": 4.4,
     "type": "European city",
     "tier": 4,
-    "id": "M080",
     "note": ""
   },
   {
+    "id": "M081",
     "city": "Bergen",
     "country": "Norway",
     "iso2": "NO",
@@ -1129,10 +1141,10 @@
     "lon": 5.32,
     "type": "European city",
     "tier": 4,
-    "id": "M081",
     "note": ""
   },
   {
+    "id": "M082",
     "city": "Bordeaux",
     "country": "France",
     "iso2": "FR",
@@ -1140,7 +1152,6 @@
     "lon": -0.58,
     "type": "European city",
     "tier": 4,
-    "id": "M082",
     "note": ""
   },
   {
@@ -1166,6 +1177,7 @@
     "note": ""
   },
   {
+    "id": "M084",
     "city": "Dresden",
     "country": "Germany",
     "iso2": "DE",
@@ -1173,10 +1185,10 @@
     "lon": 13.74,
     "type": "European city",
     "tier": 4,
-    "id": "M084",
     "note": ""
   },
   {
+    "id": "M085",
     "city": "Dubrovnik",
     "country": "Croatia",
     "iso2": "HR",
@@ -1184,7 +1196,6 @@
     "lon": 18.09,
     "type": "European city",
     "tier": 4,
-    "id": "M085",
     "note": ""
   },
   {
@@ -1199,6 +1210,7 @@
     "note": ""
   },
   {
+    "id": "M086",
     "city": "Gdańsk",
     "country": "Poland",
     "iso2": "PL",
@@ -1206,7 +1218,6 @@
     "lon": 18.65,
     "type": "European city",
     "tier": 4,
-    "id": "M086",
     "note": ""
   },
   {
@@ -1287,6 +1298,17 @@
     "note": "Capital of the Tibet Autonomous Region"
   },
   {
+    "id": "M210",
+    "city": "Maracaibo",
+    "country": "Venezuela",
+    "iso2": "VE",
+    "lat": 10.65,
+    "lon": -71.64,
+    "type": "world city",
+    "tier": 4,
+    "note": ""
+  },
+  {
     "id": "M110",
     "city": "Mashhad",
     "country": "Iran",
@@ -1342,6 +1364,7 @@
     "note": ""
   },
   {
+    "id": "M090",
     "city": "Salzburg",
     "country": "Austria",
     "iso2": "AT",
@@ -1349,7 +1372,6 @@
     "lon": 13.04,
     "type": "European city",
     "tier": 4,
-    "id": "M090",
     "note": ""
   },
   {
@@ -1375,6 +1397,7 @@
     "note": ""
   },
   {
+    "id": "M091",
     "city": "Split",
     "country": "Croatia",
     "iso2": "HR",
@@ -1382,7 +1405,6 @@
     "lon": 16.44,
     "type": "European city",
     "tier": 4,
-    "id": "M091",
     "note": ""
   },
   {
@@ -1408,6 +1430,7 @@
     "note": ""
   },
   {
+    "id": "M092",
     "city": "The Hague",
     "country": "Netherlands",
     "iso2": "NL",
@@ -1415,10 +1438,21 @@
     "lon": 4.31,
     "type": "European city",
     "tier": 4,
-    "id": "M092",
     "note": ""
   },
   {
+    "id": "M211",
+    "city": "Turku",
+    "country": "Finland",
+    "iso2": "FI",
+    "lat": 60.45,
+    "lon": 22.27,
+    "type": "European city",
+    "tier": 4,
+    "note": ""
+  },
+  {
+    "id": "M078",
     "city": "Vladivostok",
     "country": "Russia",
     "iso2": "RU",
@@ -1426,7 +1460,6 @@
     "lon": 131.89,
     "type": "world city",
     "tier": 4,
-    "id": "M078",
     "note": ""
   },
   {
@@ -1452,6 +1485,17 @@
     "note": ""
   },
   {
+    "id": "M212",
+    "city": "Akureyri",
+    "country": "Iceland",
+    "iso2": "IS",
+    "lat": 65.68,
+    "lon": -18.1,
+    "type": "European city",
+    "tier": 5,
+    "note": ""
+  },
+  {
     "id": "M158",
     "city": "Ayutthaya",
     "country": "Thailand",
@@ -1474,6 +1518,7 @@
     "note": ""
   },
   {
+    "id": "M083",
     "city": "Cork",
     "country": "Ireland",
     "iso2": "IE",
@@ -1481,7 +1526,6 @@
     "lon": -8.47,
     "type": "European city",
     "tier": 5,
-    "id": "M083",
     "note": ""
   },
   {
@@ -1639,6 +1683,7 @@
     "note": ""
   },
   {
+    "id": "M087",
     "city": "Lviv",
     "country": "Ukraine",
     "iso2": "UA",
@@ -1646,10 +1691,10 @@
     "lon": 24.03,
     "type": "European city",
     "tier": 5,
-    "id": "M087",
     "note": ""
   },
   {
+    "id": "M088",
     "city": "Malmö",
     "country": "Sweden",
     "iso2": "SE",
@@ -1657,7 +1702,6 @@
     "lon": 13.0,
     "type": "European city",
     "tier": 5,
-    "id": "M088",
     "note": ""
   },
   {
@@ -1694,6 +1738,7 @@
     "note": ""
   },
   {
+    "id": "M089",
     "city": "Odesa",
     "country": "Ukraine",
     "iso2": "UA",
@@ -1701,7 +1746,6 @@
     "lon": 30.73,
     "type": "European city",
     "tier": 5,
-    "id": "M089",
     "note": ""
   },
   {
@@ -1793,6 +1837,7 @@
     "note": ""
   },
   {
+    "id": "M093",
     "city": "Varna",
     "country": "Bulgaria",
     "iso2": "BG",
@@ -1800,10 +1845,10 @@
     "lon": 27.91,
     "type": "European city",
     "tier": 5,
-    "id": "M093",
     "note": ""
   },
   {
+    "id": "M094",
     "city": "Wrocław",
     "country": "Poland",
     "iso2": "PL",
@@ -1811,7 +1856,6 @@
     "lon": 17.04,
     "type": "European city",
     "tier": 5,
-    "id": "M094",
     "note": ""
   },
   {
@@ -1881,6 +1925,7 @@
     "note": ""
   },
   {
+    "id": "M095",
     "city": "Brno",
     "country": "Czechia",
     "iso2": "CZ",
@@ -1888,7 +1933,6 @@
     "lon": 16.61,
     "type": "European city",
     "tier": 6,
-    "id": "M095",
     "note": ""
   },
   {
@@ -1903,6 +1947,18 @@
     "note": ""
   },
   {
+    "id": "M207",
+    "city": "Camagüey",
+    "country": "Cuba",
+    "iso2": "CU",
+    "lat": 21.38,
+    "lon": -77.92,
+    "type": "world city",
+    "tier": 6,
+    "note": ""
+  },
+  {
+    "id": "M096",
     "city": "Cluj-Napoca",
     "country": "Romania",
     "iso2": "RO",
@@ -1910,7 +1966,6 @@
     "lon": 23.59,
     "type": "European city",
     "tier": 6,
-    "id": "M096",
     "note": ""
   },
   {
@@ -1925,6 +1980,7 @@
     "note": ""
   },
   {
+    "id": "M097",
     "city": "Debrecen",
     "country": "Hungary",
     "iso2": "HU",
@@ -1932,7 +1988,6 @@
     "lon": 21.63,
     "type": "European city",
     "tier": 6,
-    "id": "M097",
     "note": ""
   },
   {
@@ -2002,6 +2057,17 @@
     "note": ""
   },
   {
+    "id": "M213",
+    "city": "Kharkhorin",
+    "country": "Mongolia",
+    "iso2": "MN",
+    "lat": 47.2,
+    "lon": 102.82,
+    "type": "world city",
+    "tier": 6,
+    "note": ""
+  },
+  {
     "id": "M118",
     "city": "Khiva",
     "country": "Uzbekistan",
@@ -2013,6 +2079,7 @@
     "note": ""
   },
   {
+    "id": "M098",
     "city": "Košice",
     "country": "Slovakia",
     "iso2": "SK",
@@ -2020,7 +2087,6 @@
     "lon": 21.26,
     "type": "European city",
     "tier": 6,
-    "id": "M098",
     "note": ""
   },
   {
@@ -2046,17 +2112,7 @@
     "note": ""
   },
   {
-    "id": "M179",
-    "city": "Mérida",
-    "country": "Mexico",
-    "iso2": "MX",
-    "lat": 20.97,
-    "lon": -89.62,
-    "type": "world city",
-    "tier": 6,
-    "note": ""
-  },
-  {
+    "id": "M099",
     "city": "Novi Sad",
     "country": "Serbia",
     "iso2": "RS",
@@ -2064,7 +2120,6 @@
     "lon": 19.84,
     "type": "European city",
     "tier": 6,
-    "id": "M099",
     "note": ""
   },
   {
@@ -2090,6 +2145,7 @@
     "note": ""
   },
   {
+    "id": "M100",
     "city": "Plovdiv",
     "country": "Bulgaria",
     "iso2": "BG",
@@ -2097,7 +2153,6 @@
     "lon": 24.75,
     "type": "European city",
     "tier": 6,
-    "id": "M100",
     "note": ""
   },
   {
@@ -2134,17 +2189,6 @@
     "note": ""
   },
   {
-    "id": "M178",
-    "city": "Trinidad",
-    "country": "Cuba",
-    "iso2": "CU",
-    "lat": 21.8,
-    "lon": -79.98,
-    "type": "world city",
-    "tier": 6,
-    "note": ""
-  },
-  {
     "id": "M169",
     "city": "Turkestan",
     "country": "Kazakhstan",
@@ -2167,12 +2211,34 @@
     "note": ""
   },
   {
+    "id": "M214",
+    "city": "Wonsan",
+    "country": "North Korea",
+    "iso2": "KP",
+    "lat": 39.15,
+    "lon": 127.44,
+    "type": "world city",
+    "tier": 6,
+    "note": ""
+  },
+  {
     "id": "M167",
     "city": "Yazd",
     "country": "Iran",
     "iso2": "IR",
     "lat": 31.9,
     "lon": 54.37,
+    "type": "world city",
+    "tier": 6,
+    "note": ""
+  },
+  {
+    "id": "M208",
+    "city": "Zacatecas",
+    "country": "Mexico",
+    "iso2": "MX",
+    "lat": 22.77,
+    "lon": -102.58,
     "type": "world city",
     "tier": 6,
     "note": ""
