@@ -50,8 +50,9 @@
     });
   });
   /* Mixed mode: which categories to combine (at least two). */
-  const CAT_NAMES = { geo: 'Geography', history: 'History & Geopolitics', culture: 'Sports & Culture' };
-  let mixCats = ['geo', 'history', 'culture'];
+  const CAT_NAMES = { geo: 'Geography', history: 'History & Geopolitics', sports: 'Sports', culture: 'Culture' };
+  const CAT_SHORT = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
+  let mixCats = Quiz.CATEGORIES.slice();
   function syncMix() {
     $('mix-options').hidden = mode !== 'mixed';
     document.querySelectorAll('.mix-chip').forEach((c) => {
@@ -59,9 +60,10 @@
       c.classList.toggle('active', on);
       c.setAttribute('aria-pressed', on);
     });
-    $('mix-hint').textContent = mixCats.length === 3
-      ? 'All three categories, about a third each.'
-      : `${mixCats.map((c) => CAT_NAMES[c]).join(' + ')}, about half each.`;
+    const share = { 2: 'half', 3: 'a third', 4: 'a quarter' }[mixCats.length];
+    $('mix-hint').textContent = mixCats.length === Quiz.CATEGORIES.length
+      ? `All ${mixCats.length} categories, about ${share} each.`
+      : `${mixCats.map((c) => CAT_NAMES[c]).join(' + ')}, about ${share} each.`;
   }
   document.querySelectorAll('.mix-chip').forEach((chip) => {
     chip.addEventListener('click', () => {
@@ -132,8 +134,8 @@
     prism.classList.remove('show-map', 'settled');
     prism.classList.add('flat');
     $('result').hidden = true;
-    const modeLabel = mode === 'mixed' && mixCats.length < 3
-      ? `Mixed: ${mixCats.map((c) => CAT_NAMES[c].split(' ')[0]).join(' + ')}`
+    const modeLabel = mode === 'mixed' && mixCats.length < Quiz.CATEGORIES.length
+      ? `Mixed: ${mixCats.map((c) => CAT_SHORT[c]).join(' + ')}`
       : Quiz.MODES[mode].label;
     $('mode-chip').textContent = modeLabel;
     Board.render(state.players);
@@ -417,7 +419,7 @@
     t.hidden = false;
     t.classList.remove('low');
     // Long text questions (history, culture) get a little more time to read.
-    const total = ['history', 'culture'].includes(state.q.type) ? TIMER_SECS + 15 : TIMER_SECS;
+    const total = ['history', 'sports', 'culture', 'geoq'].includes(state.q.type) ? TIMER_SECS + 15 : TIMER_SECS;
     let left = total;
     const ring = $('timer-ring');
     const CIRC = 119.4;
@@ -441,7 +443,7 @@
       case 'capital': return `The capital of <b>${esc(c.name)}</b> is <b>${esc(c.capital)}</b>.`;
       case 'city': return `<b>${esc(q.city)}</b> is in <b>${esc(c.name)}</b>.`;
       case 'flag': return `That's the flag of <b>${esc(c.name)}</b>.`;
-      case 'history': case 'culture': return `The answer is <b>${esc(c.name)}</b>.`;
+      case 'history': case 'sports': case 'culture': case 'geoq': return `The answer is <b>${esc(c.name)}</b>.`;
       default: return `<b>${esc(c.name)}</b>` + (c.noCap ? '.' : ` — capital: ${esc(c.capital)}.`);
     }
   }

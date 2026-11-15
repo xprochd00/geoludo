@@ -17,18 +17,44 @@ const OUT = path.join(__dirname, '..');
 
 // Fame level of each country (1 = everybody knows it ... 5 = obscure micro-state).
 // A question's difficulty (1-6) = fame level + an offset for the question type
-// (name +0, flag +1, capital +1, major city +1/+2). Unlisted countries default to 4.
+// (name +0, flag +1, capital +1) + per-country CAP_ADJ / FLAG_ADJ below. Non-capital city questions
+// take their difficulty from the tier in data/cities.json. Unlisted countries default to 4.
 const FAME = {
   1: `USA CAN MEX BRA ARG GBR FRA DEU ITA ESP RUS CHN JPN IND AUS EGY ZAF TUR GRC PRT NOR SWE POL UKR SAU`,
-  2: `CHL PER COL VEN CUB IRL FIN NLD BEL CHE AUT DNK ISL CZE HUN ROU NGA KEN MAR ETH DZA IRN IRQ ISR KAZ
-      MNG THA KOR PRK PAK IDN NZL PHL VNM AFG`,
+  2: `CHL PER COL VEN CUB IRL FIN NLD BEL CHE AUT DNK ISL CZE HUN ROU NGA KEN MAR ETH DZA IRN IRQ ISR
+      MNG THA KOR PRK PAK IDN NZL PHL VNM AFG BGD TWN QAT ARE SYR`,
   3: `BOL ECU PRY URY PAN CRI GTM JAM HTI DOM SVK BGR SRB HRV BIH SVN ALB MKD MNE BLR LTU LVA EST MDA GEO
-      ARM AZE CYP LUX SYR JOR LBN KWT QAT ARE OMN YEM UZB TKM MYS SGP MMR BGD NPL LKA LBY TUN SDN SSD SOM
-      COD AGO NAM BWA ZWE ZMB MOZ MDG TZA UGA GHA SEN CMR CIV KHM LAO PNG TWN`,
+      ARM AZE CYP LUX JOR LBN KWT OMN YEM UZB TKM KAZ MYS SGP MMR NPL LKA LBY TUN SDN SSD SOM
+      COD AGO NAM BWA ZWE ZMB MOZ MDG TZA UGA GHA SEN CMR CIV KHM LAO PNG`,
   4: `GUY SUR BLZ HND NIC SLV BHS TTO KGZ TJK BTN BRN TLS MRT MLI NER TCD CAF COG GAB GNQ BEN TGO BFA GIN
       GMB GNB SLE LBR ERI DJI RWA BDI MWI LSO SWZ FJI BHR MLT MCO VAT AND LIE SMR PSE UNK`,
   5: `CPV COM STP SYC MUS MDV ATG BRB DMA GRD KNA LCA VCT KIR MHL FSM NRU PLW SLB TON TUV VUT WSM`,
 };
+
+// Per-country adjustments on top of the question-type offset (name +0, flag +1, capital +1).
+// Negative = easier than the type default, positive = harder. js/quiz.js computes
+//   difficulty = clamp(fame + typeOffset + adjustment, 1, 6)
+// Capitals everybody knows (Paris, London, Tokyo...) are -1; capitals that are traps because a bigger
+// or more famous city exists, or because the country has several capitals, are +1.
+const CAP_ADJ = {
+  USA: -1, GBR: -1, FRA: -1, ITA: -1, ESP: -1, RUS: -1, JPN: -1, CHN: -1, EGY: -1, DEU: -1, GRC: -1, PRT: -1,
+  ARG: -1, MEX: -1, CUB: -1, AUT: -1, IRL: -1, THA: -1, KOR: -1,
+  CAN: 1, AUS: 1, BRA: 1, ZAF: 1, TUR: 1, CHE: 1, NGA: 1, TZA: 1, CIV: 1, MMR: 1, PAK: 1, MAR: 1, LKA: 1,
+};
+// Flags: iconic ones are easier; flags with close look-alikes are harder.
+const FLAG_ADJ = {
+  USA: -1, GBR: -1, JPN: -1, CAN: -1, BRA: -1, CHN: -1, KOR: -1,
+  ROU: 1, TCD: 1, AND: 1,            // blue-yellow-red
+  IDN: 1, MCO: 1, POL: 1,            // red-white
+  IRL: 1, CIV: 1,                    // green-white-orange
+  NLD: 1, LUX: 1,                    // red-white-blue / light blue
+  MLI: 1, GIN: 1, SEN: 1, CMR: 1, GHA: 1, // pan-African tricolours
+  COL: 1, ECU: 1, VEN: 1,            // yellow-blue-red
+  AUS: 1, NZL: 1,                    // Southern Cross + Union Jack
+  NOR: 1, ISL: 1, FIN: 1, DNK: 1,    // Nordic crosses
+  SVN: 1, SVK: 1,                    // white-blue-red with a coat of arms
+};
+for (const m of [CAP_ADJ, FLAG_ADJ]) for (const k of Object.keys(m)) if (m[k] === 0) delete m[k];
 const fameOf = {};
 for (const [lvl, list] of Object.entries(FAME)) for (const id of list.trim().split(/\s+/)) fameOf[id] = +lvl;
 
@@ -132,6 +158,8 @@ for (const f of features) {
     rec.iso2 = c.cca2;
     rec.region = c.subregion || c.region;
     rec.fame = fameOf[c.cca3] || 4;
+    if (CAP_ADJ[c.cca3]) rec.capAdj = CAP_ADJ[c.cca3];
+    if (FLAG_ADJ[c.cca3]) rec.flagAdj = FLAG_ADJ[c.cca3];
     if (!fameOf[c.cca3]) console.warn('defaulted fame 4:', c.cca3, c.name.common);
   }
   out.push(rec);
@@ -147,6 +175,9 @@ for (const c of countries) {
     iso2: c.cca2, region: c.subregion || c.region, fame: fameOf[c.cca3] || 4 });
 }
 for (const id of Object.keys(fameOf)) if (!out.find(o => o.id === id && o.fame)) console.warn('fame list entry not on map', id);
+for (const [name, m] of [['CAP_ADJ', CAP_ADJ], ['FLAG_ADJ', FLAG_ADJ]]) {
+  for (const id of Object.keys(m)) if (!out.find(o => o.id === id && o.fame)) console.warn(`${name} entry is not a playable country:`, id);
+}
 // Cities: projected position + the country they belong to.
 const byIso2 = new Map(out.filter(o => o.iso2).map(o => [o.iso2, o]));
 const cityList = [];

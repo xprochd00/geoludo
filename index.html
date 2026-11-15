@@ -37,16 +37,19 @@
         <h2>Game mode</h2>
         <div class="mode-picker" role="radiogroup" aria-label="Game mode">
           <button type="button" class="mode-card active" data-mode="geo" role="radio" aria-checked="true">
-            <span class="mode-icon">🗺️</span><b>Geography</b><small>Countries, capitals, cities &amp; flags</small>
+            <span class="mode-icon">🗺️</span><b>Geography</b><small>Countries, capitals, cities, flags &amp; landmarks</small>
           </button>
           <button type="button" class="mode-card" data-mode="history" role="radio" aria-checked="false">
             <span class="mode-icon">📜</span><b>History &amp; Geopolitics</b><small>Events, leaders &amp; world affairs</small>
           </button>
+          <button type="button" class="mode-card" data-mode="sports" role="radio" aria-checked="false">
+            <span class="mode-icon">⚽</span><b>Sports</b><small>Athletes, teams, events &amp; venues</small>
+          </button>
           <button type="button" class="mode-card" data-mode="culture" role="radio" aria-checked="false">
-            <span class="mode-icon">🎭</span><b>Sports &amp; Culture</b><small>Stars, music, film, art &amp; games</small>
+            <span class="mode-icon">🎭</span><b>Culture</b><small>Music, film, art, books, games &amp; food</small>
           </button>
           <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Mixed</b><small>Combine two or three categories</small>
+            <span class="mode-icon">🎲</span><b>Mixed</b><small>Combine any two or more categories</small>
           </button>
         </div>
         <div id="mix-options" class="mix-options" hidden>
@@ -54,9 +57,10 @@
           <div class="mix-chips" role="group" aria-label="Categories in Mixed mode">
             <button type="button" class="mix-chip active" data-cat="geo" aria-pressed="true">🗺️ Geography</button>
             <button type="button" class="mix-chip active" data-cat="history" aria-pressed="true">📜 History &amp; Geopolitics</button>
-            <button type="button" class="mix-chip active" data-cat="culture" aria-pressed="true">🎭 Sports &amp; Culture</button>
+            <button type="button" class="mix-chip active" data-cat="sports" aria-pressed="true">⚽ Sports</button>
+            <button type="button" class="mix-chip active" data-cat="culture" aria-pressed="true">🎭 Culture</button>
           </div>
-          <div id="mix-hint" class="mix-hint">All three categories, about a third each.</div>
+          <div id="mix-hint" class="mix-hint">All 4 categories, about a quarter each.</div>
         </div>
       </div>
 
@@ -72,7 +76,7 @@
         </div>
         <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span><span>A <b>6</b> earns another roll (after bringing a piece out or a correct answer)</span></label>
         <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
-        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for history &amp; culture questions)</span></label>
+        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for longer text questions)</span></label>
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
@@ -206,6 +210,8 @@
   <script src="data/world.js"></script>
   <script src="data/history.js"></script>
   <script src="data/culture.js"></script>
+  <script src="data/sports.js"></script>
+  <script src="data/geo-extra.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/board.js"></script>
   <script src="js/map.js"></script>

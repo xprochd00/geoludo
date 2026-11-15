@@ -178,6 +178,7 @@ kbd {
 .mode-card .mode-icon { font-size: 26px; }
 .mode-card b { font-family: var(--font-display); font-weight: 600; font-size: 15px; line-height: 1.15; }
 .mode-card small { color: var(--muted); font-size: 12px; line-height: 1.3; }
+.mode-card[data-mode="mixed"] { grid-column: 1 / -1; }
 .mode-card.active { border-color: var(--accent); background: rgba(255,209,102,.12); box-shadow: 0 0 0 1px var(--accent) inset; }
 .h2-note { text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 13px; float: right; }
 
