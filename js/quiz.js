@@ -1,7 +1,9 @@
 /* Question generation.
  * Every question has a difficulty level 1-6 (the dice value, or the rescue level of a threatened piece).
- *  - Geography: country fame level (1-5) + an offset for the question type; cities use their own tier.
- *  - History & Geopolitics and Sports & Culture: the difficulty ratings from the question files.
+ *  - Geography: country fame level (1-5) + an offset for the question type (name +0, flag +1, capital +1)
+ *    + the per-country adjustments capAdj / flagAdj from tools/build-data.js, clamped to 1-6. Cities use
+ *    their tier; the extra geography questions use their own ratings.
+ *  - History & Geopolitics, Sports and Culture: the difficulty ratings from the question files.
  * Questions are drawn at random from those not asked yet. The record of asked questions is kept across
  * games (and page reloads, via localStorage); once a level's pool has been used up, new draws come from
  * the least recently asked half, so recent questions never come straight back. */
@@ -13,11 +15,13 @@
   const MODES = {
     geo: { label: 'Geography' },
     history: { label: 'History & Geopolitics' },
-    culture: { label: 'Sports & Culture' },
+    sports: { label: 'Sports' },
+    culture: { label: 'Culture' },
     mixed: { label: 'Mixed' },
   };
-  const CATEGORIES = ['geo', 'history', 'culture'];
-  const CULTURE_TAGS = { music: 'Music', film: 'Film & TV', art: 'Art', sport: 'Sport', games: 'Games', literature: 'Literature' };
+  const CATEGORIES = ['geo', 'history', 'sports', 'culture'];
+  // Tag shown on the question card: the culture subcategory, in title case ("art & architecture" -> "Art & Architecture").
+  const titleCase = (s) => s.replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 
   const W = window.WORLD;
   const countries = W.countries.filter((c) => c.fame);
@@ -34,13 +38,14 @@
   const emptyPools = () => ({ 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] });
 
   /* ---------- Pools ---------- */
-  const POOLS = { geo: emptyPools(), history: emptyPools(), culture: emptyPools() };
+  const POOLS = { geo: emptyPools(), history: emptyPools(), sports: emptyPools(), culture: emptyPools() };
   const add = (cat, lvl, q) => { if (lvl >= 1 && lvl <= 6) POOLS[cat][lvl].push(q); };
+  const clamp = (lvl) => Math.min(6, Math.max(1, lvl));
 
   for (const c of countries) {
     add('geo', c.fame, { type: 'name', c, key: 'n:' + c.id });
-    add('geo', c.fame + 1, { type: 'flag', c, key: 'f:' + c.id });
-    if (!c.noCap && !givesAway(c.capital, c)) add('geo', c.fame + 1, { type: 'capital', c, key: 'c:' + c.id });
+    add('geo', clamp(c.fame + 1 + (c.flagAdj || 0)), { type: 'flag', c, key: 'f:' + c.id });
+    if (!c.noCap && !givesAway(c.capital, c)) add('geo', clamp(c.fame + 1 + (c.capAdj || 0)), { type: 'capital', c, key: 'c:' + c.id });
   }
   const skippedCities = [];
   for (const city of W.cities || []) {
@@ -48,11 +53,14 @@
     if (givesAway(city.name, c)) { skippedCities.push(city.name); continue; }
     add('geo', city.tier, { type: 'city', c, city, key: 'y:' + city.id });
   }
-  for (const h of window.HISTORY_QUESTIONS || []) {
-    if (byId.has(h.a)) add('history', h.lvl, { type: 'history', c: byId.get(h.a), h, key: textKey(h.q) });
-  }
-  for (const h of window.CULTURE_QUESTIONS || []) {
-    if (byId.has(h.a)) add('culture', h.lvl, { type: 'culture', c: byId.get(h.a), h, key: textKey(h.q) });
+  // Text questions: [category, question type, data]
+  for (const [cat, type, list] of [
+    ['history', 'history', window.HISTORY_QUESTIONS],
+    ['sports', 'sports', window.SPORTS_QUESTIONS],
+    ['culture', 'culture', window.CULTURE_QUESTIONS],
+    ['geo', 'geoq', window.GEO_EXTRA_QUESTIONS],
+  ]) {
+    for (const h of list || []) if (byId.has(h.a)) add(cat, h.lvl, { type, c: byId.get(h.a), h, key: textKey(h.q) });
   }
 
   /* ---------- Asked-question history (persists across games) ---------- */
@@ -64,7 +72,7 @@
   } catch (e) { /* storage unavailable: keep the history in memory only */ }
   const save = () => { try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
 
-  const catCount = { geo: 0, history: 0, culture: 0 };
+  const catCount = { geo: 0, history: 0, sports: 0, culture: 0 };
   const RECENT = 8; // avoid answer countries used in the last few questions
   let recent = [];
   let lastType = null;
@@ -117,8 +125,14 @@
       case 'history':
         q.tag = pick.h.cat === 'geopolitics' ? 'Geopolitics' : 'History';
         q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+      case 'sports':
+        q.tag = 'Sport';
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'culture':
-        q.tag = CULTURE_TAGS[pick.h.cat] || 'Culture';
+        q.tag = pick.h.sub ? titleCase(pick.h.sub) : 'Culture';
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+      case 'geoq':
+        q.tag = 'Geography';
         q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
     }
     return q;
@@ -138,7 +152,7 @@
   const allKeys = new Set(CATEGORIES.flatMap((cat) => [1, 2, 3, 4, 5, 6].flatMap((l) => POOLS[cat][l].map((q) => q.key))));
   const unseenCount = () => [...allKeys].filter((k) => history.keys[k] == null).length;
   const totalCount = () => allKeys.size;
-  const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, geo: POOLS.geo[l].length, history: POOLS.history[l].length, culture: POOLS.culture[l].length }));
+  const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
   window.Quiz = { next, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };

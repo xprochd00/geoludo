@@ -2,7 +2,10 @@
 // tags (so index.html also works when opened straight from disk):
 //   data/history-questions.json -> data/history.js  (window.HISTORY_QUESTIONS)
 //   data/culture-questions.json -> data/culture.js  (window.CULTURE_QUESTIONS)
-// Each question: { id, difficulty 1-6, category, question, answer: { iso2, name } }.
+//   data/sports-questions.json  -> data/sports.js   (window.SPORTS_QUESTIONS)
+//   data/geography-extra-questions.json -> data/geo-extra.js (window.GEO_EXTRA_QUESTIONS)
+// Each question: { id, difficulty 1-6, category, subcategory?, question, answer: { iso2, name } }.
+// IDs must be unique across all files.
 // Usage: node tools/build-questions.js
 const fs = require('fs');
 const path = require('path');
@@ -14,18 +17,21 @@ const byIso2 = new Map(window.WORLD.countries.filter(c => c.iso2).map(c => [c.is
 const SETS = [
   { src: 'data/history-questions.json', out: 'data/history.js', global: 'HISTORY_QUESTIONS' },
   { src: 'data/culture-questions.json', out: 'data/culture.js', global: 'CULTURE_QUESTIONS' },
+  { src: 'data/sports-questions.json', out: 'data/sports.js', global: 'SPORTS_QUESTIONS' },
+  { src: 'data/geography-extra-questions.json', out: 'data/geo-extra.js', global: 'GEO_EXTRA_QUESTIONS' },
 ];
+const seen = new Set();
 
 for (const set of SETS) {
   const src = JSON.parse(fs.readFileSync(path.join(root, set.src), 'utf8'));
-  const seen = new Set();
   const out = src.map((q) => {
     const c = byIso2.get(q.answer && q.answer.iso2);
     if (!c) throw new Error(`${set.src} ${q.id}: no playable country with ISO code ${q.answer && q.answer.iso2}`);
     if (!(q.difficulty >= 1 && q.difficulty <= 6)) throw new Error(`${set.src} ${q.id}: difficulty must be 1-6`);
-    if (seen.has(q.id)) throw new Error(`${set.src}: duplicate id ${q.id}`);
+    if (seen.has(q.id)) throw new Error(`${set.src}: duplicate id ${q.id} (IDs must be unique across all question files)`);
     seen.add(q.id);
     const rec = { id: q.id, lvl: q.difficulty, cat: q.category, q: q.question, a: c.id };
+    if (q.subcategory) rec.sub = q.subcategory;
     if (q.time_sensitive) rec.ts = 1;
     if (q.contested_territory) rec.ct = 1;
     return rec;
