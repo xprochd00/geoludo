@@ -1,6 +1,12 @@
 /* Small effects toolkit: timing helpers, synthesized sound, confetti and the 3D dice. */
 (function () {
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  // Global pace: 1 = normal, 0.5 = "fast animations". Scales every animation wait and the CSS durations.
+  const pace = { factor: 1 };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms * pace.factor));
+  function setFast(on) {
+    pace.factor = on ? 0.5 : 1;
+    document.documentElement.style.setProperty('--spd', pace.factor);
+  }
 
   /* ---------- Sound (WebAudio synth, no assets) ---------- */
   const Sound = {
@@ -122,5 +128,5 @@
     return { roll, idle };
   })();
 
-  window.FX = { sleep, Sound, Confetti, Dice };
+  window.FX = { sleep, setFast, pace, Sound, Confetti, Dice };
 })();

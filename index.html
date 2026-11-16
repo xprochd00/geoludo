@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GeoLudo — The World Race</title>
-  <meta name="description" content="A geography board game inspired by Ludo. Roll the dice, find the country on the map, race to the finish.">
+  <meta name="description" content="A geography board game inspired by Ludo. Roll the dice, pick your challenge, find the country on the map, race to the finish.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,8 +23,14 @@
         <p class="tagline">Roll the dice · Find the country · Race around the world</p>
       </div>
 
+      <div id="resume-card" class="resume-card" hidden>
+        <div><b>Game in progress</b><small id="resume-info"></small></div>
+        <button type="button" id="resume-btn" class="btn-primary">Resume ▶</button>
+        <button type="button" id="discard-btn" class="link-btn">Discard</button>
+      </div>
+
       <div class="setup-section">
-        <h2>Players <span class="h2-note">· pieces each</span></h2>
+        <h2>Players <span class="h2-note" id="pieces-note" hidden>· pieces each</span></h2>
         <div class="count-picker" role="radiogroup" aria-label="Number of players">
           <button type="button" data-count="2" class="count-btn">2</button>
           <button type="button" data-count="3" class="count-btn">3</button>
@@ -65,33 +71,47 @@
       </div>
 
       <div class="setup-section">
-        <h2>Rules</h2>
-        <div class="difficulty-legend" aria-label="The dice roll sets the question difficulty">
-          <div class="dl" style="--c:var(--l1)"><b>⚀</b><span>Very easy</span></div>
-          <div class="dl" style="--c:var(--l2)"><b>⚁</b><span>Easy</span></div>
-          <div class="dl" style="--c:var(--l3)"><b>⚂</b><span>Moderate</span></div>
-          <div class="dl" style="--c:var(--l4)"><b>⚃</b><span>Tricky</span></div>
-          <div class="dl" style="--c:var(--l5)"><b>⚄</b><span>Hard</span></div>
-          <div class="dl" style="--c:var(--l6)"><b>⚅</b><span>Expert</span></div>
+        <h2>Game length</h2>
+        <div class="preset-picker" role="radiogroup" aria-label="Game length and rules">
+          <button type="button" class="preset-card active" data-preset="quick" role="radio" aria-checked="true">
+            <span class="mode-icon">⚡</span><b>Quick</b><small>15–25 min · 1 piece, pick your challenge</small>
+          </button>
+          <button type="button" class="preset-card" data-preset="classic" role="radio" aria-checked="false">
+            <span class="mode-icon">🎲</span><b>Classic</b><small>45–90 min · 2 pieces, the dice sets the level</small>
+          </button>
+          <button type="button" class="preset-card" data-preset="custom" role="radio" aria-checked="false">
+            <span class="mode-icon">⚙️</span><b>Custom</b><small>Set every rule yourself</small>
+          </button>
         </div>
-        <label class="toggle"><input type="checkbox" id="opt-six" checked><span class="sw"></span><span>A <b>6</b> earns another roll (after bringing a piece out or a correct answer)</span></label>
-        <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
+        <ul id="preset-summary" class="preset-summary"></ul>
+        <div id="custom-rules" class="custom-rules" hidden>
+          <label class="toggle"><input type="checkbox" id="opt-choose"><span class="sw"></span><span><b>Pick your challenge:</b> choose the question level after rolling and move roll + level (otherwise the dice sets the level)</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-board"><span class="sw"></span><span>Pieces start on the board (otherwise a <b>6</b> brings them out)</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-steal"><span class="sw"></span><span><b>Steals &amp; hints:</b> a wrong answer can be stolen by the next player; tokens buy hints</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-rescue"><span class="sw"></span><span><b>Rescue questions</b> when a piece is about to be captured</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-six"><span class="sw"></span><span>A <b>6</b> earns another roll</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <h2>Options</h2>
         <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for longer text questions)</span></label>
+        <label class="toggle"><input type="checkbox" id="opt-fast"><span class="sw"></span><span>Fast animations</span></label>
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
-      <div class="history-note"><span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
+      <div class="history-note"><span id="passport-note"></span> · <span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
       <details class="howto">
         <summary>How to play</summary>
         <ul>
-          <li>Each player chooses how many pieces (1–4) to race. All pieces start at home.</li>
-          <li>A piece can only leave home on a <b>6</b>. Bringing a piece out needs no question. With no piece on the board you get <b>3 attempts</b> to roll that 6.</li>
-          <li>🛡️ Each player's first square (marked with a shield) is a <b>safe zone</b>: pieces there can't be sent home.</li>
-          <li>⚔️ Land on a rival piece and its owner gets a <b>rescue question</b>. The further that piece has travelled, the harder the question (see the coloured zones on the progress bars). A correct answer pushes the attacker back to where it came from; a wrong one sends the rival piece home.</li>
-          <li>If only one piece can move, it is picked automatically. Otherwise the pieces that can move glow: click the one you want (or press its number key).</li>
-          <li>Moving a piece already on the board needs a correct answer. The number rolled is the difficulty (1 = very easy … 6 = expert). The board rolls away and a world map appears: click the right country. A wrong answer leaves the piece where it is.</li>
-          <li>The first player to get <b>all</b> their pieces to the centre wins.</li>
-          <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots.</li>
+          <li><b>Goal:</b> race your pieces around the board and into the centre. Every move is earned by clicking the right country on the world map.</li>
+          <li><b>Pick your challenge</b> (Quick): after rolling, choose a question level from 1 (very easy) to 6 (expert). Answer correctly to move <b>roll + level</b> squares. Hard questions get you there faster. In Classic, the number rolled is the level and you move that many squares.</li>
+          <li><b>Steals &amp; hints:</b> if you answer wrong, the next player can steal the question. A correct steal earns a 🧭 compass token, and so does an expert answer. Spend a token during a question to highlight the right region of the map.</li>
+          <li>⚔️ <b>Captures:</b> land on a rival piece to send it back. Its owner first gets a <b>rescue question</b>: the further the piece has travelled, the harder the question. 🛡️ Shield squares are safe.</li>
+          <li>Classic: a piece leaves home only on a <b>6</b> (no question needed), with 3 attempts when nothing is on the board. A 6 earns another roll.</li>
+          <li>Play with friends on one screen, or add 🤖 computer players. Countries you find are stamped in your 🛂 passport.</li>
+          <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots. Keys: <kbd>Space</kbd> roll, <kbd>1</kbd>–<kbd>6</kbd> choose, <kbd>H</kbd> hint, <kbd>Enter</kbd> continue.</li>
         </ul>
       </details>
     </div>
@@ -116,6 +136,10 @@
             <div class="board-wrap" id="board-wrap">
               <svg id="board" viewBox="-16 -16 632 632" aria-label="Game board"></svg>
             </div>
+            <div id="level-picker" class="level-picker" hidden>
+              <div class="lp-title"><b id="lp-who"></b> <span id="lp-sub"></span></div>
+              <div id="lp-btns" class="lp-btns"></div>
+            </div>
           </div>
           <!-- Bottom face: map -->
           <div class="face face-map">
@@ -132,6 +156,7 @@
                   <div id="q-kind" class="q-kind">Find the country</div>
                   <div id="q-prompt" class="q-prompt">France</div>
                 </div>
+                <button type="button" id="hint-btn" class="hint-btn" hidden title="Spend a compass token to highlight the right region (H)">🧭 Hint <b id="hint-count"></b></button>
                 <div class="timer" id="timer" hidden>
                   <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="t-bg"/><circle cx="22" cy="22" r="19" class="t-fg" id="timer-ring"/></svg>
                   <span id="timer-num">30</span>
@@ -152,6 +177,7 @@
                   <div id="result-title" class="result-title">Correct!</div>
                   <div id="result-sub" class="result-sub"></div>
                 </div>
+                <button id="pass-btn" class="btn-ghost" hidden>Pass</button>
                 <button id="continue-btn" class="btn-primary">Continue ⏎</button>
               </div>
             </div>
@@ -177,7 +203,7 @@
 
         <div class="panel">
           <h3>Standings</h3>
-          <div class="zone-legend" title="Difficulty of the rescue question if a rival lands on your piece, from start to finish">
+          <div class="zone-legend" id="zone-legend" title="Difficulty of the rescue question if a rival lands on your piece, from start to finish">
             🛡️ <span>start</span><span class="zl"><i style="--zc:var(--l1)"></i><i style="--zc:var(--l2)"></i><i style="--zc:var(--l3)"></i><i style="--zc:var(--l4)"></i><i style="--zc:var(--l5)"></i><i style="--zc:var(--l6)"></i><i class="safe"></i></span><span>finish</span>
           </div>
           <ol id="standings" class="standings"></ol>
@@ -198,6 +224,7 @@
       <h2><span id="win-name">Player</span> conquers the world!</h2>
       <p id="win-stats"></p>
       <ol id="win-table" class="win-table"></ol>
+      <div id="win-stamps" class="win-stamps"></div>
       <div class="win-actions">
         <button id="again-btn" class="btn-primary">Play again</button>
         <button id="setup-btn" class="btn-ghost">Change players</button>

@@ -1,6 +1,6 @@
 # 🌍 GeoLudo — The World Race
 
-A geography, history and culture board game inspired by Ludo. Roll the die, pick a piece, then answer by clicking the right country on an interactive world map to move it forward.
+A geography, history and culture board game inspired by Ludo. Roll the die, pick your challenge, then answer by clicking the right country on an interactive world map. Play with friends on one screen or against computer opponents.
 
 ## Play
 
@@ -11,31 +11,47 @@ There's nothing to install or build. Either:
 
 ## Rules
 
-- 2–4 players take turns on one computer (hot seat). Each player picks how many pieces (1–4) they race with. All pieces start in the home yard.
-- **Leaving home:** a piece can only come out on a **6**. Bringing a piece out needs no question. With no piece on the board, you get **3 attempts** to roll that 6.
-- **Choosing a piece:** if only one piece can move, it is picked automatically. Otherwise the pieces that can move glow: click the one you want, or press its number key. On a 6 you can either bring out a new piece or move one already on the board. Pieces at home count as one choice, because they are interchangeable.
-- **Moving:** moving a piece on the board needs a correct answer. The number rolled is the difficulty:
+2–4 players share one computer (hot seat). Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
 
-  | Dice | 1 | 2 | 3 | 4 | 5 | 6 |
-  |------|---|---|---|---|---|---|
-  | Level | Very easy | Easy | Moderate | Tricky | Hard | Expert |
+### Game length
 
-  The board rolls away and a world map rolls into view. Click the right country to move the piece forward. A wrong click or running out of time leaves it where it is.
-- **Capturing and rescue questions:** when you land on a rival's square, its owner gets a 🛡️ **rescue question**. Get it right and the capture is cancelled: the attacking piece goes back to where it came from. Get it wrong (or run out of time) and the rival piece goes home. Your own pieces can share a square.
-- **Rescue difficulty:** depends on how far the threatened piece has travelled. The 51-square loop is split into six zones, from Very easy near the start to Expert near the end:
+| Preset | Length | Rules |
+|--------|--------|-------|
+| ⚡ **Quick** (default) | ~15–25 min | 1 piece each, starting on the board · pick your challenge · steals & hints · rescue questions |
+| 🎲 **Classic** | ~45–90 min | 2 pieces each, starting at home (a 6 brings one out) · the dice sets the level · rescue questions |
+| ⚙️ **Custom** | any | every rule below as a switch, plus 1–4 pieces per player (unequal counts work as a handicap) |
+
+The lengths come from simulating thousands of games.
+
+### Core rules
+
+- **Pick your challenge** (Quick): after rolling, choose a question level from 1 (Very easy) to 6 (Expert). A correct answer moves you **roll + level** squares. Expert questions are worth up to 12 squares, Very easy ones 2–7. The best choice depends on what *you* know.
+- **Dice sets the level** (Classic): the number rolled is the level (1 Very easy … 6 Expert), and you move that many squares.
+- **Answering:** the board rolls away and a world map rolls into view. Click the right country. A wrong click or running out of time leaves the piece where it is.
+- **Steals & hints:**
+  - After a wrong answer, the next player gets 15 seconds to steal the question. A correct steal earns a 🧭 compass token, and so does a correct Expert answer (up to 3 tokens).
+  - During any question, spend a token (or press <kbd>H</kbd>) to dim the map outside the answer's region.
+  - Everyone starts with one token.
+- **Leaving home** (Classic): a piece only comes out on a **6**, with no question needed. With nothing on the board you get **3 attempts** to roll that 6.
+- **Choosing a piece:** if only one piece can move, it's picked automatically. Otherwise the pieces that can move glow: click one or press its number key. Pieces at home count as one choice.
+- **Capturing and rescue questions:** land on a rival's square to send its pieces back (home in Classic, to their start square in Quick). With rescue questions on, the owner first gets a 🛡️ **rescue question**. A correct answer cancels the capture and sends the attacker back to where it came from. Your own pieces can share a square.
+- **Rescue difficulty:** depends on how far the threatened piece has travelled. The 51-square loop is split into six zones:
 
   | Squares | 1–9 | 10–17 | 18–26 | 27–34 | 35–43 | 44–51 |
   |---------|-----|-------|-------|-------|-------|-------|
   | Rescue question | Very easy | Easy | Moderate | Tricky | Hard | Expert |
 
-  Each player's progress bar is coloured with these zones and shows every piece on it, so you can always see what you would face. Pieces in the home column can't be captured.
-- **Safe squares:** each player's first square, marked with a 🛡️ shield, is a safe zone. Pieces standing there can't be captured, so rivals simply share the square.
-- **Winning:** the first player to bring **all** their pieces to the centre wins (51 squares round the loop, then 5 up your home column).
+  Each player's progress bar is coloured with these zones and shows every piece. Pieces in the home column can't be captured.
+- **Safe squares:** each player's first square (🛡️ shield) is safe. Rivals simply share it.
+- **Winning:** the first player to bring **all** their pieces to the centre wins (51 squares round the loop, then 5 up the home column).
+- **Other switches (Custom):** a 6 earns another roll; an exact roll is needed to reach the finish.
+- **Options:** an answer timer (30 s, or 45 s for long text questions; 15 s for steals) and fast animations.
 
-Optional rules, set on the start screen:
-- A 6 earns another roll after bringing a piece out or answering correctly (on by default).
-- You need an exact roll to reach the finish (off by default).
-- Answer timer: 30 s, or 45 s for the longer text questions (on by default).
+### Between games
+
+- **Save and resume:** the game saves at the start of every turn. Reload the page or leave via ⟲, and the start screen offers **Resume**.
+- **🛂 Passport:** every country a human player finds is stamped in a passport kept in the browser. The win screen lists the new stamps.
+- **No repeats:** see below.
 
 ### Game modes
 
@@ -62,7 +78,7 @@ Every question is answered by clicking the country on the map.
 
 All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: the 204 non-capital cities in `data/cities.json`. When a city question is answered, a 📍 pin shows where the city is. Antigua Guatemala is skipped because its name gives the answer away. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
 
-**Controls:** <kbd>Space</kbd> rolls the die. <kbd>1</kbd>–<kbd>4</kbd> choose a piece. <kbd>Enter</kbd> continues after an answer. On the map you can scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots.
+**Controls:** <kbd>Space</kbd> rolls the die. <kbd>1</kbd>–<kbd>6</kbd> pick a challenge level; <kbd>1</kbd>–<kbd>4</kbd> choose a piece. <kbd>H</kbd> uses a hint. <kbd>Enter</kbd> continues after an answer. On the map you can scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots.
 
 ## Project layout
 

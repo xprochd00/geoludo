@@ -251,7 +251,7 @@
   /* ---------- Answer reveal ---------- */
   function clearMarks() {
     nodes.forEach((n) => {
-      n.path.classList.remove('correct', 'wrong', 'dim', 'hover');
+      n.path.classList.remove('correct', 'wrong', 'dim', 'hover', 'hinted');
       n.dot && n.dot.classList.remove('correct', 'wrong');
     });
     labelLayer.innerHTML = '';
@@ -333,5 +333,31 @@
   }
   function lock() { locked = true; svg.classList.add('locked'); }
 
-  window.WorldMap = { prepare, reveal, lock, reset, byId };
+  /** Hint: dim every country outside the given set and zoom to it. */
+  async function hint(ids) {
+    const set = new Set(ids);
+    nodes.forEach((n, id) => {
+      const inside = set.has(id);
+      n.path.classList.toggle('dim', !inside);
+      n.path.classList.toggle('hinted', inside);
+    });
+    await animateTo(focusBox(ids), 800);
+  }
+
+  /** Mark a wrong pick without revealing the answer (the map stays clickable, e.g. for a steal). */
+  function markWrong(id) {
+    const n = nodes.get(id);
+    if (!n) return;
+    n.path.classList.add('wrong');
+    n.dot && n.dot.classList.add('wrong');
+  }
+
+  /** Screen position of a country's marker (used to show where a bot clicks). */
+  function centerOf(id) {
+    const c = byId.get(id);
+    const r = svg.getBoundingClientRect();
+    return { x: r.left + ((c.c[0] - vb.x) / vb.w) * r.width, y: r.top + ((c.c[1] - vb.y) / vb.h) * r.height };
+  }
+
+  window.WorldMap = { prepare, reveal, lock, reset, hint, markWrong, centerOf, byId };
 })();
