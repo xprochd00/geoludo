@@ -3797,5 +3797,1050 @@
       "iso2": "ZM",
       "name": "Zambia"
     }
+  },
+  {
+    "id": "Q501",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by Queen Elizabeth I, the last monarch of the Tudor dynasty?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q502",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the Allied D-Day landings take place on 6 June 1944?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q503",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Japan invade in 1937, starting a war that merged into World War II?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q504",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country are the ruins of Pompeii, buried by Mount Vesuvius in AD 79?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q505",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the 1948–1949 Berlin Airlift break a Soviet blockade?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q506",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Peter the Great modernise, founding a new capital on the Baltic in 1703?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q507",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was invaded by its northern neighbour in June 1950, starting the Korean War?",
+    "answer": {
+      "iso2": "KR",
+      "name": "South Korea"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q508",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the Battle of Hastings fought in 1066?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q509",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country became independent on 15 August 1947 with Jawaharlal Nehru as prime minister?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q510",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which present-day country are the ruins of ancient Troy?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q511",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was occupied by the USA under General MacArthur from 1945 to 1952?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q512",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was known internationally as Persia until 1935?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q513",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country moved its capital from Rio de Janeiro to a newly built city in 1960?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q514",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was known as Siam until 1939?",
+    "answer": {
+      "iso2": "TH",
+      "name": "Thailand"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q515",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was known as Burma until 1989?",
+    "answer": {
+      "iso2": "MM",
+      "name": "Myanmar"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q516",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which present-day country was the heart of the Aztec Empire conquered by Hernán Cortés in 1519–1521?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q517",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by Kaiser Wilhelm II during World War I?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q518",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which European country colonised Indonesia, ruling it until 1949?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q519",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which European country colonised Brazil, Angola and Mozambique?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q520",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which European country ruled the Philippines for more than 300 years until 1898?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q521",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which European country began its colonisation of Algeria in 1830?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q522",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country ruled Korea as a colony from 1910 to 1945?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q523",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the 1945 conference held that founded the United Nations?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q524",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country were the Nuremberg trials of Nazi leaders held?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q525",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country is Gallipoli, scene of a failed Allied campaign in 1915–1916?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q526",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country was the Battle of the Somme fought in 1916?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q527",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country invaded Iran in 1980, starting an eight-year war?",
+    "answer": {
+      "iso2": "IQ",
+      "name": "Iraq"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q528",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country fought Egypt, Jordan and Syria in the Six-Day War of 1967?",
+    "answer": {
+      "iso2": "IL",
+      "name": "Israel"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q529",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which present-day country was the heart of the Habsburg monarchy, ruled from Vienna?",
+    "answer": {
+      "iso2": "AT",
+      "name": "Austria"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q530",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which country did the failed US-backed Bay of Pigs invasion take place in 1961?",
+    "answer": {
+      "iso2": "CU",
+      "name": "Cuba"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q531",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country bought the vast Louisiana territory from France in 1803?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q532",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by military leaders called shoguns until 1867?",
+    "answer": {
+      "iso2": "JP",
+      "name": "Japan"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q533",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country was ruled by the Ming dynasty, which built the Forbidden City?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q534",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which present-day country was home to Marco Polo, who travelled to China in the 13th century?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q535",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country did Vasco da Gama sail for when he reached India by sea in 1498?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q536",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which present-day country was Christopher Columbus born?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q537",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country's prime minister Yitzhak Rabin was assassinated in 1995?",
+    "answer": {
+      "iso2": "IL",
+      "name": "Israel"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q538",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country fought England in the Hundred Years' War (1337–1453)?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q539",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country's east coast did Captain James Cook claim for Britain in 1770?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q540",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country stayed neutral in both World Wars and hosts the headquarters of the Red Cross?",
+    "answer": {
+      "iso2": "CH",
+      "name": "Switzerland"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q541",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which country held its first elections open to all races in 1994?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q542",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was historically known in Europe as Abyssinia?",
+    "answer": {
+      "iso2": "ET",
+      "name": "Ethiopia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q543",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was called East Pakistan until its 1971 war of independence?",
+    "answer": {
+      "iso2": "BD",
+      "name": "Bangladesh"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q544",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which present-day country was the heart of the Inca Empire conquered by Francisco Pizarro?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q545",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was known as Rhodesia before its independence in 1980?",
+    "answer": {
+      "iso2": "ZW",
+      "name": "Zimbabwe"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q546",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which European country colonised Libya, Eritrea and part of Somalia?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q547",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country is Ypres, scene of several major battles in World War I?",
+    "answer": {
+      "iso2": "BE",
+      "name": "Belgium"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q548",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Treaty of Waitangi signed between the British Crown and Māori chiefs in 1840?",
+    "answer": {
+      "iso2": "NZ",
+      "name": "New Zealand"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q549",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which present-day country were the Boer Wars fought?",
+    "answer": {
+      "iso2": "ZA",
+      "name": "South Africa"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q550",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Off the coast of which country was the naval Battle of Trafalgar fought in 1805?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q551",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did the Tamil Tigers fight a civil war that ended in 2009?",
+    "answer": {
+      "iso2": "LK",
+      "name": "Sri Lanka"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q552",
+    "difficulty": 4,
+    "category": "history",
+    "question": "From which country did the Mayflower Pilgrims sail to America in 1620?",
+    "answer": {
+      "iso2": "GB",
+      "name": "United Kingdom"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q553",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was Roald Amundsen, the first person to reach the South Pole, from?",
+    "answer": {
+      "iso2": "NO",
+      "name": "Norway"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q554",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country was the Soviet revolutionary Leon Trotsky assassinated in 1940?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q555",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by Fulgencio Batista until Fidel Castro's revolution?",
+    "answer": {
+      "iso2": "CU",
+      "name": "Cuba"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q556",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which Caribbean country was devastated by an earthquake in January 2010 that destroyed much of its capital?",
+    "answer": {
+      "iso2": "HT",
+      "name": "Haiti"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q557",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country is Tikal, one of the greatest cities of the ancient Maya?",
+    "answer": {
+      "iso2": "GT",
+      "name": "Guatemala"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q558",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought Britain in the Opium Wars of the 19th century?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q559",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which present-day country was Valentina Tereshkova, the first woman in space, born?",
+    "answer": {
+      "iso2": "RU",
+      "name": "Russia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q560",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by Shah Mohammad Reza Pahlavi until 1979?",
+    "answer": {
+      "iso2": "IR",
+      "name": "Iran"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q561",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country renamed its city of Saigon after a revolutionary leader in 1976?",
+    "answer": {
+      "iso2": "VN",
+      "name": "Vietnam"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q562",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was founded in 1948 with Kim Il-sung as its leader?",
+    "answer": {
+      "iso2": "KP",
+      "name": "North Korea"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q563",
+    "difficulty": 4,
+    "category": "history",
+    "question": "To which island did Chiang Kai-shek's government retreat after losing the Chinese Civil War in 1949?",
+    "answer": {
+      "iso2": "TW",
+      "name": "Taiwan"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q564",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which island country has been divided since Turkey's invasion in 1974?",
+    "answer": {
+      "iso2": "CY",
+      "name": "Cyprus"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q565",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which present-day country was Joseph Stalin born?",
+    "answer": {
+      "iso2": "GE",
+      "name": "Georgia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q566",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country suffered the Holodomor, a man-made famine in 1932–1933?",
+    "answer": {
+      "iso2": "UA",
+      "name": "Ukraine"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q567",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which country did Anne Frank and her family hide during World War II?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q568",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which neutral country did Germany invade in August 1914, bringing Britain into World War I?",
+    "answer": {
+      "iso2": "BE",
+      "name": "Belgium"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q569",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was created as a self-governing dominion by Confederation in 1867?",
+    "answer": {
+      "iso2": "CA",
+      "name": "Canada"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q570",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought Britain in the War of 1812?",
+    "answer": {
+      "iso2": "US",
+      "name": "United States"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q571",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country lost about half of its territory to the USA in the war of 1846–1848?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q572",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country, in 1888, was the last in the Americas to abolish slavery?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q573",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was ruled by the Ptolemaic dynasty, founded by a general of Alexander the Great?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q574",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country fought a war of independence against the Ottoman Empire from 1821 to 1830?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q575",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country abolished the Islamic caliphate in 1924?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q576",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was founded as a kingdom in 1932 by Ibn Saud?",
+    "answer": {
+      "iso2": "SA",
+      "name": "Saudi Arabia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q577",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country was led by Corazon Aquino after the 1986 People Power Revolution?",
+    "answer": {
+      "iso2": "PH",
+      "name": "Philippines"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q578",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country gained independence from Britain in 1957 under the name Malaya?",
+    "answer": {
+      "iso2": "MY",
+      "name": "Malaysia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q579",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country moved its capital from Lagos to Abuja in 1991?",
+    "answer": {
+      "iso2": "NG",
+      "name": "Nigeria"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q580",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country's King Juan Carlos I led its transition to democracy after 1975?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q581",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which country hosted the 1955 Bandung Conference of Asian and African states?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q582",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was ruled by the Duvalier family, 'Papa Doc' and 'Baby Doc', from 1957 to 1986?",
+    "answer": {
+      "iso2": "HT",
+      "name": "Haiti"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q583",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the anti-foreign Boxer Rebellion take place in 1899–1901?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q584",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which occupied country smuggled most of its Jewish population to safety in Sweden in 1943?",
+    "answer": {
+      "iso2": "DK",
+      "name": "Denmark"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q585",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country was formed as a federation on 1 January 1901?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q586",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country did the Mothers of the Plaza de Mayo protest for their 'disappeared' children?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q587",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country celebrates 3 March, the day of the 1878 treaty that ended Ottoman rule, as its national day?",
+    "answer": {
+      "iso2": "BG",
+      "name": "Bulgaria"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q588",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was a British army destroyed during its retreat from Kabul in 1842?",
+    "answer": {
+      "iso2": "AF",
+      "name": "Afghanistan"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q589",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which Himalayan country abolished its monarchy in 2008?",
+    "answer": {
+      "iso2": "NP",
+      "name": "Nepal"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q590",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country declared its independence on 17 August 1945?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q591",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country gained independence from South Africa in 1990?",
+    "answer": {
+      "iso2": "NA",
+      "name": "Namibia"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q592",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which present-day country was Aachen, Charlemagne's favourite residence?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q593",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country fought a border war with Ethiopia from 1998 to 2000?",
+    "answer": {
+      "iso2": "ER",
+      "name": "Eritrea"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q594",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which country was the papacy based from 1309 to 1377?",
+    "answer": {
+      "iso2": "FR",
+      "name": "France"
+    },
+    "source": "generated"
+  },
+  {
+    "id": "Q595",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which country sponsored Abel Tasman's 1642 voyage, the first European visit to New Zealand?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    },
+    "source": "generated"
   }
 ]

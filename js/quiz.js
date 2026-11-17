@@ -109,9 +109,13 @@
   function next(level, mode, cats = CATEGORIES) {
     const cat = mode === 'mixed' ? pickCategory(level, cats) : (POOLS[mode] ? mode : 'geo');
     catCount[cat]++;
-    const pick = draw(POOLS[cat][level]);
+    return describe(draw(POOLS[cat][level]), level, cat);
+  }
+
+  /** Turn a pool entry into a question object for the UI (also used by the training page). */
+  function describe(pick, level, cat) {
     const c = pick.c;
-    const q = { level, levelLabel: LEVELS[level].label, country: c, type: pick.type, category: cat };
+    const q = { level, levelLabel: LEVELS[level].label, country: c, type: pick.type, category: cat, key: pick.key };
     switch (pick.type) {
       case 'name':
         q.kind = 'Find this country on the map'; q.prompt = c.name; q.tag = 'Country'; break;
@@ -155,5 +159,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { next, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();
