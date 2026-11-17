@@ -2,233 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GeoLudo — The World Race</title>
-  <meta name="description" content="A geography board game inspired by Ludo. Roll the dice, pick your challenge, find the country on the map, race to the finish.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GeoLudo Voyage — Sail Around the World</title>
+  <meta name="description" content="A geography race around the world. Choose how hard each question is, answer on the world map, and sail your ship home first. Play on one device or online with friends.">
+  <meta name="theme-color" content="#0b1230">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+  <link rel="stylesheet" href="css/voyage.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛵</text></svg>">
 </head>
-<body>
+<body class="voyage">
   <div class="sky" aria-hidden="true"><span></span><span></span><span></span></div>
 
-  <!-- ============ SETUP SCREEN ============ -->
-  <section id="setup" class="screen active">
-    <div class="setup-card">
+  <!-- ============ SETUP ============ -->
+  <section id="setup" class="v-screen active">
+    <div class="v-card setup">
       <div class="logo">
-        <div class="logo-globe" aria-hidden="true">🌍</div>
-        <h1>Geo<span>Ludo</span></h1>
-        <p class="tagline">Roll the dice · Find the country · Race around the world</p>
+        <div class="logo-globe" aria-hidden="true">⛵</div>
+        <h1>Geo<span>Ludo</span> <small>Voyage</small></h1>
+        <p class="tagline">Choose your challenge · Answer on the map · Sail around the world</p>
       </div>
 
-      <div id="resume-card" class="resume-card" hidden>
-        <div><b>Game in progress</b><small id="resume-info"></small></div>
-        <button type="button" id="resume-btn" class="btn-primary">Resume ▶</button>
-        <button type="button" id="discard-btn" class="link-btn">Discard</button>
+      <div id="join-banner" class="join-banner" hidden>
+        <b>You're invited to a voyage!</b>
+        <span>Enter your name and join room <code id="join-code"></code>.</span>
       </div>
 
-      <div class="setup-section">
-        <h2>Players <span class="h2-note" id="pieces-note" hidden>· pieces each</span></h2>
-        <div class="count-picker" role="radiogroup" aria-label="Number of players">
-          <button type="button" data-count="2" class="count-btn">2</button>
-          <button type="button" data-count="3" class="count-btn">3</button>
-          <button type="button" data-count="4" class="count-btn active">4</button>
+      <div class="v-section" id="cat-section">
+        <h2>Questions</h2>
+        <div class="cat-grid" id="cat-chips">
+          <button type="button" class="cat-btn" data-cat="geo"><span>🗺️</span><b>Geography</b></button>
+          <button type="button" class="cat-btn" data-cat="history"><span>📜</span><b>History</b></button>
+          <button type="button" class="cat-btn" data-cat="sports"><span>⚽</span><b>Sports</b></button>
+          <button type="button" class="cat-btn" data-cat="culture"><span>🎭</span><b>Culture</b></button>
         </div>
-        <div id="player-inputs" class="player-inputs"></div>
+        <p class="hint-line" id="cat-hint"></p>
       </div>
 
-      <div class="setup-section">
-        <h2>Game mode</h2>
-        <div class="mode-picker" role="radiogroup" aria-label="Game mode">
-          <button type="button" class="mode-card active" data-mode="geo" role="radio" aria-checked="true">
-            <span class="mode-icon">🗺️</span><b>Geography</b><small>Countries, capitals, cities, flags &amp; landmarks</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="history" role="radio" aria-checked="false">
-            <span class="mode-icon">📜</span><b>History &amp; Geopolitics</b><small>Events, leaders &amp; world affairs</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="sports" role="radio" aria-checked="false">
-            <span class="mode-icon">⚽</span><b>Sports</b><small>Athletes, teams, events &amp; venues</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="culture" role="radio" aria-checked="false">
-            <span class="mode-icon">🎭</span><b>Culture</b><small>Music, film, art, books, games &amp; food</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Mixed</b><small>Combine any two or more categories</small>
-          </button>
-        </div>
-        <div id="mix-options" class="mix-options" hidden>
-          <div class="mix-title">Combine in Mixed mode <small>(choose at least two)</small></div>
-          <div class="mix-chips" role="group" aria-label="Categories in Mixed mode">
-            <button type="button" class="mix-chip active" data-cat="geo" aria-pressed="true">🗺️ Geography</button>
-            <button type="button" class="mix-chip active" data-cat="history" aria-pressed="true">📜 History &amp; Geopolitics</button>
-            <button type="button" class="mix-chip active" data-cat="sports" aria-pressed="true">⚽ Sports</button>
-            <button type="button" class="mix-chip active" data-cat="culture" aria-pressed="true">🎭 Culture</button>
-          </div>
-          <div id="mix-hint" class="mix-hint">All 4 categories, about a quarter each.</div>
+      <div class="v-section" id="format-section">
+        <h2>How do you play?</h2>
+        <div class="format-grid">
+          <button type="button" class="format-btn active" data-format="hotseat"><span>📱</span><b>Hot seat</b><small>Take turns on this device</small></button>
+          <button type="button" class="format-btn" data-format="online"><span>🌐</span><b>Online</b><small>Everyone on their own phone</small></button>
         </div>
       </div>
 
-      <div class="setup-section">
-        <h2>Game length</h2>
-        <div class="preset-picker" role="radiogroup" aria-label="Game length and rules">
-          <button type="button" class="preset-card active" data-preset="quick" role="radio" aria-checked="true">
-            <span class="mode-icon">⚡</span><b>Quick</b><small>15–25 min · 1 piece, pick your challenge</small>
-          </button>
-          <button type="button" class="preset-card" data-preset="classic" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Classic</b><small>45–90 min · 2 pieces, the dice sets the level</small>
-          </button>
-          <button type="button" class="preset-card" data-preset="custom" role="radio" aria-checked="false">
-            <span class="mode-icon">⚙️</span><b>Custom</b><small>Set every rule yourself</small>
-          </button>
+      <div class="v-section" id="hotseat-section">
+        <h2>Players</h2>
+        <div class="stepper">
+          <button type="button" id="minus-btn" aria-label="Fewer players">−</button>
+          <b id="count-num">2</b>
+          <button type="button" id="plus-btn" aria-label="More players">+</button>
         </div>
-        <ul id="preset-summary" class="preset-summary"></ul>
-        <div id="custom-rules" class="custom-rules" hidden>
-          <label class="toggle"><input type="checkbox" id="opt-choose"><span class="sw"></span><span><b>Pick your challenge:</b> choose the question level after rolling and move roll + level (otherwise the dice sets the level)</span></label>
-          <label class="toggle"><input type="checkbox" id="opt-board"><span class="sw"></span><span>Pieces start on the board (otherwise a <b>6</b> brings them out)</span></label>
-          <label class="toggle"><input type="checkbox" id="opt-steal"><span class="sw"></span><span><b>Steals &amp; hints:</b> a wrong answer can be stolen by the next player; tokens buy hints</span></label>
-          <label class="toggle"><input type="checkbox" id="opt-rescue"><span class="sw"></span><span><b>Rescue questions</b> when a piece is about to be captured</span></label>
-          <label class="toggle"><input type="checkbox" id="opt-six"><span class="sw"></span><span>A <b>6</b> earns another roll</span></label>
-          <label class="toggle"><input type="checkbox" id="opt-exact"><span class="sw"></span><span>Exact roll needed to reach the finish</span></label>
-        </div>
+        <div id="name-list" class="name-list"></div>
+        <button id="start-btn" class="btn-primary big">Set sail ⛵</button>
       </div>
 
-      <div class="setup-section">
-        <h2>Options</h2>
-        <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for longer text questions)</span></label>
-        <label class="toggle"><input type="checkbox" id="opt-fast"><span class="sw"></span><span>Fast animations</span></label>
+      <div class="v-section" id="online-section" hidden>
+        <h2>Your name</h2>
+        <input id="my-name" class="name-input" maxlength="16" placeholder="Captain …" autocomplete="nickname">
+        <button id="create-btn" class="btn-primary big">Create a room</button>
+        <button id="join-btn" class="btn-primary big" hidden>Join the voyage</button>
+        <p class="hint-line" id="net-status"></p>
       </div>
 
-      <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
-      <div class="history-note"><span id="passport-note"></span> · <span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
-      <a class="train-link" href="train.html">🎯 Solo training: practise the questions on your own</a>
-      <details class="howto">
-        <summary>How to play</summary>
-        <ul>
-          <li><b>Goal:</b> race your pieces around the board and into the centre. Every move is earned by clicking the right country on the world map.</li>
-          <li><b>Pick your challenge</b> (Quick): after rolling, choose a question level from 1 (very easy) to 6 (expert). Answer correctly to move <b>roll + level</b> squares. Hard questions get you there faster. In Classic, the number rolled is the level and you move that many squares.</li>
-          <li><b>Steals &amp; hints:</b> if you answer wrong, the next player can steal the question. A correct steal earns a 🧭 compass token, and so does an expert answer. Spend a token during a question to highlight the right region of the map.</li>
-          <li>⚔️ <b>Captures:</b> land on a rival piece to send it back. Its owner first gets a <b>rescue question</b>: the further the piece has travelled, the harder the question. 🛡️ Shield squares are safe.</li>
-          <li>Classic: a piece leaves home only on a <b>6</b> (no question needed), with 3 attempts when nothing is on the board. A 6 earns another roll.</li>
-          <li>Play with friends on one screen, or add 🤖 computer players. Countries you find are stamped in your 🛂 passport.</li>
-          <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots. Keys: <kbd>Space</kbd> roll, <kbd>1</kbd>–<kbd>6</kbd> choose, <kbd>H</kbd> hint, <kbd>Enter</kbd> continue.</li>
-        </ul>
-      </details>
+      <div class="v-links">
+        <a href="train.html">🎯 Solo training</a>
+        <a href="ludo/">🎲 Classic GeoLudo</a>
+        <details>
+          <summary>How to play</summary>
+          <ul>
+            <li>On your turn, <b>pick a challenge from 1 (very easy) to 6 (expert)</b>. Answer it correctly and your ship sails that many ports.</li>
+            <li>Answer by tapping the right country on the world map. Pinch or scroll to zoom; tiny nations have dots.</li>
+            <li>A wrong answer costs nothing: you just stay in port. Nobody can be attacked or sent back.</li>
+            <li>The first ship to sail around the world back to Lisbon ends the race. The round is finished so everyone has the same number of turns, and the ship furthest ahead wins.</li>
+            <li>Online: while others play, you can guess along. It doesn't move your ship, but everyone sees who knew it.</li>
+          </ul>
+        </details>
+      </div>
     </div>
   </section>
 
-  <!-- ============ GAME SCREEN ============ -->
-  <section id="game" class="screen">
-    <header class="topbar">
-      <div class="brand"><span class="brand-name">🌍 Geo<span>Ludo</span></span> <small id="mode-chip" class="mode-chip"></small></div>
-      <div id="turn-pill" class="turn-pill"><span class="dot"></span><span id="turn-name">—</span><span class="turn-label">'s turn</span></div>
-      <div class="top-actions">
-        <button id="sound-btn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
-        <button id="menu-btn" class="icon-btn" title="New game" aria-label="New game">⟲</button>
+  <!-- ============ LOBBY (online) ============ -->
+  <section id="lobby" class="v-screen">
+    <div class="v-card setup">
+      <h2 class="lobby-title">⚓ Room <code id="room-code"></code></h2>
+      <div class="share-box">
+        <input id="share-link" readonly aria-label="Invitation link">
+        <button type="button" id="copy-btn" class="btn-ghost">Copy</button>
+        <button type="button" id="share-btn" class="btn-ghost" hidden>Share</button>
       </div>
-    </header>
-
-    <main class="layout">
-      <div class="stage" id="stage">
-        <div class="prism flat" id="prism">
-          <!-- Front face: board -->
-          <div class="face face-board">
-            <div class="board-wrap" id="board-wrap">
-              <svg id="board" viewBox="-16 -16 632 632" aria-label="Game board"></svg>
-            </div>
-            <div id="level-picker" class="level-picker" hidden>
-              <div class="lp-title"><b id="lp-who"></b> <span id="lp-sub"></span></div>
-              <div id="lp-btns" class="lp-btns"></div>
-            </div>
-          </div>
-          <!-- Bottom face: map -->
-          <div class="face face-map">
-            <div class="quiz-card" id="quiz-card">
-              <div class="quiz-meta">
-                <span id="q-diff" class="chip lvl">Easy</span>
-                <span id="q-tag" class="chip ghost tag">Country</span>
-                <span id="q-player" class="chip player-chip"></span>
-                <span id="q-steps" class="chip ghost"></span>
-              </div>
-              <div class="quiz-main">
-                <img id="q-flag" class="q-flag" alt="Flag to identify" hidden>
-                <div class="q-text">
-                  <div id="q-kind" class="q-kind">Find the country</div>
-                  <div id="q-prompt" class="q-prompt">France</div>
-                </div>
-                <button type="button" id="hint-btn" class="hint-btn" hidden title="Spend a compass token to highlight the right region (H)">🧭 Hint <b id="hint-count"></b></button>
-                <div class="timer" id="timer" hidden>
-                  <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="t-bg"/><circle cx="22" cy="22" r="19" class="t-fg" id="timer-ring"/></svg>
-                  <span id="timer-num">30</span>
-                </div>
-              </div>
-            </div>
-            <div class="map-wrap" id="map-wrap">
-              <svg id="map" aria-label="World map"></svg>
-              <div class="map-controls">
-                <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
-                <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
-                <button type="button" data-zoom="reset" aria-label="Reset view">⤢</button>
-              </div>
-              <div class="map-hint">Scroll / pinch to zoom · drag to pan · tiny nations are marked with dots</div>
-              <div class="result" id="result" hidden>
-                <div class="result-icon" id="result-icon">✓</div>
-                <div class="result-text">
-                  <div id="result-title" class="result-title">Correct!</div>
-                  <div id="result-sub" class="result-sub"></div>
-                </div>
-                <button id="pass-btn" class="btn-ghost" hidden>Pass</button>
-                <button id="continue-btn" class="btn-primary">Continue ⏎</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <aside class="sidebar">
-        <div class="panel dice-panel">
-          <div class="dice-scene" id="dice-scene" title="Roll the dice">
-            <div class="dice" id="dice">
-              <div class="df f1"><i></i></div>
-              <div class="df f2"><i></i><i></i></div>
-              <div class="df f3"><i></i><i></i><i></i></div>
-              <div class="df f4"><i></i><i></i><i></i><i></i></div>
-              <div class="df f5"><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="df f6"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            </div>
-          </div>
-          <button id="roll-btn" class="btn-primary roll-btn">Roll the dice <kbd>Space</kbd></button>
-          <div id="status" class="status">Roll to get a question!</div>
-        </div>
-
-        <div class="panel">
-          <h3>Standings</h3>
-          <div class="zone-legend" id="zone-legend" title="Difficulty of the rescue question if a rival lands on your piece, from start to finish">
-            🛡️ <span>start</span><span class="zl"><i style="--zc:var(--l1)"></i><i style="--zc:var(--l2)"></i><i style="--zc:var(--l3)"></i><i style="--zc:var(--l4)"></i><i style="--zc:var(--l5)"></i><i style="--zc:var(--l6)"></i><i class="safe"></i></span><span>finish</span>
-          </div>
-          <ol id="standings" class="standings"></ol>
-        </div>
-
-        <div class="panel log-panel">
-          <h3>Journey log</h3>
-          <ul id="log" class="log"></ul>
-        </div>
-      </aside>
-    </main>
+      <p class="hint-line">Send this link to your friends. They open it on their phone and join.</p>
+      <h3>Crew <small id="crew-count"></small></h3>
+      <ul id="crew" class="crew"></ul>
+      <p class="hint-line" id="lobby-cats"></p>
+      <button id="lobby-start-btn" class="btn-primary big">Start the voyage ⛵</button>
+      <p class="hint-line" id="lobby-wait" hidden>Waiting for the host to start…</p>
+      <button type="button" id="leave-btn" class="link-btn">Leave room</button>
+    </div>
   </section>
 
-  <!-- ============ WIN OVERLAY ============ -->
-  <div id="win" class="overlay" hidden>
+  <!-- ============ GAME ============ -->
+  <section id="game" class="v-screen">
+    <header class="v-top">
+      <button type="button" id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+      <div class="v-round" id="v-round"></div>
+      <div class="v-players" id="v-players"></div>
+      <button type="button" id="sound-btn" class="icon-btn" aria-label="Toggle sound">🔊</button>
+    </header>
+
+    <div class="map-wrap v-map" id="map-wrap">
+      <svg id="map" aria-label="World map"></svg>
+      <div class="map-controls">
+        <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+        <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+        <button type="button" data-zoom="reset" aria-label="Reset view">⤢</button>
+      </div>
+
+      <!-- question card (on top of the map) -->
+      <div class="quiz-card v-quiz" id="quiz-card" hidden>
+        <div class="quiz-meta">
+          <span id="q-diff" class="chip lvl"></span>
+          <span id="q-tag" class="chip ghost tag"></span>
+          <span id="q-who" class="chip player-chip"></span>
+        </div>
+        <div class="quiz-main">
+          <img id="q-flag" class="q-flag" alt="Flag to identify" hidden>
+          <div class="q-text">
+            <div id="q-kind" class="q-kind"></div>
+            <div id="q-prompt" class="q-prompt"></div>
+          </div>
+          <div class="timer" id="timer" hidden>
+            <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="t-bg"/><circle cx="22" cy="22" r="19" class="t-fg" id="timer-ring"/></svg>
+            <span id="timer-num">30</span>
+          </div>
+        </div>
+        <div class="q-note" id="q-note"></div>
+      </div>
+
+      <!-- bottom panel: choose a challenge / status / result -->
+      <div class="v-panel" id="panel">
+        <div class="v-panel-head"><span class="dot" id="panel-dot"></span><b id="panel-title"></b><span id="panel-sub"></span></div>
+        <div class="v-levels" id="levels" hidden></div>
+        <div class="v-result" id="result" hidden>
+          <div class="result-icon" id="result-icon">✓</div>
+          <div class="result-text"><div class="result-title" id="result-title"></div><div class="result-sub" id="result-sub"></div></div>
+        </div>
+        <button type="button" id="next-btn" class="btn-primary" hidden>Next ⏎</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINISH ============ -->
+  <div id="finish" class="overlay" hidden>
     <div class="win-card">
       <div class="trophy">🏆</div>
-      <h2><span id="win-name">Player</span> conquers the world!</h2>
-      <p id="win-stats"></p>
-      <ol id="win-table" class="win-table"></ol>
-      <div id="win-stamps" class="win-stamps"></div>
+      <h2><span id="win-name"></span> wins the voyage!</h2>
+      <p id="win-sub"></p>
+      <ol id="podium" class="win-table"></ol>
       <div class="win-actions">
-        <button id="again-btn" class="btn-primary">Play again</button>
-        <button id="setup-btn" class="btn-ghost">Change players</button>
+        <button id="again-btn" class="btn-primary">New voyage</button>
+        <button id="home-btn" class="btn-ghost">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MENU ============ -->
+  <div id="menu" class="overlay" hidden>
+    <div class="win-card menu-card">
+      <h2>⛵ Voyage paused</h2>
+      <p id="menu-room"></p>
+      <div class="win-actions column">
+        <button id="resume-btn" class="btn-primary">Back to the game</button>
+        <button id="copy2-btn" class="btn-ghost" hidden>Copy invitation link</button>
+        <button id="quit-btn" class="btn-ghost">Leave the voyage</button>
       </div>
     </div>
   </div>
@@ -241,9 +192,10 @@
   <script src="data/sports.js"></script>
   <script src="data/geo-extra.js"></script>
   <script src="js/fx.js"></script>
-  <script src="js/board.js"></script>
   <script src="js/map.js"></script>
   <script src="js/quiz.js"></script>
-  <script src="js/game.js"></script>
+  <script src="js/vendor/peerjs.min.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/voyage.js"></script>
 </body>
 </html>

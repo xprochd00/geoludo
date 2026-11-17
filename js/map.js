@@ -36,6 +36,9 @@
   el('path', { d: W.graticule, class: 'graticule', 'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.7 }, svg);
   const land = el('g', { filter: 'url(#landshadow)' }, svg);
   const dotLayer = el('g', {}, svg);
+  // Game overlay (route, ships …): drawn above the countries, never catches clicks.
+  const overlay = el('g', { class: 'overlay', 'pointer-events': 'none' }, svg);
+  const scaleListeners = [];
   const fxLayer = el('g', {}, svg);
   const labelLayer = el('g', {}, svg);
 
@@ -79,6 +82,7 @@
     });
     fxLayer.querySelectorAll('.ping').forEach((c) => c.setAttribute('stroke-width', 3 * u));
     fxLayer.querySelectorAll('.citypin').forEach((c) => { c.setAttribute('r', 6 * u); c.setAttribute('stroke-width', 2.5 * u); });
+    scaleListeners.forEach((fn) => fn(u));
   }
   function setVB(v) { vb = clampVB(v); apply(); }
 
@@ -251,8 +255,8 @@
   /* ---------- Answer reveal ---------- */
   function clearMarks() {
     nodes.forEach((n) => {
-      n.path.classList.remove('correct', 'wrong', 'dim', 'hover', 'hinted');
-      n.dot && n.dot.classList.remove('correct', 'wrong');
+      n.path.classList.remove('correct', 'wrong', 'dim', 'hover', 'hinted', 'picked');
+      n.dot && n.dot.classList.remove('correct', 'wrong', 'picked');
     });
     labelLayer.innerHTML = '';
     fxLayer.innerHTML = '';
@@ -352,6 +356,14 @@
     n.dot && n.dot.classList.add('wrong');
   }
 
+  /** Neutral highlight of a pick (e.g. a guest's guess before the reveal). */
+  function markPicked(id) {
+    const n = nodes.get(id);
+    if (!n) return;
+    n.path.classList.add('picked');
+    n.dot && n.dot.classList.add('picked');
+  }
+
   /** Screen position of a country's marker (used to show where a bot clicks). */
   function centerOf(id) {
     const c = byId.get(id);
@@ -359,5 +371,16 @@
     return { x: r.left + ((c.c[0] - vb.x) / vb.w) * r.width, y: r.top + ((c.c[1] - vb.y) / vb.h) * r.height };
   }
 
-  window.WorldMap = { prepare, reveal, lock, reset, hint, markWrong, centerOf, byId };
+  /** Register a callback run whenever the zoom changes, with the size of one screen pixel in map units. */
+  function onScale(fn) { scaleListeners.push(fn); fn(unitsPerPx()); }
+  /** Zoom to fit the given map points (with padding). */
+  function focusPoints(points, ms = 800, pad = 60) {
+    const xs = points.map((p) => p[0]), ys = points.map((p) => p[1]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    return animateTo({ x: x0 - pad, y: y0 - pad, w: x1 - x0 + pad * 2, h: y1 - y0 + pad * 2 }, ms);
+  }
+  /** Clear answer marks (colours, labels) without changing the view. */
+  function clear() { clearMarks(); }
+
+  window.WorldMap = { prepare, reveal, lock, reset, hint, markWrong, markPicked, centerOf, byId, overlay, onScale, focusPoints, clear, unitsPerPx: () => unitsPerPx() };
 })();
