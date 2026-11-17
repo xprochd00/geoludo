@@ -31,7 +31,7 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 
 - **Setup:** choose the question categories (one, or several to mix them in equal shares), then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
 - **Your turn:** pick a challenge from **1 (Very easy) to 6 (Expert)**. Each button shows the port you would reach. Answer correctly and your ship sails that many ports. A wrong answer costs nothing; you just stay in port.
-- **The route:** 26 legs around the world, westward from Lisbon via Rio, Cape Horn, Tahiti, Sydney, Singapore, Mumbai and the Suez Canal, back to Lisbon (`data/route.json`).
+- **The route:** 30 legs around the world, westward from Lisbon via Dakar, Rio, Cape Horn, Tahiti, Sydney, Singapore, the Maldives, Mumbai, Djibouti and the Suez Canal, back to Lisbon (`data/route.json`).
 - **No attacks:** ships can share ports. Nobody is captured or sent back.
 - **Fair finish:** when the first ship reaches Lisbon, the round is completed so everyone has had the same number of turns. The ship that sailed furthest wins (overshooting the finish counts), then the best accuracy.
 - **Timer:** 30 s per question, 45 s for longer text questions.
@@ -45,11 +45,12 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 
 Each player sees the same map. Only the active player can pick and answer. Everyone else can **guess along**: it doesn't move their ship, but the reveal shows who also knew it ("👀 Also knew it: Ana"), and the final table counts it.
 
-Under the hood, the host's browser runs the game and the other phones connect to it directly (WebRTC via [PeerJS](https://peerjs.com/), included in `js/vendor/`). There's no game server: PeerJS's free public service only introduces the devices to each other. Some consequences:
+Under the hood, the host's browser runs the game. All devices exchange messages through a free **public relay** (an MQTT message broker reached over a secure WebSocket, the same kind of connection websites use), so it works on mobile data and home Wi-Fi alike. Several public relays are tried in turn (`js/net.js`), and the invitation link records which one the host is using. There's no game server of our own. Some consequences:
 
 - The **host must keep the page open**. If the host leaves, the voyage ends.
-- A player who loses connection is shown as offline. Their turn is skipped after 12 s, and they get their ship back by opening the link again (same phone, or any device with the same name).
-- On very strict networks (some school or company Wi-Fi), direct connections can fail. Mobile data or home Wi-Fi usually work.
+- A player who loses connection is shown as offline within seconds. Their turn is skipped after 12 s, and they get their ship back by opening the link again (same phone, or any device with the same name).
+- Some school or office networks block these relays. Mobile data usually works.
+- Public relays are shared services without guarantees, and anyone who knew the room code could in theory send messages. That's fine for a game among friends.
 - On a portrait phone the world map is small: pinch to zoom, or turn the phone sideways.
 
 ## 🎯 Solo training (`train.html`)
@@ -150,8 +151,7 @@ All 197 countries are included: the 193 UN members plus Vatican City, Palestine,
 ```
 index.html          ⛵ GeoLudo Voyage (setup, lobby, game)
 js/voyage.js        Voyage: rules engine (runs on the host), rendering, ships & route, hot seat and online wiring
-js/net.js           online rooms over WebRTC (PeerJS): host / join / reconnect
-js/vendor/peerjs.min.js   PeerJS 1.5.4 (MIT, see peerjs.LICENSE)
+js/net.js           online rooms through a public MQTT relay (a small built-in client): host / join / reconnect
 css/voyage.css      Voyage styles
 train.html, js/train.js, css/train.css   🎯 Solo training
 ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/)
@@ -201,4 +201,4 @@ Map notes:
 - Country shapes: [Natural Earth](https://www.naturalearthdata.com/) via [world-atlas](https://github.com/topojson/world-atlas) (public domain)
 - Country names and capitals: [world-countries](https://github.com/mledoze/countries) (ODbL)
 - Flags: [flag-icons](https://github.com/lipis/flag-icons) (MIT)
-- Online rooms: [PeerJS](https://peerjs.com/) (MIT)
+- Online rooms: public MQTT brokers ([EMQX](https://www.emqx.com/en/mqtt/public-mqtt5-broker), [HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker/), [Eclipse](https://mqtt.eclipseprojects.io/), [Mosquitto](https://test.mosquitto.org/))
