@@ -1,0 +1,99 @@
+/* Training page (train.html). Builds on style.css; mobile first. */
+body.train { min-height: 100vh; min-height: 100dvh; }
+body.train.playing { overflow: hidden; }
+.t-screen { display: none; position: relative; z-index: 1; }
+.t-screen.active { display: block; }
+
+/* ---------- home ---------- */
+#home, #summary { max-width: 640px; margin: 0 auto; padding: 12px 14px 32px; }
+.t-head { display: flex; align-items: center; gap: 10px; padding: 6px 0 14px; }
+.t-head h1 { flex: 1; margin: 0; font-family: var(--font-display); font-size: clamp(20px, 5.5vw, 28px); text-align: center; }
+.t-head h1 span { color: var(--accent); }
+.t-back { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap; }
+.t-back:hover { color: var(--text); }
+.t-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035)); border: 1px solid var(--panel-border);
+  border-radius: 22px; padding: 16px; margin-bottom: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.3); backdrop-filter: blur(10px);
+}
+.t-card h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+.t-card h3 { margin: 14px 0 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+.muted { color: var(--muted); font-size: 13px; }
+.gold { color: var(--accent); }
+
+.overview { display: flex; align-items: center; gap: 18px; }
+.ring { position: relative; width: 104px; height: 104px; flex: none; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 10; }
+.ring .r-bg { stroke: rgba(255,255,255,.1); }
+.ring .r-fg { stroke: var(--accent-2); stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset .8s; }
+.ring-text { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ring-text b { font-family: var(--font-display); font-size: 24px; line-height: 1; }
+.ring-text small { font-size: 11px; color: var(--muted); }
+.ov-stats { flex: 1; display: grid; gap: 8px; }
+.ov-stats div { display: flex; align-items: baseline; gap: 8px; }
+.ov-stats b { font-family: var(--font-display); font-size: 22px; min-width: 44px; }
+.ov-stats span { color: var(--muted); font-size: 13px; }
+.ov-stats i { font-style: normal; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-btn {
+  border: 1px solid var(--panel-border); background: rgba(0,0,0,.2); color: var(--muted); border-radius: 99px;
+  padding: 9px 14px; font-weight: 600; font-size: 14px; transition: all .15s; -webkit-tap-highlight-color: transparent;
+}
+.chips.small .chip-btn { padding: 7px 12px; font-size: 13px; }
+.chip-btn.active { background: rgba(255,209,102,.16); border-color: var(--accent); color: var(--text); }
+.chips.levels .chip-btn.active { background: color-mix(in srgb, var(--c) 22%, transparent); border-color: var(--c); }
+#type-row[hidden] { display: none; }
+.avail { margin: 14px 0 6px; font-size: 14px; color: #cfd6f2; }
+.t-actions { display: grid; gap: 10px; margin-top: 12px; }
+.t-actions .btn-ghost { padding: 13px; font-size: 15px; }
+.t-actions .btn-ghost:disabled { opacity: .45; cursor: not-allowed; }
+.btn-ghost.small { padding: 7px 12px; font-size: 13px; }
+
+.progress-table { display: grid; gap: 6px; margin-bottom: 12px; }
+.pt-row { display: grid; grid-template-columns: minmax(96px, 1.4fr) repeat(6, 1fr); gap: 5px; align-items: center; }
+.pt-head div { text-align: center; font-weight: 800; font-size: 13px; }
+.pt-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pt-cell { position: relative; height: 34px; border-radius: 8px; background: rgba(255,255,255,.06); overflow: hidden; display: grid; place-items: center; }
+.pt-cell i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--c); opacity: .55; transition: height .6s; }
+.pt-cell span { position: relative; font-size: 10.5px; font-weight: 700; }
+
+/* ---------- play ---------- */
+#play.active {
+  display: flex; flex-direction: column; gap: 8px; height: 100vh; height: 100dvh;
+  padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+  max-width: 1100px; margin: 0 auto;
+}
+.t-top { display: flex; align-items: center; gap: 10px; flex: none; }
+.t-score { flex: 1; display: flex; gap: 14px; font-weight: 700; font-size: 15px; }
+.t-score .ok { color: var(--ok); } .t-score .bad { color: var(--bad); } .t-score .streak { color: var(--accent); }
+.t-score b { color: var(--text); }
+.t-mode { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.t-quiz { flex: none; padding: 10px 12px; gap: 6px; }
+.t-quiz .q-prompt { font-size: clamp(20px, 5.5vw, 30px); }
+.t-quiz .q-prompt.long { font-size: clamp(15px, 4.2vw, 20px); }
+.t-quiz .q-flag { height: 52px; }
+.t-tools { display: flex; gap: 8px; align-items: center; }
+.t-tools .hint-btn { padding: 6px 10px; font-size: 13px; }
+#play .map-wrap { flex: 1; min-height: 0; }
+#play .map-hint { display: none; }
+.t-result { width: auto; left: 8px; right: 8px; transform: none; max-width: none; bottom: 8px; flex-wrap: wrap; }
+@keyframes pop-up-t { from { transform: translateY(40px); opacity: 0; } }
+.t-result { animation-name: pop-up-t; }
+.t-result .result-text { flex: 1; min-width: 160px; }
+.t-result .btn-primary { margin-left: auto; }
+
+/* ---------- summary ---------- */
+.sum-card { text-align: center; margin-top: 8vh; }
+.sum-card h2 { font-size: 24px; }
+.sum-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 6px 0 16px; }
+.sum-grid div { background: rgba(0,0,0,.2); border-radius: 14px; padding: 12px 6px; display: flex; flex-direction: column; }
+.sum-grid b { font-family: var(--font-display); font-size: 26px; }
+.sum-grid span { font-size: 12px; color: var(--muted); }
+.sum-missed { font-size: 14px; color: #d8def5; line-height: 1.5; text-align: left; margin-bottom: 4px; }
+
+@media (min-width: 700px) {
+  .sum-grid { grid-template-columns: repeat(4, 1fr); }
+  .t-result { left: 50%; right: auto; transform: translateX(-50%); max-width: calc(100% - 24px); flex-wrap: nowrap; }
+  @keyframes pop-up-t { from { transform: translate(-50%, 40px); opacity: 0; } }
+}

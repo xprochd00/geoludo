@@ -106,6 +106,7 @@
   /* ---------- Dice ---------- */
   const Dice = (() => {
     const el = document.getElementById('dice');
+    if (!el) return { roll: async () => {}, idle() {} }; // pages without a dice (training)
     // Rotation that brings face n to the front
     const FACE = { 1: [0, 0], 2: [0, -90], 3: [-90, 0], 4: [90, 0], 5: [0, 90], 6: [0, 180] };
     let spins = 0;

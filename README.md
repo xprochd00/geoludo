@@ -9,6 +9,15 @@ There's nothing to install or build. Either:
 - open `index.html` in a browser, or
 - serve the folder, e.g. `python3 -m http.server` and open <http://localhost:8000>.
 
+## 🎯 Solo training (`train.html`)
+
+A phone-friendly practice page with just the questions and the map, no board. Open it from the link on the start screen, or go to `train.html` directly.
+
+- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks).
+- New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
+- "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
+- Progress per category and level is kept in the browser. Training never changes which questions the real game asks.
+
 ## Rules
 
 2–4 players share one computer (hot seat). Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
