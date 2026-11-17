@@ -270,7 +270,7 @@
       const [x, y] = ROUTE.ports[+pos].p;
       ids.forEach((id, k) => {
         if (id === except) return;
-        const off = (k - (ids.length - 1) / 2) * 16 * unit;
+        const off = (k - (ids.length - 1) / 2) * 30 * unit;
         placeShip(id, [x + off, y]);
       });
     });
@@ -295,7 +295,7 @@
     unit = u;
     portLayer.querySelectorAll('.port-dot').forEach((c) => c.setAttribute('r', 3.2 * u));
     portLayer.querySelectorAll('.port-label').forEach((t) => {
-      t.setAttribute('font-size', 12 * u); t.setAttribute('dx', -14 * u); t.setAttribute('dy', 4 * u); t.setAttribute('stroke-width', 3 * u);
+      t.setAttribute('font-size', 12 * u); t.setAttribute('dx', -26 * u); t.setAttribute('dy', 4 * u); t.setAttribute('stroke-width', 3 * u);
     });
     targetLayer.querySelectorAll('circle').forEach((c) => c.setAttribute('r', 9 * u));
     targetLayer.querySelectorAll('text').forEach((t) => { t.setAttribute('font-size', 13 * u); t.setAttribute('dy', -13 * u); t.setAttribute('stroke-width', 3.5 * u); });
@@ -672,9 +672,9 @@
     const u = new URL(location.href);
     u.search = '';
     u.hash = '';
-    const keep = ['peerhost', 'peerport', 'peerpath', 'peersecure'];
-    keep.forEach((k) => { if (params.get(k)) u.searchParams.set(k, params.get(k)); });
+    if (params.get('relay')) u.searchParams.set('relay', params.get('relay')); // local testing
     u.searchParams.set('room', code);
+    if (lobby.relay) u.searchParams.set('r', lobby.relay); // everyone uses the host's relay
     return u.toString();
   }
 
@@ -714,8 +714,9 @@
     lobby.players = [{ id: view.me, name, connected: true }];
     lobby.cats = setup.cats.slice();
     net = Net.host({
-      onReady(code) {
+      onReady(code, relayKey) {
         lobby.code = code;
+        lobby.relay = relayKey;
         $('create-btn').disabled = false;
         $('net-status').textContent = '';
         renderLobby(lobby.players, lobby.cats, code, true);
@@ -724,7 +725,7 @@
           net.broadcast({ t: 'ping' });
           const now = Date.now();
           connOf.forEach((conn, pid) => {
-            if (now - (conn._seen || now) > 15000) { // silent: phone locked, browser closed, network gone
+            if (now - (conn._seen || now) > 30000) { // silent: phone locked, browser closed, network gone
               connOf.delete(pid);
               try { conn.close(); } catch (e) { /* ignore */ }
               if (engine) engine.setConnected(pid, false);
@@ -734,10 +735,9 @@
         }, 5000);
       },
       onError(text) { $('create-btn').disabled = false; $('net-status').textContent = text; },
-      onOpen() {},
       onMessage(conn, msg) { hostMessage(conn, msg); },
       onClose(conn) {
-        const pid = conn.metadata && conn.metadata.pid || conn._pid;
+        const pid = conn._pid;
         if (!pid) return;
         if (connOf.get(pid) === conn) connOf.delete(pid);
         if (engine) engine.setConnected(pid, false);
@@ -826,13 +826,24 @@
     $('net-status').textContent = 'Connecting…';
     view.hotseat = false; view.isHost = false; view.state = null; view.shownRes = null;
     view.me = store.get(seatKey(joinCode));
-    net = Net.join(joinCode, {
-      onOpen() { net.send({ t: 'hello', pid: view.me, name }); $('net-status').textContent = 'Connected.'; },
-      onReconnecting() { $('net-status').textContent = 'Connection lost — reconnecting…'; banner('Connection lost — reconnecting…'); },
+    let welcomed = false;
+    net = Net.join(joinCode, params.get('r'), {
+      onOpen() {
+        net.send({ t: 'hello', pid: view.me, name });
+        $('net-status').textContent = 'Looking for the room…';
+        setTimeout(() => {
+          if (welcomed) return;
+          $('join-btn').disabled = false;
+          $('net-status').textContent = 'No answer from this room. Check that the host\'s page is still open (the room ends when the host leaves), then try again.';
+        }, 12000);
+      },
+      onReconnecting(who) { banner(who === 'host' ? 'Waiting for the host…' : 'Connection lost — reconnecting…'); },
+      onBack() { banner(null); },
       onError(text) { $('join-btn').disabled = false; $('net-status').textContent = text; },
       onClose() { banner('Disconnected from the voyage.', true); },
       onMessage(msg) {
         if (msg.t === 'welcome') {
+          welcomed = true;
           view.me = msg.pid;
           if (msg.pid) store.set(seatKey(joinCode), msg.pid);
           banner(null);
