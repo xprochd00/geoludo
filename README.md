@@ -1,6 +1,14 @@
-# 🌍 GeoLudo — The World Race
+# ⛵ GeoLudo Voyage — Sail Around the World
 
-A geography, history and culture board game inspired by Ludo. Roll the die, pick your challenge, then answer by clicking the right country on an interactive world map. Play with friends on one screen or against computer opponents.
+A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own phone**, by sharing a room link.
+
+The site has three parts:
+
+| Page | What it is |
+|------|------------|
+| `index.html` | ⛵ **GeoLudo Voyage**, the main game |
+| `train.html` | 🎯 **Solo training**: questions and map only, to practise on your own |
+| `ludo/` | 🎲 **GeoLudo Classic**, the earlier Ludo-board version, kept unchanged |
 
 ## Play
 
@@ -9,16 +17,54 @@ There's nothing to install or build. Either:
 - open `index.html` in a browser, or
 - serve the folder, e.g. `python3 -m http.server` and open <http://localhost:8000>.
 
+Online play needs the page to be served over the web (e.g. GitHub Pages, below), not opened as a file.
+
+### Publishing on GitHub Pages
+
+In the repository: **Settings → Pages → Deploy from a branch → `main` / root**. The pages are then at:
+
+- `https://<user>.github.io/geoludo/`: Voyage
+- `https://<user>.github.io/geoludo/train.html`: Solo training
+- `https://<user>.github.io/geoludo/ludo/`: Classic
+
+## ⛵ Voyage rules
+
+- **Setup:** choose the question categories (one, or several to mix them in equal shares), then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
+- **Your turn:** pick a challenge from **1 (Very easy) to 6 (Expert)**. Each button shows the port you would reach. Answer correctly and your ship sails that many ports. A wrong answer costs nothing; you just stay in port.
+- **The route:** 26 legs around the world, westward from Lisbon via Rio, Cape Horn, Tahiti, Sydney, Singapore, Mumbai and the Suez Canal, back to Lisbon (`data/route.json`).
+- **No attacks:** ships can share ports. Nobody is captured or sent back.
+- **Fair finish:** when the first ship reaches Lisbon, the round is completed so everyone has had the same number of turns. The ship that sailed furthest wins (overshooting the finish counts), then the best accuracy.
+- **Timer:** 30 s per question, 45 s for longer text questions.
+- **Hot seat** saves after every turn: reload the page and choose **Resume**.
+
+### Online rooms
+
+1. Choose **Online**, enter your name and press **Create a room**.
+2. Send the invitation link (or the 5-letter room code) to your friends. They open it, enter their name and join.
+3. When everyone is in the lobby, the host presses **Start**.
+
+Each player sees the same map. Only the active player can pick and answer. Everyone else can **guess along**: it doesn't move their ship, but the reveal shows who also knew it ("👀 Also knew it: Ana"), and the final table counts it.
+
+Under the hood, the host's browser runs the game and the other phones connect to it directly (WebRTC via [PeerJS](https://peerjs.com/), included in `js/vendor/`). There's no game server: PeerJS's free public service only introduces the devices to each other. Some consequences:
+
+- The **host must keep the page open**. If the host leaves, the voyage ends.
+- A player who loses connection is shown as offline. Their turn is skipped after 12 s, and they get their ship back by opening the link again (same phone, or any device with the same name).
+- On very strict networks (some school or company Wi-Fi), direct connections can fail. Mobile data or home Wi-Fi usually work.
+- On a portrait phone the world map is small: pinch to zoom, or turn the phone sideways.
+
 ## 🎯 Solo training (`train.html`)
 
-A phone-friendly practice page with just the questions and the map, no board. Open it from the link on the start screen, or go to `train.html` directly.
+A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
 - Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks).
 - New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
-- Progress per category and level is kept in the browser. Training never changes which questions the real game asks.
+- Progress per category and level is kept in the browser. Training never changes which questions the games ask.
 
-## Rules
+## 🎲 GeoLudo Classic rules (`ludo/`)
+
+The earlier Ludo-board version is kept in `ludo/` with frozen copies of its code and styles; it shares the question data and flags with the rest of the site.
+
 
 2–4 players share one computer (hot seat). Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
 
@@ -62,17 +108,27 @@ The lengths come from simulating thousands of games.
 - **🛂 Passport:** every country a human player finds is stamped in a passport kept in the browser. The win screen lists the new stamps.
 - **No repeats:** see below.
 
-### Game modes
+## Questions (shared by all three parts)
 
-| Mode | Questions |
-|------|-----------|
+| Category | Questions |
+|----------|-----------|
 | 🗺️ Geography | Find a country by its **name**, **flag**, **capital** or a **major city**, plus the 52 extra questions in `data/geography-extra-questions.json` (landmarks, records …) |
-| 📜 History & Geopolitics | The 378 questions in `data/history-questions.json` |
-| ⚽ Sports | The 378 questions in `data/sports-questions.json` |
+| 📜 History & Geopolitics | The 473 questions in `data/history-questions.json` |
+| ⚽ Sports | The 468 questions in `data/sports-questions.json` |
 | 🎭 Culture | The 490 questions in `data/culture-questions.json`: music, film, art & architecture, literature, video games, traditions & food |
-| 🎲 Mixed | Combine any two, three or all four categories (chosen on the start screen). Each chosen category gets an equal share: each question comes at random from whichever chosen categories have been asked least so far |
+| Mixed | Choosing several categories mixes them in equal shares: each question comes at random from whichever chosen categories have been asked least so far |
 
 Every question is answered by clicking the country on the map.
+
+**Pool sizes per level.** Because Voyage players choose their own level, the middle levels are picked most, so levels 3 and 4 have the largest pools:
+
+| Level | 1 | 2 | 3 | 4 | 5 | 6 |
+|-------|---|---|---|---|---|---|
+| History | 60 | 78 | 101 | 100 | 74 | 60 |
+| Sports | 60 | 69 | 100 | 106 | 73 | 60 |
+| Culture | 60 | 81 | 100 | 103 | 86 | 60 |
+
+Questions added to reach these sizes are marked `"source": "generated"` in the JSON files, so they can be reviewed.
 
 **No repeats:** questions are drawn at random from those not asked yet. The record of asked questions is kept in the browser (`localStorage`), so it carries over between games and page reloads. Once every question at a level has been asked, new draws come from the least recently asked half. The game also avoids answer countries used in the last 8 questions. The start screen shows how many questions haven't been asked yet and has a **Reset question history** link.
 
@@ -85,21 +141,26 @@ Every question is answered by clicking the country on the map.
 | Capital | fame + 1 + the country's `CAP_ADJ` |
 | Non-capital city | the city's tier (1–6) in `data/cities.json` |
 
-All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: the 204 non-capital cities in `data/cities.json`. When a city question is answered, a 📍 pin shows where the city is. Antigua Guatemala is skipped because its name gives the answer away. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
+All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: the 100 non-capital cities in `data/cities.json`. When a city question is answered, a 📍 pin shows where the city is. Antigua Guatemala is skipped because its name gives the answer away. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
 
-**Controls:** <kbd>Space</kbd> rolls the die. <kbd>1</kbd>–<kbd>6</kbd> pick a challenge level; <kbd>1</kbd>–<kbd>4</kbd> choose a piece. <kbd>H</kbd> uses a hint. <kbd>Enter</kbd> continues after an answer. On the map you can scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots.
+**Controls:** on the map, scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots. Voyage keys: <kbd>1</kbd>–<kbd>6</kbd> pick a challenge, <kbd>Enter</kbd> next, <kbd>Esc</kbd> menu.
 
 ## Project layout
 
 ```
-index.html          markup for the setup screen, game screen and win overlay
-css/style.css       styling, the 3D board/map "roll" and the 3D dice
-js/fx.js            sound synthesised with WebAudio, confetti, dice animation
-js/board.js         Ludo board geometry, SVG rendering, pawn movement
-js/map.js           world map rendering, pan/zoom/pinch, click picking, answer reveal
-js/quiz.js          question generator (6 levels, geography / history / mixed)
-js/game.js          turn flow and game state
-data/world.js       generated: projected country outlines, capitals, cities, fame levels
+index.html          ⛵ GeoLudo Voyage (setup, lobby, game)
+js/voyage.js        Voyage: rules engine (runs on the host), rendering, ships & route, hot seat and online wiring
+js/net.js           online rooms over WebRTC (PeerJS): host / join / reconnect
+js/vendor/peerjs.min.js   PeerJS 1.5.4 (MIT, see peerjs.LICENSE)
+css/voyage.css      Voyage styles
+train.html, js/train.js, css/train.css   🎯 Solo training
+ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/)
+css/style.css       shared base styles (cards, buttons, map, question card)
+js/map.js           world map: rendering, pan/zoom/pinch, picking, answer reveal, overlay layer for the route & ships
+js/quiz.js          question pools and selection (6 levels, categories, no repeats)
+js/fx.js            sound (WebAudio), confetti
+data/world.js       generated: projected country outlines, capitals, cities, fame levels, the voyage route
+data/route.json     the voyage route: ports and sea waypoints (edit this)
 data/history-questions.json   history & geopolitics questions (edit this)
 data/culture-questions.json   culture questions (edit this)
 data/sports-questions.json    sports questions (edit this)
@@ -107,8 +168,8 @@ data/geography-extra-questions.json   extra geography questions (edit this)
 data/cities.json    non-capital cities with tiers 1-6 (edit this)
 data/history.js, culture.js, sports.js, geo-extra.js   generated from the question files
 flags/*.svg         country flags (from flag-icons)
-tools/build-data.js     regenerates data/world.js and flags/
-tools/build-questions.js  regenerates the question data files (history, culture, sports, geography extra)
+tools/build-data.js     regenerates data/world.js (including the route) and flags/
+tools/build-questions.js  regenerates the question data files
 ```
 
 ### Regenerating the data
@@ -125,7 +186,7 @@ node tools/build-data.js /tmp/geo/node_modules
 node tools/build-questions.js
 ```
 
-The fame levels, the per-country capital and flag difficulty adjustments (`CAP_ADJ`, `FLAG_ADJ`) and the capitals that are never asked are listed at the top of `tools/build-data.js`. Cities come from `data/cities.json`, so after editing it, run `tools/build-data.js` again.
+The fame levels, the per-country capital and flag difficulty adjustments (`CAP_ADJ`, `FLAG_ADJ`) and the capitals that are never asked are listed at the top of `tools/build-data.js`. Cities come from `data/cities.json` and the voyage route from `data/route.json`, so after editing either, run `tools/build-data.js` again.
 
 To add or change questions, edit any of the `data/*-questions.json` files, then run `node tools/build-questions.js`. Question IDs must be unique across all the files. Each answer is given by its ISO 3166-1 alpha-2 code. The script stops with an error if a code doesn't match a country on the map.
 
@@ -140,3 +201,4 @@ Map notes:
 - Country shapes: [Natural Earth](https://www.naturalearthdata.com/) via [world-atlas](https://github.com/topojson/world-atlas) (public domain)
 - Country names and capitals: [world-countries](https://github.com/mledoze/countries) (ODbL)
 - Flags: [flag-icons](https://github.com/lipis/flag-icons) (MIT)
+- Online rooms: [PeerJS](https://peerjs.com/) (MIT)

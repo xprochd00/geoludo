@@ -20,6 +20,7 @@
   const Q_TIME = 30, Q_TIME_LONG = 45;
   const PICK_TIMEOUT = 45; // online only: auto-pick level 3 if a player is idle
   const AUTO_NEXT = 5200; // online: move on after a result
+  const OFFLINE_GRACE = 12; // online: seconds an offline player keeps their turn before it is skipped
   const LEG_MS = 520; // ship animation per port
   const CAT_LABEL = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
 
@@ -63,7 +64,7 @@
       S.phase = 'pick'; S.q = null; S.res = null;
       secret = null; guesses = {};
       const p = active();
-      if (S.online && !p.connected) { timer = setTimeout(() => skip('offline'), 2500); }
+      if (S.online && !p.connected) { timer = setTimeout(() => skip('offline'), OFFLINE_GRACE * 1000); }
       else if (S.online) timer = setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000);
       publish();
     }
@@ -173,7 +174,11 @@
       if (!p || p.connected === on) return;
       p.connected = on;
       log(on ? `🔌 ${p.name} is back.` : `📴 ${p.name} lost connection.`);
-      if (!on && p === active() && S.phase === 'pick') { clearTimer(); timer = setTimeout(() => skip('offline'), 2500); }
+      if (p === active() && S.phase === 'pick') {
+        // give a reloading / reconnecting player a moment before skipping their turn
+        clearTimer();
+        timer = on ? setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000) : setTimeout(() => skip('offline'), OFFLINE_GRACE * 1000);
+      }
       publish();
     }
 
@@ -592,8 +597,9 @@
       ? `Mixed: ${setup.cats.map((c) => CAT_LABEL[c]).join(' + ')}, in equal shares.`
       : `${CAT_LABEL[setup.cats[0]]} questions only. Pick more to mix them.`;
     document.querySelectorAll('.format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
-    $('hotseat-section').hidden = setup.format !== 'hotseat';
-    $('online-section').hidden = setup.format !== 'online';
+    // an invitation link always shows the join form
+    $('hotseat-section').hidden = !!joinCode || setup.format !== 'hotseat';
+    $('online-section').hidden = !joinCode && setup.format !== 'online';
     $('count-num').textContent = setup.count;
     const list = $('name-list');
     list.innerHTML = '';
@@ -714,7 +720,18 @@
         $('net-status').textContent = '';
         renderLobby(lobby.players, lobby.cats, code, true);
         clearInterval(pingTimer);
-        pingTimer = setInterval(() => net.broadcast({ t: 'ping' }), 5000);
+        pingTimer = setInterval(() => {
+          net.broadcast({ t: 'ping' });
+          const now = Date.now();
+          connOf.forEach((conn, pid) => {
+            if (now - (conn._seen || now) > 15000) { // silent: phone locked, browser closed, network gone
+              connOf.delete(pid);
+              try { conn.close(); } catch (e) { /* ignore */ }
+              if (engine) engine.setConnected(pid, false);
+              else { lobby.players = lobby.players.filter((p) => p.id !== pid); hostLobbyUpdate(); }
+            }
+          });
+        }, 5000);
       },
       onError(text) { $('create-btn').disabled = false; $('net-status').textContent = text; },
       onOpen() {},
@@ -736,10 +753,18 @@
 
   function hostMessage(conn, msg) {
     if (!msg || typeof msg !== 'object') return;
+    conn._seen = Date.now();
+    if (msg.t === 'pong') return;
     if (msg.t === 'hello') {
       const name = String(msg.name || '').trim().slice(0, 16) || 'Captain';
       let pid = msg.pid;
-      const known = engine ? engine.state.players.find((p) => p.id === pid) : lobby.players.find((p) => p.id === pid);
+      const roster = engine ? engine.state.players : lobby.players;
+      let known = roster.find((p) => p.id === pid);
+      if (!known && engine) {
+        // same name as a player who is offline: give them their ship back
+        known = roster.find((p) => !p.connected && p.name.toLowerCase() === name.toLowerCase());
+        if (known) pid = known.id;
+      }
       if (!known) {
         if (engine) { // game already running: watch only
           net.sendTo(conn, { t: 'welcome', pid: null, code: lobby.code });
