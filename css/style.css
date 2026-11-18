@@ -667,3 +667,13 @@ kbd {
   .prism { transition-duration: .01s; }
   .sky span, .dice.idle, .logo-globe { animation: none; }
 }
+
+/* ================= IN-GAME DIALOG (replaces the browser's confirm) ================= */
+.g-dialog { z-index: 40; }
+.g-dialog-card { width: min(380px, 100%); padding: 24px 22px 22px; }
+.g-dialog-card h2 { font-size: 22px; margin: 0 0 8px; }
+.g-dialog-card p { line-height: 1.45; }
+.g-dialog-card .win-actions button { min-width: 120px; }
+.g-dialog-icon { font-size: 40px; line-height: 1; margin-bottom: 4px; }
+.btn-primary.danger { background: linear-gradient(180deg, #ff7b7b, #e04f5f); color: #fff; box-shadow: 0 6px 0 #a83442, 0 10px 20px rgba(224, 79, 95, .3); }
+.btn-primary.danger:active { box-shadow: 0 2px 0 #a83442, 0 6px 12px rgba(224, 79, 95, .3); }

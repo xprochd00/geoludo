@@ -1,6 +1,6 @@
 # ⛵ GeoLudo Voyage — Sail Around the World
 
-A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own phone**, by sharing a room link.
+A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own device** (phone, tablet or computer), by sharing a room link.
 
 The site has three parts:
 
@@ -32,23 +32,26 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 - **Setup:** choose the question categories (one, or several to mix them in equal shares), then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
 - **Your turn:** pick a challenge from **1 (Very easy) to 6 (Expert)**. Each button shows the port you would reach. Answer correctly and your ship sails that many ports. A wrong answer costs nothing; you just stay in port.
 - **The route:** 30 legs around the world, westward from Lisbon via Dakar, Rio, Cape Horn, Tahiti, Sydney, Singapore, the Maldives, Mumbai, Djibouti and the Suez Canal, back to Lisbon (`data/route.json`).
+- **Compass tokens 🧭:** everyone starts with one (max 3). Land **exactly** on one of the six 🧭 treasure ports (the level buttons mark the challenge that lands there), or answer **3 in a row**, to find another. During your question, spend one (button or **H**) to highlight the region the answer is in.
 - **No attacks:** ships can share ports. Nobody is captured or sent back.
 - **Fair finish:** when the first ship reaches Lisbon, the round is completed so everyone has had the same number of turns. The ship that sailed furthest wins (overshooting the finish counts), then the best accuracy.
 - **Timer:** 30 s per question, 45 s for longer text questions.
+- **Computer captains 🤖:** in hot seat, tap a player's *Human* button to make it a Rookie, Explorer or Genius bot (accuracy falls with the level, as in GeoLudo). Bots weigh the risk of each level, aim for treasure ports and use their compass on hard questions.
 - **Hot seat** saves after every turn: reload the page and choose **Resume**.
 
 ### Online rooms
 
 1. Choose **Online**, enter your name and press **Create a room**.
 2. Send the invitation link (or the 5-letter room code) to your friends. They open it, enter their name and join.
-3. When everyone is in the lobby, the host presses **Start**.
+3. The host can also **add computer captains** (🤖 Rookie, Explorer or Genius; tap the level to change it, ✕ to remove).
+4. When everyone is in the lobby, the host presses **Start**.
 
 Each player sees the same map. Only the active player can pick and answer. Everyone else can **guess along**: it doesn't move their ship, but the reveal shows who also knew it ("👀 Also knew it: Ana"), and the final table counts it.
 
 Under the hood, the host's browser runs the game. All devices exchange messages through a free **public relay** (an MQTT message broker reached over a secure WebSocket, the same kind of connection websites use), so it works on mobile data and home Wi-Fi alike. Several public relays are tried in turn (`js/net.js`), and the invitation link records which one the host is using. There's no game server of our own. Some consequences:
 
 - The **host must keep the page open**. If the host leaves, the voyage ends.
-- A player who loses connection is shown as offline within seconds. Their turn is skipped after 12 s, and they get their ship back by opening the link again (same phone, or any device with the same name).
+- A player who loses connection is shown as offline (at once when the page closes, at most 30 s when the phone just goes silent). **20 s later a bot (Explorer level) sails their ship** until they come back by opening the link again (same phone, or any device with the same name); they then take the helm again.
 - Some school or office networks block these relays. Mobile data usually works.
 - Public relays are shared services without guarantees, and anyone who knew the room code could in theory send messages. That's fine for a game among friends.
 - On a portrait phone the world map is small: pinch to zoom, or turn the phone sideways.
@@ -67,7 +70,20 @@ A phone-friendly practice page with just the questions and the map, no board. Op
 The earlier Ludo-board version is kept in `ludo/` with frozen copies of its code and styles; it shares the question data and flags with the rest of the site.
 
 
-2–4 players share one computer (hot seat). Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
+2–4 players share one device (**hot seat**) or play **online**, each on their own device. Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
+
+### Online rooms
+
+1. Choose **Online**, pick the questions, game length and options, enter your name and press **Create a room**.
+2. Send the invitation link. Friends open it, enter their name and join (up to 4 players). The host can add, re-level and remove 🤖 computer players.
+3. The host presses **Start**. Each player rolls, picks and answers on their own device; everyone sees the same board and map.
+
+How it stays in step: every device runs the same game from the same random seed, so dice, questions and bots come out identical everywhere. Only decisions travel (roll, piece, level, answer, hint, continue): the host numbers them and sends them to all devices through the same public relay as Voyage (`ludo/js/net.js`, its own channel), and each device applies a decision when its game reaches that point (`ludo/js/online.js`, `point()` in `ludo/js/game.js`).
+
+- **Reload or rejoin:** open the link again (same device, or any device with the same name). The device replays the game without animations and catches up.
+- **Lost connection:** a player is shown as offline at once when the page closes, or after 30 s of silence. **20 s later a bot (Explorer level) plays for them** until they are back. The host makes those decisions, so all devices stay identical.
+- **Idle players:** the answer timer still applies; after 60 s without a roll or choice the host decides for them.
+- The host's page must stay open; online games aren't saved for Resume. On a joining device, the question history and passport of that device are left untouched.
 
 ### Game length
 
@@ -154,9 +170,10 @@ js/voyage.js        Voyage: rules engine (runs on the host), rendering, ships & 
 js/net.js           online rooms through a public MQTT relay (a small built-in client): host / join / reconnect
 css/voyage.css      Voyage styles
 train.html, js/train.js, css/train.css   🎯 Solo training
-ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/)
+ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/; online rooms in ludo/js/online.js)
 css/style.css       shared base styles (cards, buttons, map, question card)
-js/map.js           world map: rendering, pan/zoom/pinch, picking, answer reveal, overlay layer for the route & ships
+js/map.js           world map: rendering, pan/zoom/pinch, picking (larger tap areas for tiny nations), answer reveal, overlay layer
+js/dialog.js        in-game confirm/alert dialogs (copy in ludo/js/)
 js/quiz.js          question pools and selection (6 levels, categories, no repeats)
 js/fx.js            sound (WebAudio), confetti
 data/world.js       generated: projected country outlines, capitals, cities, fame levels, the voyage route

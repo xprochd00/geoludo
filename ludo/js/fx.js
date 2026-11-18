@@ -1,12 +1,15 @@
 /* Small effects toolkit: timing helpers, synthesized sound, confetti and the 3D dice. */
 (function () {
   // Global pace: 1 = normal, 0.5 = "fast animations". Scales every animation wait and the CSS durations.
-  const pace = { factor: 1 };
+  // Instant: no waiting at all (an online player catching up replays the game this way).
+  const pace = { factor: 1, fast: false, instant: false };
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms * pace.factor));
-  function setFast(on) {
-    pace.factor = on ? 0.5 : 1;
-    document.documentElement.style.setProperty('--spd', pace.factor);
+  function applyPace() {
+    pace.factor = pace.instant ? 0 : pace.fast ? 0.5 : 1;
+    document.documentElement.style.setProperty('--spd', pace.instant ? 0.001 : pace.factor);
   }
+  function setFast(on) { pace.fast = !!on; applyPace(); }
+  function setInstant(on) { if (pace.instant !== !!on) { pace.instant = !!on; applyPace(); } }
 
   /* ---------- Sound (WebAudio synth, no assets) ---------- */
   const Sound = {
@@ -20,7 +23,7 @@
       return this.ctx;
     },
     tone(freq, dur = 0.12, type = 'sine', vol = 0.15, delay = 0, slideTo = null) {
-      if (!this.enabled || !this.ensure()) return;
+      if (!this.enabled || pace.instant || !this.ensure()) return;
       const t = this.ctx.currentTime + delay;
       const o = this.ctx.createOscillator();
       const g = this.ctx.createGain();
@@ -129,5 +132,9 @@
     return { roll, idle };
   })();
 
-  window.FX = { sleep, setFast, pace, Sound, Confetti, Dice };
+  const fxConfetti = {
+    burst(...a) { if (!pace.instant) Confetti.burst(...a); },
+    rain(...a) { if (!pace.instant) Confetti.rain(...a); },
+  };
+  window.FX = { sleep, setFast, setInstant, pace, Sound, Confetti: fxConfetti, Dice };
 })();

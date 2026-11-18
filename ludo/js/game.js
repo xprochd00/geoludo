@@ -40,6 +40,22 @@
   const botAcc = (skill, lvl) => Math.min(0.98, Math.max(0.15, BOTS[skill].base - BOTS[skill].drop * (lvl - 1)));
   const isBot = (p) => p && p.type !== 'human';
 
+  /* Randomness that decides the game (dice, questions, bots). Online, every device uses the same seeded
+   * generator so all of them play out exactly the same game; only players' decisions travel. */
+  let rng = Math.random;
+  function seeded(a) {
+    return () => {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* Online play (see online.js). Off: hot seat, everything is local. */
+  const NET = { on: false, seat: null, host: false, send: null, pending: [], hostStep: 0, roster: {}, onPoint: null };
+  /** Is this player played on this device? (Hot seat: everyone.) */
+  const local = (p) => !NET.on || (p && p.seat === NET.seat);
+
   const store = {
     get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } },
@@ -82,19 +98,26 @@
       row.style.setProperty('--pc', col.hex);
       row.innerHTML = `<span class="pawn-icon"></span>
         <input maxlength="16" aria-label="${col.name} player name">
-        <select class="type-select" aria-label="${col.name} player: human or computer">
-          <option value="human">🙂 Human</option>
-          ${Object.entries(BOTS).map(([k, b]) => `<option value="${k}">🤖 Bot · ${b.label}</option>`).join('')}
-        </select>
+        <button type="button" class="type-select" title="Tap to switch: human or computer player"></button>
         <div class="piece-picker" role="radiogroup" aria-label="${col.name} player's number of pieces" title="Number of pieces (a handicap when unequal)" ${preset === 'custom' ? '' : 'hidden'}>
           ${[1, 2, 3, 4].map((n) => `<button type="button" role="radio" data-n="${n}" aria-label="${n} piece${n > 1 ? 's' : ''}">${n}</button>`).join('')}
         </div>`;
       const input = row.querySelector('input');
       input.value = names[seat];
       input.addEventListener('input', () => { names[seat] = input.value; saveSetup(); });
-      const sel = row.querySelector('select');
-      sel.value = types[seat];
-      sel.addEventListener('change', () => { types[seat] = sel.value; saveSetup(); });
+      const typeBtn = row.querySelector('.type-select');
+      const TYPE_ORDER = ['human', ...Object.keys(BOTS)];
+      const syncType = () => {
+        const t = types[seat];
+        typeBtn.textContent = t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`;
+        typeBtn.classList.toggle('bot', t !== 'human');
+        typeBtn.setAttribute('aria-label', `${col.name} player: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
+      };
+      typeBtn.addEventListener('click', () => {
+        types[seat] = TYPE_ORDER[(TYPE_ORDER.indexOf(types[seat]) + 1) % TYPE_ORDER.length];
+        syncType(); saveSetup();
+      });
+      syncType();
       const sync = () => row.querySelectorAll('.piece-picker button').forEach((b) => {
         const on = +b.dataset.n === pieceCounts[seat];
         b.classList.toggle('active', on);
@@ -116,45 +139,26 @@
   /* Mixed mode: which categories to combine (at least two). */
   const CAT_NAMES = { geo: 'Geography', history: 'History & Geopolitics', sports: 'Sports', culture: 'Culture' };
   const CAT_SHORT = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
-  function syncMix() {
-    $('mix-options').hidden = mode !== 'mixed';
-    document.querySelectorAll('.mix-chip').forEach((c) => {
-      const on = mixCats.includes(c.dataset.cat);
-      c.classList.toggle('active', on);
-      c.setAttribute('aria-pressed', on);
-    });
-    const share = { 2: 'half', 3: 'a third', 4: 'a quarter' }[mixCats.length];
-    $('mix-hint').textContent = mixCats.length === Quiz.CATEGORIES.length
-      ? `All ${mixCats.length} categories, about ${share} each.`
-      : `${mixCats.map((c) => CAT_NAMES[c]).join(' + ')}, about ${share} each.`;
+  // Categories: pick one, or several to mix them in equal shares (same picker as Voyage).
+  let cats = mode === 'mixed' ? mixCats.slice() : [mode];
+  function applyCats() {
+    mode = cats.length > 1 ? 'mixed' : cats[0];
+    mixCats = cats.length > 1 ? cats.slice() : Quiz.CATEGORIES.slice();
   }
-  document.querySelectorAll('.mix-chip').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const cat = chip.dataset.cat;
-      if (mixCats.includes(cat)) {
-        if (mixCats.length <= 2) {
-          chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
-          $('mix-hint').textContent = 'Mixed mode needs at least two categories. Pick a single-category mode for just one.';
-          return;
-        }
-        mixCats = mixCats.filter((c) => c !== cat);
-      } else {
-        mixCats = Quiz.CATEGORIES.filter((c) => c === cat || mixCats.includes(c));
-      }
-      syncMix();
-      saveSetup();
-    });
-  });
   function syncMode() {
-    document.querySelectorAll('.mode-card').forEach((x) => {
-      x.classList.toggle('active', x.dataset.mode === mode);
-      x.setAttribute('aria-checked', x.dataset.mode === mode);
-    });
-    syncMix();
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.classList.toggle('active', cats.includes(b.dataset.cat)));
+    $('cat-hint').textContent = cats.length > 1
+      ? `Mixed: ${cats.map((c) => CAT_SHORT[c]).join(' + ')}, in equal shares.`
+      : `${CAT_NAMES[cats[0]]} questions only. Pick more to mix them.`;
   }
-  document.querySelectorAll('.mode-card').forEach((b) => {
-    b.addEventListener('click', () => { mode = b.dataset.mode; syncMode(); saveSetup(); });
-  });
+  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => {
+    const c = b.dataset.cat;
+    if (cats.includes(c)) { if (cats.length > 1) cats = cats.filter((x) => x !== c); }
+    else cats = Quiz.CATEGORIES.filter((x) => x === c || cats.includes(x));
+    applyCats();
+    syncMode();
+    saveSetup();
+  }));
 
   /* Game-length presets + custom rules. */
   function syncPreset() {
@@ -218,20 +222,33 @@
   /* ================= STATE ================= */
   let state = null;
 
-  function startGame() {
+  /** The game settings chosen on the setup screen (an online host sends these to everyone). */
+  function currentConfig() {
     const rules = preset === 'custom' ? { ...custom } : { ...PRESETS[preset] };
-    const opts = { ...rules, timer: $('opt-timer').checked, fast: $('opt-fast').checked };
+    return {
+      opts: { ...rules, timer: $('opt-timer').checked },
+      preset, mode, cats: cats.slice(),
+      pieces: [0, 1, 2, 3].map((seat) => (preset === 'custom' ? pieceCounts[seat] : rules.pieces)),
+    };
+  }
+  function startGame(online) {
+    const cfg = online ? online.cfg : currentConfig();
+    const roster = online ? online.players : SEATS[count].map((seat) => ({ seat, name: (names[seat] || '').trim() || DEFAULT_NAMES[seat], type: types[seat] }));
+    Object.assign(NET, { on: !!online, seat: online ? online.seat : null, host: !!(online && online.host), send: online ? online.send : null, pending: [], hostStep: 0 });
+    rng = online ? seeded(online.seed) : Math.random;
+    Quiz.setShared(online ? rng : null);
+    const opts = { ...cfg.opts, fast: $('opt-fast').checked };
     state = {
-      players: SEATS[count].map((seat) => ({
-        seat, name: (names[seat] || '').trim() || DEFAULT_NAMES[seat], type: types[seat],
-        pieces: Array.from({ length: preset === 'custom' ? pieceCounts[seat] : rules.pieces }, () => ({ pos: opts.board ? 1 : 0 })),
+      players: roster.map((r) => ({
+        seat: r.seat, name: r.name, type: r.type,
+        pieces: Array.from({ length: cfg.pieces[r.seat] }, () => ({ pos: opts.board ? 1 : 0 })),
         correct: 0, asked: 0, captures: 0, steals: 0, tokens: opts.steal ? 1 : 0,
       })),
       turn: 0,
-      mode,
-      cats: mode === 'mixed' ? mixCats.slice() : [mode],
+      mode: cfg.mode,
+      cats: cfg.cats.slice(),
       opts,
-      preset,
+      preset: cfg.preset,
       stamps: [],
     };
     launch();
@@ -243,6 +260,9 @@
   function resumeGame() {
     const sv = store.get(SAVE_KEY);
     if (!sv) return;
+    Object.assign(NET, { on: false, seat: null, host: false, pending: [] });
+    rng = Math.random;
+    Quiz.setShared(null);
     state = sv.state;
     launch();
     $('log').innerHTML = sv.log || '';
@@ -252,10 +272,11 @@
 
   /** Common start-up for a new or resumed game. */
   function launch() {
-    Object.assign(state, { phase: 'roll', roll: 0, attempts: 0, choice: null, q: null, outcome: null, pending: null, stealer: null, gen: Math.random() });
+    Object.assign(state, { phase: 'roll', roll: 0, attempts: 0, choice: null, q: null, outcome: null, pending: null, stealer: null, gen: Math.random(), step: 0, waiting: null, actor: null });
     FX.setFast(state.opts.fast);
     Quiz.newGame(); // keeps the record of questions asked in earlier games
     $('setup').classList.remove('active');
+    if ($('lobby')) $('lobby').classList.remove('active');
     $('game').classList.add('active');
     $('win').hidden = true;
     $('log').innerHTML = '';
@@ -270,7 +291,7 @@
   }
 
   function saveGame() {
-    if (!state || state.phase === 'over') return;
+    if (!state || state.phase === 'over' || NET.on) return;
     const { players, turn, mode: m, cats, opts, preset: pr, stamps } = state;
     const items = [...$('log').children].slice(0, 40).map((li) => li.outerHTML).join('');
     store.set(SAVE_KEY, { v: 1, state: { players, turn, mode: m, cats, opts, preset: pr, stamps }, log: items });
@@ -283,8 +304,101 @@
 
   /** Run fn after a pause, unless the game was left or replaced in the meantime. */
   function later(ms, fn) {
-    const gen = state.gen;
-    sleep(ms).then(() => { if (state && state.gen === gen && state.phase !== 'over') fn(); });
+    const gen = state.gen, step = state.step;
+    sleep(ms).then(() => { if (state && state.gen === gen && state.step === step && state.phase !== 'over') fn(); });
+  }
+
+  /* ---------- Decisions ----------
+   * Every point where someone must decide (roll, piece, level, answer, continue) gets a step number.
+   * Hot seat: decisions apply at once. Online: they go to the host, which numbers them and sends them
+   * to every device; a device applies one only when it reaches that step, so slow and fast devices,
+   * and a player who rejoins and replays the game, all play out the same game. */
+  const PHASE_OF = { roll: 'roll', choose: 'choose', level: 'level', answer: 'question', hint: 'question', continue: 'result' };
+  function point(kind) {
+    state.step++;
+    state.waiting = kind;
+    if (!NET.on) return;
+    // far behind the host (rejoined, or a slow device): replay without animations until caught up
+    FX.setInstant(!NET.host && (NET.hostStep - state.step > 2 || NET.pending.some((a) => a.step > state.step + 1)));
+    if (NET.onPoint) NET.onPoint(kind, state.step);
+    supervise();
+    pump();
+  }
+
+  /* The host keeps an online game moving: it decides for a player whose device went offline (a bot
+   * takes the helm, see online.js) and, after a long pause, for an idle one. Its decisions travel
+   * like everyone else's, so every device stays in step. */
+  let supTimer = null;
+  const actorOf = (kind) => (kind === 'question' ? answerer() : kind === 'result' ? state.actor : current());
+  function supervise() {
+    clearTimeout(supTimer);
+    if (!NET.on || !NET.host || !state || state.phase === 'over') return;
+    const kind = state.waiting;
+    const p = state.pending || kind !== 'question' ? actorOf(kind) : null;
+    if (!p || isBot(p)) return;
+    const auto = !!(NET.roster[p.seat] || {}).auto;
+    let ms;
+    if (auto) ms = { roll: 900, choose: 900, level: 1500, question: 2500, result: 2600 }[kind];
+    else if (kind === 'question') { if (!state.opts.timer) return; ms = ((state.stealer ? STEAL_SECS : timeFor(state.q)) + 4) * 1000; }
+    else ms = kind === 'result' ? 12000 : 60000;
+    const step = state.step;
+    supTimer = setTimeout(() => {
+      if (!state || state.step !== step || state.phase !== PHASE_OF[{ question: 'answer', result: 'continue' }[kind] || kind]) return;
+      const a = decideFor(kind, p, auto);
+      if (a) NET.send({ ...a, step });
+    }, ms);
+  }
+  function decideFor(kind, p, auto) {
+    switch (kind) {
+      case 'roll': return { t: 'roll' };
+      case 'choose': {
+        const opts = optionsFor(p, state.roll);
+        if (opts.length < 2) return null; // chosen automatically anyway
+        const o = botPickPiece(p, opts);
+        return { t: 'choose', idx: o.idx, action: o.action };
+      }
+      case 'level': return { t: 'level', l: botPickLevel(p, p.pieces[state.choice.idx], state.roll, Math.random, 'explorer') };
+      case 'question': return { t: 'answer', id: auto ? botGuess('explorer', state.pending.ctx.level, state.wrongPicks, Math.random) : null };
+      case 'result': return { t: 'continue' };
+      default: return null;
+    }
+  }
+  function act(a) {
+    if (!state) return;
+    if (!NET.on) return apply(a);
+    NET.send({ ...a, step: state.step });
+  }
+  function apply(a) {
+    if (!state || state.phase !== PHASE_OF[a.t]) return false;
+    const p = current();
+    switch (a.t) {
+      case 'roll': roll(true); break;
+      case 'choose': { const o = optionsFor(p, state.roll).find((x) => x.idx === a.idx && x.action === a.action); if (!o) return false; choose(o); break; }
+      case 'level': if (!state.levelPick) return false; state.levelPick(a.l); break;
+      case 'answer': answer(a.id == null ? null : a.id); break;
+      case 'hint': useHint(); break;
+      case 'continue': continueAfterAnswer(); break;
+      default: return false;
+    }
+    return true;
+  }
+  /** Online: an ordered decision from the host. */
+  function receive(a) {
+    NET.pending.push(a);
+    NET.hostStep = Math.max(NET.hostStep, a.step);
+    pump();
+  }
+  function pump() {
+    if (!state) return;
+    for (;;) {
+      NET.pending = NET.pending.filter((a) => a.step >= state.step); // stale: that decision was already made
+      const i = NET.pending.findIndex((a) => a.step === state.step && state.phase === PHASE_OF[a.t]);
+      if (i < 0) return;
+      const [a] = NET.pending.splice(i, 1);
+      const before = state.step;
+      apply(a);
+      if (a.t !== 'hint' && state.step === before) return; // the rest follows once the game reaches the next step
+    }
   }
 
   /* ================= UI helpers ================= */
@@ -345,6 +459,11 @@
         <div class="pinfo"><div class="nm"><span></span>${isBot(p) ? `<small class="botbadge">🤖 ${BOTS[p.type].label}</small>` : ''}</div>${progressBar(p)}</div>
         <div class="sc">${p.pieces.length > 1 ? `<b>${finishedCount(p)}</b>/${p.pieces.length} 🏁<br>` : ''}${p.correct}/${p.asked} ✓${tokens ? '<br>' + tokens : ''}</div>`;
       li.querySelector('.nm span').textContent = p.name;
+      if (NET.on) {
+        const r = NET.roster[p.seat] || {};
+        const tag = p.seat === NET.seat ? ' (you)' : r.auto ? ' 🤖 bot for now' : r.connected === false ? ' 📴' : '';
+        if (tag) li.querySelector('.nm span').textContent += tag;
+      }
       ol.appendChild(li);
     });
   }
@@ -390,14 +509,17 @@
     renderStandings();
     Board.setSelectable([]);
     Board.showTarget(null);
-    $('roll-btn').disabled = isBot(p);
+    $('roll-btn').disabled = isBot(p) || !local(p);
     saveGame();
+    point('roll');
+    if (state.phase !== 'roll') return; // decided already (replaying)
     const noneActive = !p.pieces.some((pc) => pc.pos > 0 && pc.pos < FIN);
     if (isBot(p)) {
       status(`${who(p)} is rolling…`);
       later(900, () => roll(false));
       return;
     }
+    if (!local(p)) { status(`Waiting for ${who(p)} to roll…`); return; }
     status(noneActive && !state.opts.board
       ? `${who(p)}, roll a <b>6</b> to bring a piece out — ${MAX_ATTEMPTS} attempts.`
       : `${who(p)}, roll the dice!`);
@@ -428,7 +550,7 @@
     if (byUser && isBot(p)) return;
     state.phase = 'rolling';
     $('roll-btn').disabled = true;
-    const n = 1 + Math.floor(Math.random() * 6);
+    const n = 1 + Math.floor(rng() * 6);
     state.roll = n;
     status('Rolling…');
     await Dice.roll(n);
@@ -442,8 +564,9 @@
       if (state.attempts < MAX_ATTEMPTS) {
         status(`Rolled <b>${n}</b> — no 6. Attempt <b>${state.attempts + 1}</b> of ${MAX_ATTEMPTS}${isBot(p) ? '…' : ': roll again!'}`);
         state.phase = 'roll';
-        $('roll-btn').disabled = isBot(p);
-        if (isBot(p)) later(800, () => roll(false));
+        $('roll-btn').disabled = isBot(p) || !local(p);
+        point('roll');
+        if (state.phase === 'roll' && isBot(p)) later(800, () => roll(false));
         return;
       }
       log(`🎲 ${who(p)} didn't roll a 6 in ${MAX_ATTEMPTS} attempts.`, p.seat);
@@ -460,15 +583,20 @@
     }
 
     state.phase = 'choose';
-    Board.setSelectable(isBot(p) ? [] : opts, choose);
+    point('choose');
+    if (state.phase !== 'choose') return;
+    Board.setSelectable(isBot(p) || !local(p) ? [] : opts, (o) => act({ t: 'choose', idx: o.idx, action: o.action }));
     if (opts.length === 1 || isBot(p)) {
       const o = opts.length === 1 ? opts[0] : botPickPiece(p, opts);
       status(`Rolled <b>${n}</b> → ${o.action === 'enter' ? 'bringing a piece onto the board' : `moving${p.pieces.length > 1 ? ` piece ${o.idx + 1}` : ''}`}…`);
       Board.showTarget(p.seat, o.target);
+      const step = state.step;
       await sleep(isBot(p) ? 900 : 700);
+      if (!state || state.step !== step) return;
       return choose(o);
     }
     const canEnter = opts.some((o) => o.action === 'enter');
+    if (!local(p)) { status(`Rolled <b>${n}</b> → ${who(p)} is choosing a piece…`); return; }
     status(`Rolled <b>${n}</b> → ${canEnter ? 'click the glowing <b>home</b> piece to bring it out (no question) or a piece on the board to move it.' : 'click the piece you want to move.'}`);
   }
 
@@ -526,7 +654,7 @@
       btns.innerHTML = [1, 2, 3, 4, 5, 6].map((l) => {
         const move = Math.min(FIN - pc.pos, n + l);
         const blocked = state.opts.exact && pc.pos + n + l > FIN;
-        return `<button type="button" data-l="${l}" style="--c:var(--l${l})" ${blocked ? 'disabled' : ''}>
+        return `<button type="button" data-l="${l}" style="--c:var(--l${l})" ${blocked || isBot(p) || !local(p) ? 'disabled' : ''}>
           <b>${l}</b><span>${Quiz.LEVELS[l].label}</span><em>+${move}</em></button>`;
       }).join('');
       panel.hidden = false;
@@ -540,11 +668,13 @@
       };
       btns.querySelectorAll('button').forEach((b) => {
         const l = +b.dataset.l;
-        b.addEventListener('click', () => { if (!isBot(p)) done(l); });
+        b.addEventListener('click', () => { if (!isBot(p) && local(p)) act({ t: 'level', l }); });
         b.addEventListener('pointerenter', () => Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l)));
         b.addEventListener('focus', () => Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l)));
       });
       state.levelPick = done;
+      point('level');
+      if (state.phase !== 'level') return;
       if (isBot(p)) {
         status(`${who(p)} is picking a challenge…`);
         const l = botPickLevel(p, pc, n);
@@ -554,6 +684,8 @@
           Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l));
           later(800, () => done(l));
         });
+      } else if (!local(p)) {
+        status(`Rolled <b>${n}</b> → ${who(p)} is picking a challenge…`);
       } else {
         status(`Rolled <b>${n}</b> → pick your challenge (keys <kbd>1</kbd>–<kbd>6</kbd>). Harder questions move you further.`);
         setTimeout(() => { const b = btns.querySelector('button:not([disabled])'); if (b) b.focus({ preventScroll: true }); }, 50);
@@ -562,12 +694,12 @@
   }
 
   /* ---------- Bots ---------- */
-  function botPickLevel(p, pc, n) {
+  function botPickLevel(p, pc, n, rnd = rng, skill = p.type) {
     // Maximise expected progress, with a little personality noise.
     let best = 1, bestV = -1;
     for (let l = 1; l <= 6; l++) {
       if (state.opts.exact && pc.pos + n + l > FIN) continue;
-      const v = Math.min(FIN - pc.pos, n + l) * botAcc(p.type, l) * (0.9 + Math.random() * 0.2);
+      const v = Math.min(FIN - pc.pos, n + l) * botAcc(skill, l) * (0.9 + rnd() * 0.2);
       if (v > bestV) { bestV = v; best = l; }
     }
     return best;
@@ -582,22 +714,20 @@
   }
   /** A bot answers: right with a probability that depends on its skill and the level, otherwise a neighbour. */
   function botAnswer(bot, level, excluded = []) {
-    const q = state.q;
-    const gen = state.gen;
     $('q-kind').textContent = `🤖 ${bot.name} is thinking…`;
-    sleep(1400 + Math.random() * 1400).then(() => {
-      if (!state || state.gen !== gen || state.q !== q || state.phase !== 'question') return;
-      let id = q.country.id;
-      if (Math.random() > botAcc(bot.type, level)) {
-        const [x, y] = q.country.c;
-        const near = window.WORLD.countries
-          .filter((c) => c.fame && c.id !== q.country.id && !excluded.includes(c.id))
-          .map((c) => ({ id: c.id, d: Math.hypot(c.c[0] - x, c.c[1] - y) }))
-          .sort((a, b) => a.d - b.d).slice(0, 5);
-        id = near[Math.floor(Math.random() * near.length)].id;
-      }
-      answer(id);
-    });
+    const id = botGuess(bot.type, level, excluded, rng); // decided now, so every device draws in the same order
+    later(1400 + Math.random() * 1400, () => { if (state.phase === 'question') answer(id); });
+  }
+  /** A bot's answer: right with a probability that depends on its skill and the level, otherwise a neighbour. */
+  function botGuess(skill, level, excluded, rnd) {
+    const q = state.q;
+    if (rnd() <= botAcc(skill, level)) return q.country.id;
+    const [x, y] = q.country.c;
+    const near = window.WORLD.countries
+      .filter((c) => c.fame && c.id !== q.country.id && !excluded.includes(c.id))
+      .map((c) => ({ id: c.id, d: Math.hypot(c.c[0] - x, c.c[1] - y) }))
+      .sort((a, b) => a.d - b.d).slice(0, 5);
+    return near[Math.floor(rnd() * near.length)].id;
   }
 
   /* ---------- Questions ----------
@@ -651,17 +781,28 @@
     $('result').hidden = true;
     $('pass-btn').hidden = true;
     syncHint();
-    WorldMap.prepare(answer);
+    WorldMap.prepare(mapPick);
     WorldMap.lock();
 
     await showMap();
     if (state.q !== q) return;
-    WorldMap.prepare(answer);
+    WorldMap.prepare(mapPick);
+    if (!local(p) || isBot(p)) WorldMap.lock();
+    syncHint();
+    point('question');
+    if (state.q !== q || state.phase !== 'question' || state.stealer) return; // answered already (replaying)
     if (isBot(p)) botAnswer(p, ctx.level);
     else startTimer(timeFor(q));
   }
 
   const answerer = () => state.stealer || state.pending.ctx.player;
+  /** A click on the map: only the player who is answering, on their own device. */
+  function mapPick(id) {
+    const a = state && state.pending && answerer();
+    if (!a || isBot(a) || !local(a) || state.phase !== 'question') return;
+    WorldMap.lock();
+    act({ t: 'answer', id });
+  }
   const timeFor = (q) => (['history', 'sports', 'culture', 'geoq'].includes(q.type) ? TIMER_SECS + 15 : TIMER_SECS);
 
   function setAnswererChip(p, extra = '') {
@@ -689,7 +830,11 @@
       left--;
       draw();
       if (left <= 5 && left > 0) Sound.tick();
-      if (left <= 0) { clearInterval(timerHandle); answer(null); }
+      if (left <= 0) {
+        clearInterval(timerHandle);
+        const a = state && state.pending && answerer();
+        if (a && local(a)) act({ t: 'answer', id: null }); // online, others wait for this device (or the host)
+      }
     }, 1000);
   }
 
@@ -697,7 +842,7 @@
   function syncHint() {
     const btn = $('hint-btn');
     const a = state.pending && answerer();
-    const show = state.opts.steal && state.phase === 'question' && a && !isBot(a) && !state.hintUsed;
+    const show = state.opts.steal && state.phase === 'question' && a && !isBot(a) && local(a) && !state.hintUsed;
     btn.hidden = !show;
     if (show) {
       $('hint-count').textContent = `×${a.tokens}`;
@@ -733,7 +878,7 @@
   }
 
   function stamp(p, c) {
-    if (isBot(p) || passport.has(c.id)) return;
+    if (isBot(p) || !local(p) || passport.has(c.id)) return;
     passport.add(c.id);
     store.set(PASSPORT_KEY, [...passport]);
     state.stamps.push(c.name);
@@ -804,10 +949,15 @@
       $('result-title').textContent = clickedId ? 'Not quite!' : "Time's up!";
       $('result-sub').innerHTML = `${clicked ? `<b>${esc(clicked.name)}</b> is wrong. ` : ''}${who(s)}, your chance to steal!`;
       $('continue-btn').hidden = true;
-      $('pass-btn').hidden = isBot(s);
+      $('pass-btn').hidden = isBot(s) || !local(s);
       res.hidden = false;
       state.hintUsed = false;
+      WorldMap.prepare(mapPick);
+      state.wrongPicks.forEach((id) => WorldMap.markWrong(id));
+      if (isBot(s) || !local(s)) WorldMap.lock();
       syncHint();
+      point('question');
+      if (state.phase !== 'question' || state.stealer !== s) return;
       if (isBot(s)) botAnswer(s, ctx.level, state.wrongPicks);
       else startTimer(STEAL_SECS);
       return;
@@ -821,7 +971,7 @@
     if (ok) {
       p.correct++;
       stamp(p, c);
-      $('result-title').textContent = rescue ? 'Rescued!' : ['Correct!', 'Spot on!', 'Brilliant!', 'Well navigated!'][(Math.random() * 4) | 0];
+      $('result-title').textContent = rescue ? 'Rescued!' : ['Correct!', 'Spot on!', 'Brilliant!', 'Well navigated!'][(Math.random() * 4) | 0]; // cosmetic only
       sub = `${factFor(q)} ` + (rescue
         ? `${esc(ctx.attacker.name)}'s piece is pushed back.`
         : `Move <b>${ctx.moves}</b> square${ctx.moves === 1 ? '' : 's'}.`);
@@ -844,7 +994,10 @@
     $('result-icon').textContent = icon;
     $('result-sub').innerHTML = sub;
     $('pass-btn').hidden = true;
-    $('continue-btn').hidden = false;
+    clearInterval(timerHandle);
+    state.actor = actor;
+    // online: the player who answered (or the host) continues; bots carry on by themselves
+    $('continue-btn').hidden = NET.on && (isBot(actor) || !(local(actor) || NET.host));
     $('timer').hidden = true;
     $('hint-btn').hidden = true;
     res.hidden = false;
@@ -853,6 +1006,8 @@
       Confetti.burst(r.left + r.width / 2, r.top + r.height * 0.75, 60, 0.8);
     }
     renderStandings();
+    point('result');
+    if (state.phase !== 'result') return; // already continued (replaying)
     // Bots don't press Continue: carry on by themselves after a moment.
     if (isBot(actor)) later(2600, continueAfterAnswer);
     else setTimeout(() => $('continue-btn').focus({ preventScroll: true }), 50);
@@ -956,19 +1111,28 @@
     $('win-stamps').innerHTML = state.stamps.length
       ? `🛂 <b>${state.stamps.length} new passport stamp${state.stamps.length === 1 ? '' : 's'}:</b> ${state.stamps.slice(0, 12).map(esc).join(', ')}${state.stamps.length > 12 ? '…' : ''}<br><small>Passport: ${passport.size} / ${playableCount} countries found</small>`
       : `<small>🛂 Passport: ${passport.size} / ${playableCount} countries found</small>`;
-    setTimeout(() => { $('win').hidden = false; $('again-btn').focus(); }, 900);
+    $('again-btn').hidden = NET.on && !NET.host;
+    setTimeout(() => { $('win').hidden = false; if (!$('again-btn').hidden) $('again-btn').focus(); }, 900);
   }
 
   /* ================= EVENTS ================= */
-  $('roll-btn').addEventListener('click', () => roll(true));
-  $('dice-scene').addEventListener('click', () => roll(true));
-  $('continue-btn').addEventListener('click', continueAfterAnswer);
-  $('pass-btn').addEventListener('click', () => answer('pass'));
-  $('hint-btn').addEventListener('click', useHint);
-  $('again-btn').addEventListener('click', () => { $('win').hidden = true; startGame(); });
+  const myRoll = () => { if (state && state.phase === 'roll' && !isBot(current()) && local(current())) act({ t: 'roll' }); };
+  const myContinue = () => { if (state && state.phase === 'result' && !$('continue-btn').hidden) act({ t: 'continue' }); };
+  const myHint = () => { const a = state && state.phase === 'question' && answerer(); if (a && local(a) && !isBot(a)) act({ t: 'hint' }); };
+  $('roll-btn').addEventListener('click', myRoll);
+  $('dice-scene').addEventListener('click', myRoll);
+  $('continue-btn').addEventListener('click', myContinue);
+  $('pass-btn').addEventListener('click', () => { const a = state && state.phase === 'question' && answerer(); if (a && local(a)) act({ t: 'answer', id: 'pass' }); });
+  $('hint-btn').addEventListener('click', myHint);
+  $('again-btn').addEventListener('click', () => {
+    $('win').hidden = true;
+    if (NET.on) { if (NET.onAgain) NET.onAgain(); } else startGame();
+  });
   $('setup-btn').addEventListener('click', toSetup);
-  $('menu-btn').addEventListener('click', () => {
-    if (state && state.phase !== 'over' && !confirm('Leave this game? It is saved: you can resume it from the start screen.')) return;
+  $('menu-btn').addEventListener('click', async () => {
+    if (state && state.phase !== 'over' && !await Dialog.confirm(NET.on
+      ? { icon: '🌐', title: 'Leave the online game?', text: NET.host ? 'You are the host: leaving ends the game for everyone.' : 'A bot plays for you while you are away. Open the invitation link again to come back.', ok: 'Leave', cancel: 'Keep playing', danger: NET.host }
+      : { icon: '🎲', title: 'Leave this game?', text: 'It is saved: you can resume it from the start screen.', ok: 'Leave', cancel: 'Keep playing' })) return;
     toSetup();
   });
   $('sound-btn').addEventListener('click', () => {
@@ -977,6 +1141,13 @@
   });
   function toSetup() {
     clearInterval(timerHandle);
+    clearTimeout(supTimer);
+    if (NET.on) {
+      NET.on = false;
+      FX.setInstant(false);
+      Quiz.setShared(null);
+      if (NET.onLeave) NET.onLeave();
+    }
     if (state) { state.gen = null; state.phase = 'over'; }
     state = null;
     $('win').hidden = true;
@@ -990,21 +1161,32 @@
     if (!state || !$('game').classList.contains('active')) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.closest('.piece')) return;
     const p = current();
-    if ((e.code === 'Space' || e.key === ' ') && state.phase === 'roll' && !isBot(p)) { e.preventDefault(); roll(true); }
-    else if (e.key === 'Enter' && state.phase === 'result' && !$('continue-btn').hidden) { e.preventDefault(); continueAfterAnswer(); }
-    else if ((e.key === 'h' || e.key === 'H') && state.phase === 'question') { e.preventDefault(); useHint(); }
-    else if (state.phase === 'level' && /^[1-6]$/.test(e.key) && !isBot(p) && state.levelPick) {
+    if ((e.code === 'Space' || e.key === ' ') && state.phase === 'roll') { e.preventDefault(); myRoll(); }
+    else if (e.key === 'Enter' && state.phase === 'result') { e.preventDefault(); myContinue(); }
+    else if ((e.key === 'h' || e.key === 'H') && state.phase === 'question') { e.preventDefault(); myHint(); }
+    else if (state.phase === 'level' && /^[1-6]$/.test(e.key) && !isBot(p) && local(p) && state.levelPick) {
       const b = document.querySelector(`#lp-btns [data-l="${e.key}"]`);
-      if (b && !b.disabled) { e.preventDefault(); state.levelPick(+e.key); }
-    } else if (state.phase === 'choose' && /^[1-4]$/.test(e.key) && !isBot(p)) {
+      if (b && !b.disabled) { e.preventDefault(); act({ t: 'level', l: +e.key }); }
+    } else if (state.phase === 'choose' && /^[1-4]$/.test(e.key) && !isBot(p) && local(p)) {
       // Number keys pick the current player's piece with that number, if it can move.
       const o = optionsFor(p, state.roll).find((x) => x.idx === +e.key - 1);
-      if (o) { e.preventDefault(); choose(o); }
+      if (o) { e.preventDefault(); act({ t: 'choose', idx: o.idx, action: o.action }); }
     }
   });
 
   // Test hook: open the page with ?debug to inspect / tweak the live state from the console.
-  if (/[?&]debug\b/.test(location.search)) window.__geoludo = { get state() { return state; }, Board, choose, optionsFor, botAcc };
+  if (/[?&]debug\b/.test(location.search)) window.__geoludo = { get state() { return state; }, Board, choose, optionsFor, botAcc, NET, act, local, answerer: () => answerer() };
+
+  /* Used by online.js */
+  window.LudoGame = {
+    NET, BOTS, SEATS, DEFAULT_NAMES, currentConfig, modeLabelFor, receive,
+    start(online) { Sound.ensure(); startGame(online); },
+    resupervise() { if (state && NET.on) supervise(); },
+    get running() { return !!state && NET.on; },
+    get step() { return state ? state.step : 0; },
+    leave: () => toSetup(),
+    renderStandings: () => { if (state) renderStandings(); },
+  };
 
   // Keep the 3D prism depth equal to half the stage height so the faces meet at a clean edge.
   const stage = $('stage');

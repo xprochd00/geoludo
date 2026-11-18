@@ -46,8 +46,8 @@
       <div class="v-section" id="format-section">
         <h2>How do you play?</h2>
         <div class="format-grid">
-          <button type="button" class="format-btn active" data-format="hotseat"><span>📱</span><b>Hot seat</b><small>Take turns on this device</small></button>
-          <button type="button" class="format-btn" data-format="online"><span>🌐</span><b>Online</b><small>Everyone on their own phone</small></button>
+          <button type="button" class="format-btn active" data-format="hotseat"><span>🖥️</span><b>Hot seat</b><small>Take turns on one device</small></button>
+          <button type="button" class="format-btn" data-format="online"><span>🌐</span><b>Online</b><small>Everyone on their own device</small></button>
         </div>
       </div>
 
@@ -72,15 +72,17 @@
 
       <div class="v-links">
         <a href="train.html">🎯 Solo training</a>
-        <a href="ludo/">🎲 Classic GeoLudo</a>
+        <a href="ludo/">🎲 GeoLudo</a>
         <details>
           <summary>How to play</summary>
           <ul>
             <li>On your turn, <b>pick a challenge from 1 (very easy) to 6 (expert)</b>. Answer it correctly and your ship sails that many ports.</li>
             <li>Answer by tapping the right country on the world map. Pinch or scroll to zoom; tiny nations have dots.</li>
             <li>A wrong answer costs nothing: you just stay in port. Nobody can be attacked or sent back.</li>
+            <li><b>Compass tokens 🧭:</b> you start with one. Land <i>exactly</i> on a 🧭 port, or answer 3 in a row, to find another (up to 3). Spend one during your question to see which region the answer is in.</li>
             <li>The first ship to sail around the world back to Lisbon ends the race. The round is finished so everyone has the same number of turns, and the ship furthest ahead wins.</li>
-            <li>Online: while others play, you can guess along. It doesn't move your ship, but everyone sees who knew it.</li>
+            <li>Online, each on your own device: while others play, you can guess along. It doesn't move your ship, but everyone sees who knew it.</li>
+            <li>Computer captains 🤖 (Rookie, Explorer, Genius) can join: tap a player's <i>Human</i> button, or <i>Add a computer captain</i> in an online room. If an online player loses connection, a bot sails for them after 20 seconds until they are back.</li>
           </ul>
         </details>
       </div>
@@ -96,9 +98,10 @@
         <button type="button" id="copy-btn" class="btn-ghost">Copy</button>
         <button type="button" id="share-btn" class="btn-ghost" hidden>Share</button>
       </div>
-      <p class="hint-line">Send this link to your friends. They open it on their phone and join.</p>
+      <p class="hint-line">Send this link to your friends. They open it on their own device and join.</p>
       <h3>Crew <small id="crew-count"></small></h3>
       <ul id="crew" class="crew"></ul>
+      <button type="button" id="add-bot-btn" class="btn-ghost add-bot" hidden>🤖 Add a computer captain</button>
       <p class="hint-line" id="lobby-cats"></p>
       <button id="lobby-start-btn" class="btn-primary big">Start the voyage ⛵</button>
       <p class="hint-line" id="lobby-wait" hidden>Waiting for the host to start…</p>
@@ -142,6 +145,7 @@
           </div>
         </div>
         <div class="q-note" id="q-note"></div>
+        <button type="button" id="hint-btn" class="hint-btn" hidden>🧭 Use a compass <small>(<b>1</b> left)</small></button>
       </div>
 
       <!-- bottom panel: choose a challenge / status / result -->
@@ -194,6 +198,7 @@
   <script src="js/fx.js"></script>
   <script src="js/map.js"></script>
   <script src="js/quiz.js"></script>
+  <script src="js/dialog.js"></script>
   <script src="js/net.js"></script>
   <script src="js/voyage.js"></script>
 </body>

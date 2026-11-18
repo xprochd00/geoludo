@@ -187,7 +187,7 @@
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) {
       svg.classList.remove('dragging');
-      if (drag && !wasDrag && e.type === 'pointerup') pick(e.clientX, e.clientY);
+      if (drag && !wasDrag && e.type === 'pointerup') pick(e.clientX, e.clientY, e.pointerType);
       drag = null;
     } else if (pointers.size === 1) {
       const [p] = [...pointers.values()];
@@ -208,33 +208,35 @@
   }
   svg.addEventListener('pointerleave', () => { if (hovered) hovered.path.classList.remove('hover'); hovered = null; });
 
-  function pick(x, y) {
+  function pick(x, y, pointerType) {
     if (locked) return;
+    // Tiny nations (Vatican City, San Marino, Liechtenstein, island states …) get an invisible hit
+    // area larger than their dot, bigger for fingers than for a mouse. Inside a bigger country the
+    // area scales with that country's size on screen, so Italy stays clickable at world zoom.
+    const touch = pointerType && pointerType !== 'mouse';
     const stack = document.elementsFromPoint(x, y);
-    let t = stack[0];
-    let onDot = t && t.classList && t.classList.contains('dot');
-    if (onDot) {
-      // A dot only wins near its centre; on its rim, prefer the country outline underneath
-      // (e.g. Luxembourg's dot overlaps Belgium at world zoom).
-      const r = t.getBoundingClientRect();
-      const d = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
-      const under = stack.find((e) => e.classList && e.classList.contains('country'));
-      if (d > r.width * 0.3 && under) { t = under; onDot = false; }
+    const under = stack.find((e) => e.classList && e.classList.contains('country'));
+    const underId = under && under.getAttribute('data-id');
+    const underTiny = underId && nodes.get(underId) && nodes.get(underId).dot;
+    let reach; // px around a dot centre that still counts as that dot
+    if (!underId) reach = touch ? 26 : 14; // ocean: generous
+    else if (underTiny) reach = 0; // on a tiny country's own outline: take it
+    else {
+      const r = under.getBoundingClientRect();
+      reach = Math.max(3.5, Math.min(touch ? 22 : 9, Math.min(r.width, r.height) * (touch ? 0.25 : 0.12)));
     }
-    let id = t && t.getAttribute && t.getAttribute('data-id');
-    // Over the ocean or on a dot: choose the nearest dot centre (dots overlap where islands cluster).
-    if (!id || onDot) {
-      // Generous hit test for tiny nations: nearest dot within 14px.
+    let id = underId;
+    if (reach) {
       const u = unitsPerPx();
       const p = toSvg(x, y);
-      let best = onDot ? id : null, bd = 14 * u;
+      let best = null, bd = reach * u;
       nodes.forEach((n, nid) => {
-        if (!n.dot) return;
+        if (!n.dot || nid === underId) return;
         const c = byId.get(nid).c;
         const d = Math.hypot(c[0] - p.x, c[1] - p.y);
         if (d < bd) { bd = d; best = nid; }
       });
-      id = best;
+      if (best) id = best;
     }
     // Only countries in the game's database (name + flag + capital) can be picked; the ocean and
     // territories such as Greenland or New Caledonia are ignored.
