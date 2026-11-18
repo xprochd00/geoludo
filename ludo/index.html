@@ -29,7 +29,28 @@
         <button type="button" id="discard-btn" class="link-btn">Discard</button>
       </div>
 
-      <div class="setup-section">
+      <div id="join-banner" class="join-banner" hidden>
+        <b>You're invited to a GeoLudo game!</b>
+        <span>Enter your name and join room <code id="join-code"></code>.</span>
+      </div>
+
+      <div class="setup-section" id="format-section">
+        <h2>How do you play?</h2>
+        <div class="format-grid">
+          <button type="button" class="format-btn active" data-format="hotseat"><span>🖥️</span><b>Hot seat</b><small>Take turns on one device</small></button>
+          <button type="button" class="format-btn" data-format="online"><span>🌐</span><b>Online</b><small>Everyone on their own device</small></button>
+        </div>
+      </div>
+
+      <div class="setup-section" id="online-section" hidden>
+        <h2>Your name</h2>
+        <input id="my-name" class="name-input" maxlength="16" placeholder="Explorer …" autocomplete="nickname">
+        <p class="hint-line" id="online-note">Choose the questions and rules below, then create a room: you'll get a link for your friends and can add bots there.</p>
+        <button type="button" id="join-btn" class="btn-primary big" hidden>Join the game</button>
+        <p class="hint-line" id="net-status"></p>
+      </div>
+
+      <div class="setup-section" id="players-section">
         <h2>Players <span class="h2-note" id="pieces-note" hidden>· pieces each</span></h2>
         <div class="count-picker" role="radiogroup" aria-label="Number of players">
           <button type="button" data-count="2" class="count-btn">2</button>
@@ -39,7 +60,7 @@
         <div id="player-inputs" class="player-inputs"></div>
       </div>
 
-      <div class="setup-section">
+      <div class="setup-section" id="cat-section">
         <h2>Questions</h2>
         <div class="cat-grid" id="cat-chips">
           <button type="button" class="cat-btn" data-cat="geo"><span>🗺️</span><b>Geography</b></button>
@@ -50,7 +71,7 @@
         <p class="hint-line" id="cat-hint"></p>
       </div>
 
-      <div class="setup-section">
+      <div class="setup-section" id="length-section">
         <h2>Game length</h2>
         <div class="preset-picker" role="radiogroup" aria-label="Game length and rules">
           <button type="button" class="preset-card active" data-preset="quick" role="radio" aria-checked="true">
@@ -74,13 +95,14 @@
         </div>
       </div>
 
-      <div class="setup-section">
+      <div class="setup-section" id="options-section">
         <h2>Options</h2>
         <label class="toggle"><input type="checkbox" id="opt-timer" checked><span class="sw"></span><span>Answer timer (30 s, 45 s for longer text questions)</span></label>
         <label class="toggle"><input type="checkbox" id="opt-fast"><span class="sw"></span><span>Fast animations</span></label>
       </div>
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
+      <button type="button" id="create-btn" class="btn-primary big" hidden>Create a room 🌐</button>
       <div class="history-note"><span id="passport-note"></span> · <span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
       <div class="v-links">
         <a href="../train.html">🎯 Solo training</a>
@@ -93,11 +115,32 @@
           <li><b>Steals &amp; hints:</b> if you answer wrong, the next player can steal the question. A correct steal earns a 🧭 compass token, and so does an expert answer. Spend a token during a question to highlight the right region of the map.</li>
           <li>⚔️ <b>Captures:</b> land on a rival piece to send it back. Its owner first gets a <b>rescue question</b>: the further the piece has travelled, the harder the question. 🛡️ Shield squares are safe.</li>
           <li>Classic: a piece leaves home only on a <b>6</b> (no question needed), with 3 attempts when nothing is on the board. A 6 earns another roll.</li>
+          <li><b>Online:</b> choose <i>Online</i>, create a room and send the link; everyone plays on their own device. If someone loses connection, a bot plays for them after 20 seconds until they are back.</li>
           <li>Play with friends on one screen, or add 🤖 computer players. Countries you find are stamped in your 🛂 passport.</li>
           <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots. Keys: <kbd>Space</kbd> roll, <kbd>1</kbd>–<kbd>6</kbd> choose, <kbd>H</kbd> hint, <kbd>Enter</kbd> continue.</li>
         </ul>
       </details>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ LOBBY (online) ============ -->
+  <section id="lobby" class="screen">
+    <div class="setup-card">
+      <h2 class="lobby-title">🌐 Room <code id="room-code"></code></h2>
+      <div class="share-box">
+        <input id="share-link" readonly aria-label="Invitation link">
+        <button type="button" id="copy-btn" class="btn-ghost">Copy</button>
+        <button type="button" id="share-btn" class="btn-ghost" hidden>Share</button>
+      </div>
+      <p class="hint-line">Send this link to your friends. They open it on their own device and join.</p>
+      <h3 class="crew-title">Players <small id="crew-count"></small></h3>
+      <ul id="crew" class="crew"></ul>
+      <button type="button" id="add-bot-btn" class="btn-ghost add-bot" hidden>🤖 Add a computer player</button>
+      <p class="hint-line" id="lobby-rules"></p>
+      <button type="button" id="lobby-start-btn" class="btn-primary big">Start the race ✈️</button>
+      <p class="hint-line" id="lobby-wait" hidden>Waiting for the host to start…</p>
+      <button type="button" id="leave-btn" class="link-btn">Leave room</button>
     </div>
   </section>
 
@@ -229,5 +272,7 @@
   <script src="js/quiz.js"></script>
   <script src="js/dialog.js"></script>
   <script src="js/game.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/online.js"></script>
 </body>
 </html>

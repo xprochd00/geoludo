@@ -700,3 +700,48 @@ kbd {
 .g-dialog-icon { font-size: 40px; line-height: 1; margin-bottom: 4px; }
 .btn-primary.danger { background: linear-gradient(180deg, #ff7b7b, #e04f5f); color: #fff; box-shadow: 0 6px 0 #a83442, 0 10px 20px rgba(224, 79, 95, .3); }
 .btn-primary.danger:active { box-shadow: 0 2px 0 #a83442, 0 6px 12px rgba(224, 79, 95, .3); }
+
+/* ================= ONLINE (same look as Voyage) ================= */
+.format-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px; border-radius: 16px;
+  border: 1px solid var(--panel-border); background: rgba(0,0,0,.2); color: var(--text); transition: all .18s; cursor: pointer;
+}
+.format-btn span { font-size: 26px; }
+.format-btn b { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.format-btn small { color: var(--muted); font-size: 12px; }
+.format-btn:hover { background: rgba(255,255,255,.08); }
+.format-btn.active { border-color: var(--accent); background: rgba(255,209,102,.13); box-shadow: 0 0 0 1px var(--accent) inset; }
+.format-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.setup-section[hidden], #create-btn[hidden], #start-btn[hidden], #join-btn[hidden] { display: none; }
+.name-input {
+  width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--panel-border); background: rgba(0,0,0,.25);
+  color: var(--text); font: 600 17px var(--font-body); outline: none;
+}
+.name-input:focus { border-color: var(--accent); }
+.join-banner { display: flex; flex-direction: column; gap: 4px; text-align: center; padding: 14px; border-radius: 16px; background: rgba(6,214,160,.14); border: 1px solid rgba(6,214,160,.5); margin-top: 6px; }
+.join-banner[hidden] { display: none; }
+.join-banner code, .lobby-title code { font-family: var(--font-display); color: var(--accent); letter-spacing: 2px; }
+#lobby.active { display: grid; place-items: start center; min-height: 100vh; min-height: 100dvh; padding: 24px 16px; }
+.lobby-title { text-align: center; font-family: var(--font-display); font-size: 24px; margin: 0 0 14px; }
+.crew-title { font-family: var(--font-display); font-weight: 600; margin: 18px 0 8px; }
+.crew-title small { color: var(--muted); font-size: 13px; }
+.share-box { display: flex; gap: 6px; }
+.share-box input { flex: 1; min-width: 0; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--panel-border); background: rgba(0,0,0,.25); color: var(--text); font: 13px var(--font-body); }
+.share-box .btn-ghost { padding: 10px 14px; }
+.share-box .btn-ghost[hidden] { display: none; }
+.crew { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 8px; }
+.crew li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(0,0,0,.2); }
+.crew li .pawn-icon { width: 24px; height: 24px; }
+.crew small { color: var(--muted); font-size: 12px; }
+.crew li .type-select { margin-left: auto; min-width: 0; }
+.crew-x { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--panel-border); background: rgba(255,255,255,.06); color: var(--muted); cursor: pointer; }
+.crew-x:hover { color: var(--text); background: rgba(239,71,111,.3); }
+.add-bot { width: 100%; margin: 0 0 6px; }
+.add-bot[hidden] { display: none; }
+#lobby .btn-primary.big { margin-top: 10px; width: 100%; }
+#lobby .link-btn { display: block; margin: 14px auto 0; }
+#lobby-wait[hidden], #lobby-start-btn[hidden] { display: none; }
+.net-banner {
+  position: fixed; z-index: 50; top: 8px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 99px;
+  background: rgba(239,71,111,.95); color: #fff; font-weight: 700; font-size: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}

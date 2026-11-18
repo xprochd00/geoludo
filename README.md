@@ -70,7 +70,20 @@ A phone-friendly practice page with just the questions and the map, no board. Op
 The earlier Ludo-board version is kept in `ludo/` with frozen copies of its code and styles; it shares the question data and flags with the rest of the site.
 
 
-2–4 players share one computer (hot seat). Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
+2–4 players share one device (**hot seat**) or play **online**, each on their own device. Any seat can be a 🤖 computer player (Rookie, Explorer or Genius), so you can also play alone. Every move is earned by clicking the right country on the world map.
+
+### Online rooms
+
+1. Choose **Online**, pick the questions, game length and options, enter your name and press **Create a room**.
+2. Send the invitation link. Friends open it, enter their name and join (up to 4 players). The host can add, re-level and remove 🤖 computer players.
+3. The host presses **Start**. Each player rolls, picks and answers on their own device; everyone sees the same board and map.
+
+How it stays in step: every device runs the same game from the same random seed, so dice, questions and bots come out identical everywhere. Only decisions travel (roll, piece, level, answer, hint, continue): the host numbers them and sends them to all devices through the same public relay as Voyage (`ludo/js/net.js`, its own channel), and each device applies a decision when its game reaches that point (`ludo/js/online.js`, `point()` in `ludo/js/game.js`).
+
+- **Reload or rejoin:** open the link again (same device, or any device with the same name). The device replays the game without animations and catches up.
+- **Lost connection:** a player is shown as offline at once when the page closes, or after 30 s of silence. **20 s later a bot (Explorer level) plays for them** until they are back. The host makes those decisions, so all devices stay identical.
+- **Idle players:** the answer timer still applies; after 60 s without a roll or choice the host decides for them.
+- The host's page must stay open; online games aren't saved for Resume. On a joining device, the question history and passport of that device are left untouched.
 
 ### Game length
 
@@ -157,7 +170,7 @@ js/voyage.js        Voyage: rules engine (runs on the host), rendering, ships & 
 js/net.js           online rooms through a public MQTT relay (a small built-in client): host / join / reconnect
 css/voyage.css      Voyage styles
 train.html, js/train.js, css/train.css   🎯 Solo training
-ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/)
+ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/; online rooms in ludo/js/online.js)
 css/style.css       shared base styles (cards, buttons, map, question card)
 js/map.js           world map: rendering, pan/zoom/pinch, picking (larger tap areas for tiny nations), answer reveal, overlay layer
 js/dialog.js        in-game confirm/alert dialogs (copy in ludo/js/)

@@ -70,7 +70,16 @@
     const saved = JSON.parse(localStorage.getItem(STORE));
     if (saved && saved.keys) history = saved;
   } catch (e) { /* storage unavailable: keep the history in memory only */ }
-  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
+  const save = () => { if (!shared) try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
+  // Online games: every device must draw the same questions, so they use a shared random source and a
+  // fresh in-memory history (this device's own record is left untouched and restored afterwards).
+  let rand = Math.random;
+  let shared = null;
+  function setShared(rng) {
+    if (rng) { if (!shared) shared = history; history = { seq: 0, keys: {} }; } // every online game starts fresh
+    else if (shared) { history = shared; shared = null; }
+    rand = rng || Math.random;
+  }
 
   const catCount = { geo: 0, history: 0, sports: 0, culture: 0 };
   const RECENT = 8; // avoid answer countries used in the last few questions
@@ -89,7 +98,7 @@
     const geoTypes = ['name', 'flag', 'capital', 'city'];
     const varied = candidates.filter((q) => !recent.includes(q.c.id) && (q.type !== lastType || !geoTypes.includes(q.type)));
     const list = varied.length ? varied : candidates;
-    const q = list[Math.floor(Math.random() * list.length)];
+    const q = list[Math.floor(rand() * list.length)];
     history.keys[q.key] = ++history.seq;
     save();
     recent = [q.c.id, ...recent].slice(0, RECENT);
@@ -102,7 +111,7 @@
     const avail = cats.filter((cat) => POOLS[cat] && POOLS[cat][level].length);
     const min = Math.min(...avail.map((cat) => catCount[cat]));
     const behind = avail.filter((cat) => catCount[cat] === min);
-    return behind[Math.floor(Math.random() * behind.length)];
+    return behind[Math.floor(rand() * behind.length)];
   }
 
   /** cats: the categories combined in Mixed mode (default: all three). */
@@ -159,5 +168,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();
