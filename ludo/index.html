@@ -103,7 +103,6 @@
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
       <button type="button" id="create-btn" class="btn-primary big" hidden>Create a room 🌐</button>
-      <div class="history-note"><span id="passport-note"></span> · <span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
       <div class="v-links">
         <a href="../train.html">🎯 Solo training</a>
         <a href="../index.html">⛵ GeoLudo Voyage</a>
@@ -116,7 +115,7 @@
           <li>⚔️ <b>Captures:</b> land on a rival piece to send it back. Its owner first gets a <b>rescue question</b>: the further the piece has travelled, the harder the question. 🛡️ Shield squares are safe.</li>
           <li>Classic: a piece leaves home only on a <b>6</b> (no question needed), with 3 attempts when nothing is on the board. A 6 earns another roll.</li>
           <li><b>Online:</b> choose <i>Online</i>, create a room and send the link; everyone plays on their own device. If someone loses connection, a bot plays for them after 20 seconds until they are back.</li>
-          <li>Play with friends on one screen, or add 🤖 computer players. Countries you find are stamped in your 🛂 passport.</li>
+          <li>Play with friends on one screen, or add 🤖 computer players. Questions don't repeat from one game to the next until all of them have been asked.</li>
           <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots. Keys: <kbd>Space</kbd> roll, <kbd>1</kbd>–<kbd>6</kbd> choose, <kbd>H</kbd> hint, <kbd>Enter</kbd> continue.</li>
         </ul>
       </details>
@@ -251,7 +250,6 @@
       <h2><span id="win-name">Player</span> conquers the world!</h2>
       <p id="win-stats"></p>
       <ol id="win-table" class="win-table"></ol>
-      <div id="win-stamps" class="win-stamps"></div>
       <div class="win-actions">
         <button id="again-btn" class="btn-primary">Play again</button>
         <button id="setup-btn" class="btn-ghost">Change players</button>
