@@ -16,13 +16,32 @@
   const CATS = ['geo', 'history', 'sports', 'culture'];
   const CAT_LABEL = { geo: '🗺️ Geography', history: '📜 History', sports: '⚽ Sports', culture: '🎭 Culture' };
   const GEO_TYPES = ['name', 'flag', 'capital', 'city', 'geoq'];
+  /* Parts of the world to practise, by the answer's country. Tonga, Samoa and Kiribati sit next to the
+   * Americas on this map (west of the date line), so they are practised with them. */
+  const AREAS = ['europe', 'africa', 'asia', 'oceania', 'americas'];
+  const AREA_OF_REGION = {
+    'Northern Europe': 'europe', 'Western Europe': 'europe', 'Central Europe': 'europe', 'Eastern Europe': 'europe',
+    'Southern Europe': 'europe', 'Southeast Europe': 'europe',
+    'Northern Africa': 'africa', 'Western Africa': 'africa', 'Middle Africa': 'africa', 'Eastern Africa': 'africa', 'Southern Africa': 'africa',
+    'Western Asia': 'asia', 'Central Asia': 'asia', 'Southern Asia': 'asia', 'Eastern Asia': 'asia',
+    'South-Eastern Asia': 'oceania', 'Australia and New Zealand': 'oceania', 'Melanesia': 'oceania', 'Micronesia': 'oceania', 'Polynesia': 'oceania',
+    'North America': 'americas', 'Central America': 'americas', 'Caribbean': 'americas', 'South America': 'americas',
+  };
+  const AREA_EXCEPTIONS = { TON: 'americas', WSM: 'americas', KIR: 'americas' };
+  const areaOf = (c) => AREA_EXCEPTIONS[c.id] || AREA_OF_REGION[c.region] || null;
+  // Map view for a set of areas: around their countries (Russia left out, or Europe would reach Siberia).
+  function areaPoints() {
+    return window.WORLD.countries.filter((c) => c.fame && c.id !== 'RUS' && settings.areas.includes(areaOf(c))).map((c) => c.c);
+  }
 
   const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } };
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
   let prog = load(STORE, { n: 0, items: {} });
-  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], timer: false, sound: true }, load(SETTINGS, {}));
+  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], areas: AREAS.slice(), timer: false, sound: true }, load(SETTINGS, {}));
+  settings.areas = (settings.areas || []).filter((a) => AREAS.includes(a));
+  if (!settings.areas.length) settings.areas = AREAS.slice();
   Sound.enabled = settings.sound;
 
   /* ---------- Question catalogue ---------- */
@@ -43,8 +62,10 @@
   const isMistake = (r) => !!r && r.w > 0 && !mastered(r);
 
   function filtered() {
+    const allAreas = settings.areas.length === AREAS.length;
     return ALL.filter((e) => settings.cats.includes(e.cat) && settings.levels.includes(e.lvl)
-      && (e.cat !== 'geo' || settings.types.includes(e.pick.type)));
+      && (e.cat !== 'geo' || settings.types.includes(e.pick.type))
+      && (allAreas || settings.areas.includes(areaOf(e.pick.c))));
   }
 
   /* ---------- Home screen ---------- */
@@ -52,6 +73,7 @@
     document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.cats.includes(b.dataset.cat)));
     document.querySelectorAll('#type-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.types.includes(b.dataset.type)));
     document.querySelectorAll('#level-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.levels.includes(+b.dataset.l)));
+    document.querySelectorAll('#area-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.areas.includes(b.dataset.area)));
     $('type-row').hidden = !settings.cats.includes('geo');
     $('opt-timer').checked = settings.timer;
     $('sound-btn').textContent = settings.sound ? '🔊' : '🔇';
@@ -73,6 +95,7 @@
   document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.cats, b.dataset.cat); syncChips(); }));
   document.querySelectorAll('#type-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.types, b.dataset.type); syncChips(); }));
   document.querySelectorAll('#level-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.levels, +b.dataset.l); syncChips(); }));
+  document.querySelectorAll('#area-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.areas, b.dataset.area); syncChips(); }));
   $('opt-timer').addEventListener('change', () => { settings.timer = $('opt-timer').checked; syncChips(); });
   $('sound-btn').addEventListener('click', () => { settings.sound = !settings.sound; Sound.enabled = settings.sound; syncChips(); });
 
@@ -180,6 +203,8 @@
     $('hint-btn').disabled = false;
     $('idk-btn').disabled = false;
     WorldMap.prepare(answer);
+    // practising some parts of the world only: start the map there
+    if (settings.areas.length < AREAS.length) WorldMap.focusPoints(areaPoints(), 450, 40);
     if (settings.timer) startTimer(['history', 'sports', 'culture', 'geoq'].includes(q.type) ? TIMER_SECS + 15 : TIMER_SECS);
     else $('timer').hidden = true;
     updateScore();

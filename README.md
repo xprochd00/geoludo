@@ -61,6 +61,7 @@ Under the hood, the host's browser runs the game. All devices exchange messages 
 A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
 - Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks).
+- **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
 - New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
 - Progress per category and level is kept in the browser. Training never changes which questions the games ask.
