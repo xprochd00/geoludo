@@ -198,3 +198,17 @@ body.answering .v-panel { display: none; }
 .hint-btn:disabled { opacity: .45; cursor: not-allowed; border-color: var(--panel-border); }
 .hint-btn small { color: var(--muted); font-weight: 600; }
 .hint-btn[hidden] { display: none; }
+
+/* computer captains */
+.type-btn {
+  flex: none; min-width: 98px; padding: 6px 12px; border-radius: 999px; font: 600 12.5px var(--font-body); color: var(--text); cursor: pointer;
+  background: rgba(255,255,255,.08); border: 1px solid var(--panel-border); transition: background .2s, border-color .2s;
+}
+.type-btn:hover { background: rgba(255,255,255,.14); }
+.type-btn.bot { border-color: var(--accent); background: rgba(255,209,102,.12); }
+.crew li .type-btn { min-width: 0; margin-left: auto; }
+.crew-x { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--panel-border); background: rgba(255,255,255,.06); color: var(--muted); cursor: pointer; }
+.crew-x:hover { color: var(--text); background: rgba(239,71,111,.3); }
+.add-bot { width: 100%; margin: -4px 0 12px; }
+.add-bot[hidden] { display: none; }
+@media (max-width: 420px) { .name-row small { display: none; } }

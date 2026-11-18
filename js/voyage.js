@@ -20,7 +20,17 @@
   const Q_TIME = 30, Q_TIME_LONG = 45;
   const PICK_TIMEOUT = 45; // online only: auto-pick level 3 if a player is idle
   const AUTO_NEXT = 5200; // online: move on after a result
-  const OFFLINE_GRACE = 12; // online: seconds an offline player keeps their turn before it is skipped
+  const TAKEOVER = 20; // online: seconds after a player goes offline before a bot sails their ship
+  const BOT_THINK = 1400, BOT_ANSWER = [2600, 5200]; // bot pacing (ms)
+  // Computer captains: accuracy falls with the level (same model as GeoLudo's bots).
+  const BOTS = {
+    rookie: { label: 'Rookie', base: 0.85, drop: 0.11 },
+    explorer: { label: 'Explorer', base: 0.92, drop: 0.075 },
+    genius: { label: 'Genius', base: 0.97, drop: 0.045 },
+  };
+  const BOT_NAMES = ['Zheng He', 'James Cook', 'Amundsen', 'Bougainville', 'Tasman', 'Vespucci'];
+  const botAcc = (skill, lvl) => Math.min(0.98, Math.max(0.15, BOTS[skill].base - BOTS[skill].drop * (lvl - 1)));
+  const isBotP = (p) => !!(p && (p.bot || p.auto));
   const LEG_MS = 520; // ship animation per port
   // Compass tokens: everyone starts with one; land exactly on a treasure port or answer 3 in a
   // row to find another (max 3). Spend one during your question to see the answer's region.
@@ -47,7 +57,7 @@
       phase: 'pick', cats: cfg.cats, n: N,
       players: cfg.players.map((p, i) => ({
         id: p.id, name: p.name, color: COLORS[i % COLORS.length], ship: SHIP_NAMES[i % SHIP_NAMES.length],
-        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0,
+        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0, bot: BOTS[p.bot] ? p.bot : null, auto: false,
       })),
       turn: 0, round: 1, finalRound: false, finishers: [],
       q: null, res: null, ranking: null, seq: 0, log: [],
@@ -57,6 +67,7 @@
     let secret = null; // the current question including its answer (never sent to guests)
     let guesses = {};
     let timer = null;
+    const offTimers = {}; // pid -> bot takeover timer
     const mode = () => (S.cats.length > 1 ? 'mixed' : S.cats[0]);
     const active = () => S.players[S.turn];
 
@@ -69,8 +80,9 @@
       S.phase = 'pick'; S.q = null; S.res = null;
       secret = null; guesses = {};
       const p = active();
-      if (S.online && !p.connected) { timer = setTimeout(() => skip('offline'), OFFLINE_GRACE * 1000); }
-      else if (S.online) timer = setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000);
+      if (isBotP(p)) timer = setTimeout(() => botPick(p), BOT_THINK);
+      else if (S.online && p.connected) timer = setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000);
+      // (an offline player waits for their bot takeover, see setConnected)
       publish();
     }
 
@@ -88,6 +100,53 @@
       S.phase = 'question';
       guesses = {};
       timer = setTimeout(() => answer(p.id, null), (time + 1) * 1000);
+      publish();
+      if (isBotP(p)) botQuestion(p);
+    }
+
+    /* ---- computer captains (and bots sailing for offline players) ---- */
+    const skillOf = (p) => p.bot || 'explorer';
+    function botPick(p) {
+      if (S.phase !== 'pick' || active() !== p) return;
+      const leader = Math.max(...S.players.filter((o) => o !== p).map((o) => o.dist), 0);
+      let best = 3, bv = -1;
+      for (let l = 1; l <= 6; l++) {
+        const to = Math.min(N, p.pos + l);
+        let v = botAcc(skillOf(p), l) * (Math.min(N - p.pos, l) + (TREASURE.has(to) && p.tokens < TOKENS_MAX ? 1.2 : 0));
+        if (S.finalRound && p.dist + l <= leader) v *= 0.2; // last chance: only a big jump helps
+        v *= 0.85 + Math.random() * 0.3;
+        if (v > bv) { bv = v; best = l; }
+      }
+      pick(p.id, best);
+    }
+    function botQuestion(p) {
+      clearTimer();
+      const started = S.q.started;
+      const hint = p.tokens > 0 && S.q.level >= 4 && Math.random() < 0.6;
+      if (hint) setTimeout(() => { if (S.q && S.q.started === started && active() === p) useHint(p.id); }, 1200);
+      const [a, b] = BOT_ANSWER;
+      timer = setTimeout(() => {
+        if (S.phase !== 'question' || active() !== p) return;
+        const c = secret.country;
+        const acc = Math.min(0.98, botAcc(skillOf(p), S.q.level) + (S.q.hint ? 0.15 : 0));
+        let id = c.id;
+        if (Math.random() > acc) { // a plausible mistake: a country of the same region
+          const pool = W.countries.filter((x) => x.fame && x.id !== c.id && x.region === c.region);
+          const all = pool.length ? pool : W.countries.filter((x) => x.fame && x.id !== c.id);
+          id = all[Math.floor(Math.random() * all.length)].id;
+        }
+        answer(p.id, id);
+      }, a + Math.random() * (b - a) + (hint ? 1200 : 0));
+    }
+    function takeOver(pid) {
+      const p = S.players.find((o) => o.id === pid);
+      if (!p || p.connected || p.auto || S.phase === 'over') return;
+      p.auto = true;
+      log(`🤖 A bot takes the helm for ${p.name} until they are back.`);
+      if (p === active()) {
+        if (S.phase === 'pick') { clearTimer(); timer = setTimeout(() => botPick(p), BOT_THINK); }
+        else if (S.phase === 'question') botQuestion(p);
+      }
       publish();
     }
 
@@ -139,7 +198,7 @@
         if (!S.finalRound) { S.finalRound = true; log(`⚓ ${p.name} is home! Last round.`); }
       }
       S.phase = 'result';
-      if (S.online) timer = setTimeout(() => next(null, true), AUTO_NEXT + (to - from) * LEG_MS);
+      if (S.online || isBotP(p)) timer = setTimeout(() => next(null, true), AUTO_NEXT + (to - from) * LEG_MS);
       publish();
     }
 
@@ -158,12 +217,6 @@
       if (S.phase !== 'question' || pid === active().id || guesses[pid]) return;
       if (!S.players.some((o) => o.id === pid)) return;
       guesses[pid] = countryId;
-    }
-
-    function skip(why) {
-      const p = active();
-      log(`⏭ ${p.name} skipped (${why}).`);
-      advance();
     }
 
     function next(pid, auto) {
@@ -196,11 +249,18 @@
       const p = S.players.find((o) => o.id === pid);
       if (!p || p.connected === on) return;
       p.connected = on;
-      log(on ? `🔌 ${p.name} is back.` : `📴 ${p.name} lost connection.`);
-      if (p === active() && S.phase === 'pick') {
-        // give a reloading / reconnecting player a moment before skipping their turn
-        clearTimer();
-        timer = on ? setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000) : setTimeout(() => skip('offline'), OFFLINE_GRACE * 1000);
+      clearTimeout(offTimers[pid]);
+      if (on) {
+        log(`🔌 ${p.name} is back${p.auto ? ' and takes the helm again' : ''}.`);
+        if (p.auto) {
+          p.auto = false;
+          if (p === active() && S.phase === 'pick') { clearTimer(); timer = setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000); }
+        }
+      } else {
+        log(`📴 ${p.name} lost connection. A bot sails for them in ${TAKEOVER} s.`);
+        // a reloading / reconnecting player gets a moment; then a bot plays their turns
+        offTimers[pid] = setTimeout(() => takeOver(pid), TAKEOVER * 1000);
+        if (p === active() && S.phase === 'pick') clearTimer();
       }
       publish();
     }
@@ -220,7 +280,7 @@
       get state() { return S; },
       snapshot() { return JSON.parse(JSON.stringify(S)); },
       peek() { return secret && secret.country.id; }, // debug / tests only (host side)
-      stop() { clearTimer(); },
+      stop() { clearTimer(); Object.values(offTimers).forEach(clearTimeout); },
     };
   }
 
@@ -395,7 +455,7 @@
    * VIEW (every device)
    * ==================================================================== */
   const activeP = (s) => s.players[s.turn];
-  const canAct = (s) => view.hotseat || (view.me && activeP(s).id === view.me);
+  const canAct = (s) => !isBotP(activeP(s)) && (view.hotseat || (view.me && activeP(s).id === view.me));
   const meP = (s) => s.players.find((p) => p.id === view.me);
 
   function show(id) {
@@ -410,7 +470,7 @@
       const pct = Math.round((p.pos / N) * 100);
       const isMe = !view.hotseat && p.id === view.me;
       return `<div class="vp${i === s.turn && s.phase !== 'over' ? ' active' : ''}${p.connected ? '' : ' off'}" style="--pc:${p.color}" title="${esc(p.name)}: port ${p.pos}/${N}, ${p.correct}/${p.asked} correct">
-        <span class="vp-name">${esc(p.name)}${isMe ? ' (you)' : ''}</span>
+        <span class="vp-name">${p.bot || p.auto ? '🤖 ' : ''}${esc(p.name)}${isMe ? ' (you)' : ''}</span>
         <span class="vp-bar"><i style="width:${pct}%"></i></span>
         <span class="vp-num">${p.pos}/${N} · 🧭${p.tokens}${p.streak >= 3 ? ` · 🔥${p.streak}` : ''}</span></div>`;
     }).join('');
@@ -482,8 +542,10 @@
       document.body.classList.remove('answering');
       if (!view.animating) layoutShips(s);
       const fresh = !prev || prev.gid !== s.gid || prev.phase !== 'pick' || prev.turn !== s.turn;
-      $('panel-title').textContent = view.hotseat ? `${p.name}, your turn` : mine ? 'Your turn!' : `${p.name}'s turn`;
-      setPanelSub(mine ? 'Choose your challenge — a correct answer sails you that many ports.' : `${esc(p.name)} is choosing a challenge…`);
+      const botTag = isBotP(p) ? '🤖 ' : '';
+      $('panel-title').textContent = !mine ? `${botTag}${p.name}'s turn` : view.hotseat ? `${p.name}, your turn` : 'Your turn!';
+      setPanelSub(mine ? 'Choose your challenge — a correct answer sails you that many ports.'
+        : p.auto ? `${esc(p.name)} is offline: a bot sails for them until they are back.` : `${esc(p.name)} is choosing a challenge…`);
       $('levels').hidden = !mine;
       if (mine) renderLevels(s);
       showTarget(null);
@@ -520,7 +582,7 @@
       const flag = $('q-flag');
       if (q.flag) { flag.hidden = false; flag.src = q.flag; } else { flag.hidden = true; flag.removeAttribute('src'); }
       $('q-note').textContent = mine ? (q.auto ? 'Level picked automatically (time ran out).' : '') : view.me ? 'Guess along — it won\'t move your ship, but everyone will see if you knew it.' : '';
-      $('panel-title').textContent = mine ? (view.hotseat ? `${p.name}: tap the answer on the map` : 'Tap the answer on the map') : `${p.name} is answering…`;
+      $('panel-title').textContent = mine ? (view.hotseat ? `${p.name}: tap the answer on the map` : 'Tap the answer on the map') : `${isBotP(p) ? '🤖 ' : ''}${p.name} is answering…`;
       setPanelSub(`Correct = sail ${q.level} port${q.level === 1 ? '' : 's'} to ${esc(portName(Math.min(N, p.pos + q.level)))}`);
       document.body.classList.add('answering');
       WorldMap.reset(true);
@@ -644,7 +706,11 @@
    * ==================================================================== */
   const SETUP_KEY = 'voyage.setup.v1';
   const SAVE_KEY = 'voyage.save.v1';
-  const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], myName: '' }, store.get(SETUP_KEY) || {});
+  const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '' }, store.get(SETUP_KEY) || {});
+  if (!Array.isArray(setup.types) || setup.types.length < MAX_PLAYERS) setup.types = ['human', 'explorer', 'human', 'human', 'human', 'human'];
+  const TYPE_ORDER = ['human', ...Object.keys(BOTS)];
+  const typeText = (t) => (t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`);
+  const nextType = (t) => TYPE_ORDER[(TYPE_ORDER.indexOf(t) + 1) % TYPE_ORDER.length];
   const saveSetup = () => store.set(SETUP_KEY, setup);
   const params = new URLSearchParams(location.search);
   const joinCode = (params.get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -665,10 +731,21 @@
       const row = document.createElement('label');
       row.className = 'name-row';
       row.style.setProperty('--pc', COLORS[i]);
-      row.innerHTML = `<span class="pawn-icon"></span><input maxlength="16" placeholder="Captain ${i + 1}" aria-label="Player ${i + 1} name"><small>${SHIP_NAMES[i]}</small>`;
+      row.innerHTML = `<span class="pawn-icon"></span><input maxlength="16" aria-label="Player ${i + 1} name"><small>${SHIP_NAMES[i]}</small>
+        <button type="button" class="type-btn" title="Tap to switch: human or computer captain"></button>`;
       const input = row.querySelector('input');
       input.value = setup.names[i] || '';
       input.addEventListener('input', () => { setup.names[i] = input.value; saveSetup(); });
+      const tb = row.querySelector('.type-btn');
+      const syncType = () => {
+        const t = setup.types[i];
+        tb.textContent = typeText(t);
+        tb.classList.toggle('bot', t !== 'human');
+        tb.setAttribute('aria-label', `Player ${i + 1}: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
+        input.placeholder = t === 'human' ? `Captain ${i + 1}` : BOT_NAMES[i];
+      };
+      tb.addEventListener('click', (e) => { e.preventDefault(); setup.types[i] = nextType(setup.types[i]); syncType(); saveSetup(); });
+      syncType();
       list.appendChild(row);
     }
     $('my-name').value = setup.myName || '';
@@ -690,7 +767,10 @@
    * ==================================================================== */
   let engine = null;
   function startHotseat(resume) {
-    const players = resume ? resume.players : Array.from({ length: setup.count }, (_, i) => ({ id: uid(), name: (setup.names[i] || '').trim() || `Captain ${i + 1}` }));
+    const players = resume ? resume.players : Array.from({ length: setup.count }, (_, i) => {
+      const bot = setup.types[i] !== 'human' ? setup.types[i] : null;
+      return { id: uid(), name: (setup.names[i] || '').trim() || (bot ? BOT_NAMES[i] : `Captain ${i + 1}`), bot };
+    });
     view.hotseat = true; view.me = null; view.isHost = true; view.state = null; view.shownRes = null;
     Quiz.newGame();
     engine = createEngine({ cats: resume ? resume.cats : setup.cats.slice(), players, resume }, (s) => {
@@ -742,13 +822,34 @@
     $('share-link').value = shareUrl(code);
     $('share-btn').hidden = !navigator.share;
     $('crew-count').textContent = `${players.length} / ${MAX_PLAYERS}`;
-    $('crew').innerHTML = players.map((p, i) => `<li style="--pc:${COLORS[i]}"><span class="pawn-icon"></span><b>${esc(p.name)}</b>${i === 0 ? ' <small>host</small>' : ''}${p.id === view.me ? ' <small>you</small>' : ''}${p.connected === false ? ' <small>offline</small>' : ''}</li>`).join('');
+    $('crew').innerHTML = players.map((p, i) => `<li style="--pc:${COLORS[i]}"><span class="pawn-icon"></span><b>${p.bot ? '🤖 ' : ''}${esc(p.name)}</b>${i === 0 ? ' <small>host</small>' : ''}${p.id === view.me ? ' <small>you</small>' : ''}${p.connected === false ? ' <small>offline</small>' : ''}${
+      p.bot ? (isHost ? ` <button type="button" class="type-btn bot" data-skill="${p.id}" title="Tap to change the bot's level">${BOTS[p.bot].label}</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>bot · ${BOTS[p.bot].label}</small>`) : ''}</li>`).join('');
+    $('add-bot-btn').hidden = !isHost || players.length >= MAX_PLAYERS;
+    if (isHost) {
+      $('crew').querySelectorAll('[data-skill]').forEach((b) => b.addEventListener('click', () => {
+        const p = lobby.players.find((x) => x.id === b.dataset.skill);
+        const ks = Object.keys(BOTS);
+        p.bot = ks[(ks.indexOf(p.bot) + 1) % ks.length];
+        hostLobbyUpdate();
+      }));
+      $('crew').querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => {
+        lobby.players = lobby.players.filter((x) => x.id !== b.dataset.rm);
+        hostLobbyUpdate();
+      }));
+    }
     $('lobby-cats').textContent = `Questions: ${cats.map((c) => CAT_LABEL[c]).join(' + ')}`;
     $('lobby-start-btn').hidden = !isHost;
     $('lobby-start-btn').disabled = players.length < 2;
     $('lobby-start-btn').textContent = players.length < 2 ? 'Waiting for players…' : `Start the voyage with ${players.length} ⛵`;
     $('lobby-wait').hidden = isHost;
   }
+  $('add-bot-btn').addEventListener('click', () => {
+    if (!view.isHost || lobby.players.length >= MAX_PLAYERS) return;
+    const taken = new Set(lobby.players.map((p) => p.name));
+    const name = BOT_NAMES.find((n) => !taken.has(n)) || `Bot ${lobby.players.length + 1}`;
+    lobby.players.push({ id: uid(), name, bot: 'explorer', connected: true });
+    hostLobbyUpdate();
+  });
   $('copy-btn').addEventListener('click', () => copyLink($('copy-btn')));
   $('copy2-btn').addEventListener('click', () => copyLink($('copy2-btn')));
   function copyLink(btn) {
