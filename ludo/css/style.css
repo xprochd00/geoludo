@@ -745,3 +745,31 @@ kbd {
   position: fixed; z-index: 50; top: 8px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 99px;
   background: rgba(239,71,111,.95); color: #fff; font-weight: 700; font-size: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
 }
+
+/* ================= PHONES: room for the map during a question ================= */
+@media (max-width: 900px) {
+  body.map-open .stage { height: calc(100vh - 72px); height: calc(100dvh - 72px); min-height: 420px; }
+}
+@media (max-width: 560px) {
+  body.map-open .stage { height: calc(100dvh - 62px); }
+  .quiz-card { position: relative; gap: 4px; padding: 8px 10px; border-radius: 14px; }
+  .quiz-meta { gap: 4px; padding-right: 44px; }
+  .quiz-meta .chip { font-size: 10px; letter-spacing: .5px; padding: 3px 7px; }
+  .quiz-main { flex-wrap: wrap; gap: 4px 10px; }
+  .q-flag { height: 38px; }
+  .q-kind { font-size: 12px; }
+  .q-prompt { font-size: 20px; }
+  .q-prompt.long { font-size: 15px; line-height: 1.25; }
+  .quiz-card .timer { position: absolute; top: 6px; right: 6px; width: 38px; height: 38px; }
+  .quiz-card .timer span { font-size: 14px; }
+  .quiz-card .hint-btn { padding: 4px 10px; font-size: 12px; margin-left: auto; }
+  .face-map { padding: 6px; gap: 6px; }
+  .result { padding: 8px 10px; gap: 8px; }
+  /* steal prompt: a slim bar at the bottom, so the map stays free for the next player */
+  .result.compact { top: auto; bottom: 6px; flex-wrap: nowrap; text-align: left; justify-content: flex-start; width: calc(100% - 12px); max-width: none; }
+  .result.compact .result-icon { width: 30px; height: 30px; font-size: 15px; flex: none; }
+  .result.compact .result-title { display: none; }
+  .result.compact .result-sub { font-size: 13px; }
+  .result.compact .btn-ghost { padding: 6px 12px; flex: none; }
+  .quiz-card.steal #q-steps { display: none; } /* the line below says the same */
+}

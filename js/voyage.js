@@ -28,7 +28,9 @@
     explorer: { label: 'Explorer', base: 0.92, drop: 0.075 },
     genius: { label: 'Genius', base: 0.97, drop: 0.045 },
   };
-  const BOT_NAMES = ['Zheng He', 'James Cook', 'Amundsen', 'Bougainville', 'Tasman', 'Vespucci'];
+  const botName = (n) => `Bot captain ${n}`;
+  /** People and bots are numbered separately: Captain 1, Captain 2, Bot captain 1 … */
+  const nthOfKind = (list, i) => list.slice(0, i + 1).filter((t) => (t === 'human') === (list[i] === 'human')).length;
   const botAcc = (skill, lvl) => Math.min(0.98, Math.max(0.15, BOTS[skill].base - BOTS[skill].drop * (lvl - 1)));
   const isBotP = (p) => !!(p && (p.bot || p.auto));
   const LEG_MS = 520; // ship animation per port
@@ -742,9 +744,10 @@
         tb.textContent = typeText(t);
         tb.classList.toggle('bot', t !== 'human');
         tb.setAttribute('aria-label', `Player ${i + 1}: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
-        input.placeholder = t === 'human' ? `Captain ${i + 1}` : BOT_NAMES[i];
+        const n = nthOfKind(setup.types.slice(0, setup.count), i);
+        input.placeholder = t === 'human' ? `Captain ${n}` : botName(n);
       };
-      tb.addEventListener('click', (e) => { e.preventDefault(); setup.types[i] = nextType(setup.types[i]); syncType(); saveSetup(); });
+      tb.addEventListener('click', (e) => { e.preventDefault(); setup.types[i] = nextType(setup.types[i]); syncSetup(); }); // renumbers the default names
       syncType();
       list.appendChild(row);
     }
@@ -769,7 +772,7 @@
   function startHotseat(resume) {
     const players = resume ? resume.players : Array.from({ length: setup.count }, (_, i) => {
       const bot = setup.types[i] !== 'human' ? setup.types[i] : null;
-      return { id: uid(), name: (setup.names[i] || '').trim() || (bot ? BOT_NAMES[i] : `Captain ${i + 1}`), bot };
+      return { id: uid(), name: (setup.names[i] || '').trim() || (bot ? botName(nthOfKind(setup.types.slice(0, setup.count), i)) : `Captain ${nthOfKind(setup.types.slice(0, setup.count), i)}`), bot };
     });
     view.hotseat = true; view.me = null; view.isHost = true; view.state = null; view.shownRes = null;
     Quiz.newGame();
@@ -846,7 +849,9 @@
   $('add-bot-btn').addEventListener('click', () => {
     if (!view.isHost || lobby.players.length >= MAX_PLAYERS) return;
     const taken = new Set(lobby.players.map((p) => p.name));
-    const name = BOT_NAMES.find((n) => !taken.has(n)) || `Bot ${lobby.players.length + 1}`;
+    let k = 1;
+    while (taken.has(botName(k))) k++;
+    const name = botName(k);
     lobby.players.push({ id: uid(), name, bot: 'explorer', connected: true });
     hostLobbyUpdate();
   });
