@@ -477,13 +477,14 @@
   /* ---------- Board ⇄ map roll ---------- */
   async function showMap() {
     const prism = $('prism');
+    document.body.classList.add('map-open'); // phones: the stage grows to almost the full screen
     // Leave the flat resting state without animating (it looks identical to the 3D rest pose).
     prism.style.transition = 'none';
     prism.classList.remove('flat');
     void prism.offsetWidth;
     prism.style.transition = '';
     Sound.whoosh();
-    if (innerWidth <= 900) $('stage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (innerWidth <= 900) $('stage').scrollIntoView({ behavior: FX.pace.instant ? 'auto' : 'smooth', block: 'start' });
     prism.classList.add('show-map');
     await sleep(ROLL_MS);
     // Flatten the 3D scene once the roll is done: same picture, reliable hit-testing.
@@ -497,6 +498,7 @@
     prism.classList.remove('show-map');
     await sleep(ROLL_MS);
     prism.classList.add('flat');
+    document.body.classList.remove('map-open');
   }
 
   /* ================= TURN FLOW ================= */
@@ -1140,6 +1142,7 @@
     $('sound-btn').textContent = Sound.enabled ? '🔊' : '🔇';
   });
   function toSetup() {
+    document.body.classList.remove('map-open');
     clearInterval(timerHandle);
     clearTimeout(supTimer);
     if (NET.on) {
