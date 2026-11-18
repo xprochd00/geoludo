@@ -21,7 +21,6 @@
         <div class="logo-globe" aria-hidden="true">🌍</div>
         <h1>Geo<span>Ludo</span></h1>
         <p class="tagline">Roll the dice · Find the country · Race around the world</p>
-        <p class="tagline"><a href="../index.html" style="color:var(--accent)">⛵ Try the new ship voyage game →</a></p>
       </div>
 
       <div id="resume-card" class="resume-card" hidden>
@@ -41,34 +40,14 @@
       </div>
 
       <div class="setup-section">
-        <h2>Game mode</h2>
-        <div class="mode-picker" role="radiogroup" aria-label="Game mode">
-          <button type="button" class="mode-card active" data-mode="geo" role="radio" aria-checked="true">
-            <span class="mode-icon">🗺️</span><b>Geography</b><small>Countries, capitals, cities, flags &amp; landmarks</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="history" role="radio" aria-checked="false">
-            <span class="mode-icon">📜</span><b>History &amp; Geopolitics</b><small>Events, leaders &amp; world affairs</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="sports" role="radio" aria-checked="false">
-            <span class="mode-icon">⚽</span><b>Sports</b><small>Athletes, teams, events &amp; venues</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="culture" role="radio" aria-checked="false">
-            <span class="mode-icon">🎭</span><b>Culture</b><small>Music, film, art, books, games &amp; food</small>
-          </button>
-          <button type="button" class="mode-card" data-mode="mixed" role="radio" aria-checked="false">
-            <span class="mode-icon">🎲</span><b>Mixed</b><small>Combine any two or more categories</small>
-          </button>
+        <h2>Questions</h2>
+        <div class="cat-grid" id="cat-chips">
+          <button type="button" class="cat-btn" data-cat="geo"><span>🗺️</span><b>Geography</b></button>
+          <button type="button" class="cat-btn" data-cat="history"><span>📜</span><b>History</b></button>
+          <button type="button" class="cat-btn" data-cat="sports"><span>⚽</span><b>Sports</b></button>
+          <button type="button" class="cat-btn" data-cat="culture"><span>🎭</span><b>Culture</b></button>
         </div>
-        <div id="mix-options" class="mix-options" hidden>
-          <div class="mix-title">Combine in Mixed mode <small>(choose at least two)</small></div>
-          <div class="mix-chips" role="group" aria-label="Categories in Mixed mode">
-            <button type="button" class="mix-chip active" data-cat="geo" aria-pressed="true">🗺️ Geography</button>
-            <button type="button" class="mix-chip active" data-cat="history" aria-pressed="true">📜 History &amp; Geopolitics</button>
-            <button type="button" class="mix-chip active" data-cat="sports" aria-pressed="true">⚽ Sports</button>
-            <button type="button" class="mix-chip active" data-cat="culture" aria-pressed="true">🎭 Culture</button>
-          </div>
-          <div id="mix-hint" class="mix-hint">All 4 categories, about a quarter each.</div>
-        </div>
+        <p class="hint-line" id="cat-hint"></p>
       </div>
 
       <div class="setup-section">
@@ -103,7 +82,9 @@
 
       <button id="start-btn" class="btn-primary big">Start the race ✈️</button>
       <div class="history-note"><span id="passport-note"></span> · <span id="unseen-note"></span> <button type="button" id="forget-btn" class="link-btn">Reset question history</button></div>
-      <a class="train-link" href="../train.html">🎯 Solo training: practise the questions on your own</a>
+      <div class="v-links">
+        <a href="../train.html">🎯 Solo training</a>
+        <a href="../index.html">⛵ GeoLudo Voyage</a>
       <details class="howto">
         <summary>How to play</summary>
         <ul>
@@ -116,6 +97,7 @@
           <li>On the map: scroll or pinch to zoom, drag to pan. Tiny nations are marked with dots. Keys: <kbd>Space</kbd> roll, <kbd>1</kbd>–<kbd>6</kbd> choose, <kbd>H</kbd> hint, <kbd>Enter</kbd> continue.</li>
         </ul>
       </details>
+      </div>
     </div>
   </section>
 

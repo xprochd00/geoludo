@@ -116,45 +116,26 @@
   /* Mixed mode: which categories to combine (at least two). */
   const CAT_NAMES = { geo: 'Geography', history: 'History & Geopolitics', sports: 'Sports', culture: 'Culture' };
   const CAT_SHORT = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
-  function syncMix() {
-    $('mix-options').hidden = mode !== 'mixed';
-    document.querySelectorAll('.mix-chip').forEach((c) => {
-      const on = mixCats.includes(c.dataset.cat);
-      c.classList.toggle('active', on);
-      c.setAttribute('aria-pressed', on);
-    });
-    const share = { 2: 'half', 3: 'a third', 4: 'a quarter' }[mixCats.length];
-    $('mix-hint').textContent = mixCats.length === Quiz.CATEGORIES.length
-      ? `All ${mixCats.length} categories, about ${share} each.`
-      : `${mixCats.map((c) => CAT_NAMES[c]).join(' + ')}, about ${share} each.`;
+  // Categories: pick one, or several to mix them in equal shares (same picker as Voyage).
+  let cats = mode === 'mixed' ? mixCats.slice() : [mode];
+  function applyCats() {
+    mode = cats.length > 1 ? 'mixed' : cats[0];
+    mixCats = cats.length > 1 ? cats.slice() : Quiz.CATEGORIES.slice();
   }
-  document.querySelectorAll('.mix-chip').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const cat = chip.dataset.cat;
-      if (mixCats.includes(cat)) {
-        if (mixCats.length <= 2) {
-          chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
-          $('mix-hint').textContent = 'Mixed mode needs at least two categories. Pick a single-category mode for just one.';
-          return;
-        }
-        mixCats = mixCats.filter((c) => c !== cat);
-      } else {
-        mixCats = Quiz.CATEGORIES.filter((c) => c === cat || mixCats.includes(c));
-      }
-      syncMix();
-      saveSetup();
-    });
-  });
   function syncMode() {
-    document.querySelectorAll('.mode-card').forEach((x) => {
-      x.classList.toggle('active', x.dataset.mode === mode);
-      x.setAttribute('aria-checked', x.dataset.mode === mode);
-    });
-    syncMix();
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.classList.toggle('active', cats.includes(b.dataset.cat)));
+    $('cat-hint').textContent = cats.length > 1
+      ? `Mixed: ${cats.map((c) => CAT_SHORT[c]).join(' + ')}, in equal shares.`
+      : `${CAT_NAMES[cats[0]]} questions only. Pick more to mix them.`;
   }
-  document.querySelectorAll('.mode-card').forEach((b) => {
-    b.addEventListener('click', () => { mode = b.dataset.mode; syncMode(); saveSetup(); });
-  });
+  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => {
+    const c = b.dataset.cat;
+    if (cats.includes(c)) { if (cats.length > 1) cats = cats.filter((x) => x !== c); }
+    else cats = Quiz.CATEGORIES.filter((x) => x === c || cats.includes(x));
+    applyCats();
+    syncMode();
+    saveSetup();
+  }));
 
   /* Game-length presets + custom rules. */
   function syncPreset() {
@@ -229,7 +210,7 @@
       })),
       turn: 0,
       mode,
-      cats: mode === 'mixed' ? mixCats.slice() : [mode],
+      cats: cats.slice(),
       opts,
       preset,
       stamps: [],
