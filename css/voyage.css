@@ -75,7 +75,7 @@ body.voyage.in-game { overflow: hidden; }
 #lobby .link-btn { display: block; margin: 14px auto 0; }
 
 /* ---------- game ---------- */
-#game.active { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: max(6px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); gap: 6px; }
+#game.active { display: flex; flex-direction: column; height: 100vh; height: 100dvh; min-height: 0; /* not the shared 100vh: on phones it hides the bottom panel under the browser bar */ padding: max(6px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); gap: 6px; }
 .v-top { display: flex; align-items: center; gap: 8px; flex: none; min-width: 0; }
 .v-round { font-size: 13px; color: var(--muted); white-space: nowrap; }
 .v-round b { color: var(--text); }
@@ -175,7 +175,9 @@ body.answering #map .overlay { opacity: .22; }
   .v-round { display: none; }
   .v-levels { grid-template-columns: repeat(3, 1fr); }
   .v-levels em { font-size: 10px; }
-  .v-panel { bottom: 6px; padding: 8px 10px 10px; width: calc(100% - 12px); }
+  .v-panel { bottom: 6px; padding: 8px 10px 10px; width: calc(100% - 12px); max-height: 62%; overflow-y: auto; }
+  .v-levels button { padding: 6px 2px; }
+  #next-btn { padding: 8px 16px; }
   .v-panel-head b { font-size: 16px; }
   #panel-sub { font-size: 12.5px; flex-basis: 100%; }
   .v-quiz { top: 6px; width: calc(100% - 12px); padding: 8px 10px; }
