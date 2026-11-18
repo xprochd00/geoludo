@@ -1,6 +1,6 @@
 # ⛵ GeoLudo Voyage — Sail Around the World
 
-A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own phone**, by sharing a room link.
+A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own device** (phone, tablet or computer), by sharing a room link.
 
 The site has three parts:
 
