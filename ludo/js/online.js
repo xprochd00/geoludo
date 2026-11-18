@@ -133,7 +133,9 @@
   $('add-bot-btn').addEventListener('click', () => {
     if (!room.isHost || room.players.length >= MAX_PLAYERS) return;
     const taken = new Set(room.players.map((p) => p.name));
-    const name = G.DEFAULT_NAMES.find((n) => !taken.has(n)) || `Bot ${room.players.length + 1}`;
+    let k = 1;
+    while (taken.has(G.defaultName(k, 'bot'))) k++;
+    const name = G.defaultName(k, 'bot');
     room.players.push({ id: uid(), name, type: 'explorer', connected: true });
     lobbyUpdate();
   });

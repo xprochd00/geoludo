@@ -5,7 +5,11 @@
   const COLORS = Board.COLORS;
   const FIN = Board.FINISH_POS;
   const SEATS = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
-  const DEFAULT_NAMES = ['Magellan', 'Earhart', 'Ibn Battuta', 'Zheng He'];
+  const LEGACY_NAMES = ['Magellan', 'Earhart', 'Ibn Battuta', 'Zheng He']; // earlier defaults, cleared from saved setups
+  /** Name used when a name field is left empty: Player 2, Bot player 3 … (n = position in the list). */
+  const defaultName = (n, type) => (type === 'human' ? `Player ${n}` : `Bot player ${n}`);
+  /** People and bots are numbered separately: Player 1, Player 2, Bot player 1 … */
+  const nthOfKind = (list, i) => list.slice(0, i + 1).filter((t) => (t === 'human') === (list[i] === 'human')).length;
   const TIMER_SECS = 30;
   const STEAL_SECS = 15;
   const ROLL_MS = 1150;
@@ -74,7 +78,7 @@
   let count = saved.count || 2;
   let mode = saved.mode || 'geo';
   let preset = saved.preset || 'quick';
-  const names = saved.names || [...DEFAULT_NAMES];
+  const names = (saved.names || ['', '', '', '']).map((n) => (LEGACY_NAMES.includes(n) ? '' : n));
   const types = saved.types || ['human', 'human', 'explorer', 'human'];
   const pieceCounts = saved.pieceCounts || [2, 2, 2, 2];
   let mixCats = (saved.mixCats || Quiz.CATEGORIES).filter((c) => Quiz.CATEGORIES.includes(c));
@@ -91,7 +95,7 @@
   function renderInputs() {
     const box = $('player-inputs');
     box.innerHTML = '';
-    SEATS[count].forEach((seat) => {
+    SEATS[count].forEach((seat, i) => {
       const col = COLORS[seat];
       const row = document.createElement('div');
       row.className = 'player-row';
@@ -112,10 +116,11 @@
         typeBtn.textContent = t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`;
         typeBtn.classList.toggle('bot', t !== 'human');
         typeBtn.setAttribute('aria-label', `${col.name} player: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
+        input.placeholder = defaultName(nthOfKind(SEATS[count].map((x) => types[x]), i), t);
       };
       typeBtn.addEventListener('click', () => {
         types[seat] = TYPE_ORDER[(TYPE_ORDER.indexOf(types[seat]) + 1) % TYPE_ORDER.length];
-        syncType(); saveSetup();
+        saveSetup(); renderInputs(); // numbering of the default names changes
       });
       syncType();
       const sync = () => row.querySelectorAll('.piece-picker button').forEach((b) => {
@@ -233,7 +238,7 @@
   }
   function startGame(online) {
     const cfg = online ? online.cfg : currentConfig();
-    const roster = online ? online.players : SEATS[count].map((seat) => ({ seat, name: (names[seat] || '').trim() || DEFAULT_NAMES[seat], type: types[seat] }));
+    const roster = online ? online.players : SEATS[count].map((seat, i) => ({ seat, name: (names[seat] || '').trim() || defaultName(nthOfKind(SEATS[count].map((x) => types[x]), i), types[seat]), type: types[seat] }));
     Object.assign(NET, { on: !!online, seat: online ? online.seat : null, host: !!(online && online.host), send: online ? online.send : null, pending: [], hostStep: 0 });
     rng = online ? seeded(online.seed) : Math.random;
     Quiz.setShared(online ? rng : null);
@@ -1182,7 +1187,7 @@
 
   /* Used by online.js */
   window.LudoGame = {
-    NET, BOTS, SEATS, DEFAULT_NAMES, currentConfig, modeLabelFor, receive,
+    NET, BOTS, SEATS, defaultName, currentConfig, modeLabelFor, receive,
     start(online) { Sound.ensure(); startGame(online); },
     resupervise() { if (state && NET.on) supervise(); },
     get running() { return !!state && NET.on; },
