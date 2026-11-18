@@ -43,6 +43,10 @@
   };
   const botAcc = (skill, lvl) => Math.min(0.98, Math.max(0.15, BOTS[skill].base - BOTS[skill].drop * (lvl - 1)));
   const isBot = (p) => p && p.type !== 'human';
+  /** Choices for a seat, shown in a small menu (Dialog.menu). */
+  const BOT_NOTES = { rookie: 'Bot · makes mistakes', explorer: 'Bot · a fair match', genius: 'Bot · hard to beat' };
+  const botChoices = () => Object.entries(BOTS).map(([k, b]) => ({ value: k, label: `🤖 ${b.label}`, note: BOT_NOTES[k] }));
+  const typeChoices = () => [{ value: 'human', label: '🙂 Human', note: 'A person plays' }, ...botChoices()];
 
   /* Randomness that decides the game (dice, questions, bots). Online, every device uses the same seeded
    * generator so all of them play out exactly the same game; only players' decisions travel. */
@@ -67,11 +71,7 @@
   };
   const SAVE_KEY = 'geoludo.save.v1';
   const SETUP_KEY = 'geoludo.setup.v1';
-  const PASSPORT_KEY = 'geoludo.passport.v1';
 
-  /* Passport: every country a human player has found on this device. */
-  const passport = new Set(store.get(PASSPORT_KEY) || []);
-  const playableCount = window.WORLD.countries.filter((c) => c.fame).length;
 
   /* ================= SETUP ================= */
   const saved = store.get(SETUP_KEY) || {};
@@ -103,7 +103,7 @@
       row.style.setProperty('--pc', col.hex);
       row.innerHTML = `<span class="pawn-icon"></span>
         <input maxlength="16" aria-label="${col.name} player name">
-        <button type="button" class="type-select" title="Tap to switch: human or computer player"></button>
+        <button type="button" class="type-select" title="Choose: human or computer player"></button>
         <div class="piece-picker" role="radiogroup" aria-label="${col.name} player's number of pieces" title="Number of pieces (a handicap when unequal)" ${preset === 'custom' ? '' : 'hidden'}>
           ${[1, 2, 3, 4].map((n) => `<button type="button" role="radio" data-n="${n}" aria-label="${n} piece${n > 1 ? 's' : ''}">${n}</button>`).join('')}
         </div>`;
@@ -111,16 +111,18 @@
       input.value = names[seat];
       input.addEventListener('input', () => { names[seat] = input.value; saveSetup(); });
       const typeBtn = row.querySelector('.type-select');
-      const TYPE_ORDER = ['human', ...Object.keys(BOTS)];
       const syncType = () => {
         const t = types[seat];
-        typeBtn.textContent = t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`;
+        typeBtn.textContent = `${t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`} ▾`;
         typeBtn.classList.toggle('bot', t !== 'human');
-        typeBtn.setAttribute('aria-label', `${col.name} player: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
+        typeBtn.setAttribute('aria-label', `${col.name} player: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to choose.`);
+        typeBtn.setAttribute('aria-haspopup', 'listbox');
         input.placeholder = defaultName(nthOfKind(SEATS[count].map((x) => types[x]), i), t);
       };
-      typeBtn.addEventListener('click', () => {
-        types[seat] = TYPE_ORDER[(TYPE_ORDER.indexOf(types[seat]) + 1) % TYPE_ORDER.length];
+      typeBtn.addEventListener('click', async () => {
+        const v = await Dialog.menu(typeBtn, typeChoices(), types[seat]);
+        if (v == null || v === types[seat]) return;
+        types[seat] = v;
         saveSetup();
         rowSyncs.forEach((f) => f());
       });
@@ -196,8 +198,6 @@
   $('opt-fast').addEventListener('change', saveSetup);
 
   function syncNotes() {
-    $('unseen-note').textContent = `${Quiz.unseenCount()} of ${Quiz.totalCount()} questions not asked yet.`;
-    $('passport-note').textContent = `🛂 Passport: ${passport.size} / ${playableCount} countries found`;
     const sv = store.get(SAVE_KEY);
     $('resume-card').hidden = !sv;
     if (sv) {
@@ -206,7 +206,6 @@
       $('resume-info').textContent = `${s.players.map((p) => p.name).join(', ')} · ${modeLabelFor(s.mode, s.cats)} · ${who.name} to play`;
     }
   }
-  $('forget-btn').addEventListener('click', () => { Quiz.clearHistory(); syncNotes(); });
   $('discard-btn').addEventListener('click', () => { store.del(SAVE_KEY); syncNotes(); });
   $('resume-btn').addEventListener('click', () => { Sound.ensure(); resumeGame(); });
 
@@ -887,12 +886,6 @@
     }
   }
 
-  function stamp(p, c) {
-    if (isBot(p) || !local(p) || passport.has(c.id)) return;
-    passport.add(c.id);
-    store.set(PASSPORT_KEY, [...passport]);
-    state.stamps.push(c.name);
-  }
 
   function award(p, why) {
     if (!state.opts.steal || p.tokens >= MAX_TOKENS) return '';
@@ -921,7 +914,6 @@
       if (ok) {
         s.correct++;
         s.steals++;
-        stamp(s, c);
         $('result-title').textContent = 'Stolen! 🦊';
         sub = `${factFor(q)}${award(s, 'steal')}`;
         Sound.correct();
@@ -980,7 +972,6 @@
     let sub;
     if (ok) {
       p.correct++;
-      stamp(p, c);
       $('result-title').textContent = rescue ? 'Rescued!' : ['Correct!', 'Spot on!', 'Brilliant!', 'Well navigated!'][(Math.random() * 4) | 0]; // cosmetic only
       sub = `${factFor(q)} ` + (rescue
         ? `${esc(ctx.attacker.name)}'s piece is pushed back.`
@@ -1118,9 +1109,6 @@
       li.children[2].textContent = (isBot(x) ? '🤖 ' : '') + x.name;
       table.appendChild(li);
     });
-    $('win-stamps').innerHTML = state.stamps.length
-      ? `🛂 <b>${state.stamps.length} new passport stamp${state.stamps.length === 1 ? '' : 's'}:</b> ${state.stamps.slice(0, 12).map(esc).join(', ')}${state.stamps.length > 12 ? '…' : ''}<br><small>Passport: ${passport.size} / ${playableCount} countries found</small>`
-      : `<small>🛂 Passport: ${passport.size} / ${playableCount} countries found</small>`;
     $('again-btn').hidden = NET.on && !NET.host;
     setTimeout(() => { $('win').hidden = false; if (!$('again-btn').hidden) $('again-btn').focus(); }, 900);
   }
@@ -1190,7 +1178,7 @@
 
   /* Used by online.js */
   window.LudoGame = {
-    NET, BOTS, SEATS, defaultName, currentConfig, modeLabelFor, receive,
+    NET, BOTS, SEATS, defaultName, botChoices, currentConfig, modeLabelFor, receive,
     start(online) { Sound.ensure(); startGame(online); },
     resupervise() { if (state && NET.on) supervise(); },
     get running() { return !!state && NET.on; },

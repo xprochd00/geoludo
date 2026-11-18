@@ -36,14 +36,14 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 - **No attacks:** ships can share ports. Nobody is captured or sent back.
 - **Fair finish:** when the first ship reaches Lisbon, the round is completed so everyone has had the same number of turns. The ship that sailed furthest wins (overshooting the finish counts), then the best accuracy.
 - **Timer:** 30 s per question, 45 s for longer text questions.
-- **Computer captains 🤖:** in hot seat, tap a player's *Human* button to make it a Rookie, Explorer or Genius bot (accuracy falls with the level, as in GeoLudo). Bots weigh the risk of each level, aim for treasure ports and use their compass on hard questions.
+- **Computer captains 🤖:** in hot seat, tap a player's *Human ▾* button and choose Rookie, Explorer or Genius (accuracy falls with the level, as in GeoLudo). Bots weigh the risk of each level, aim for treasure ports and use their compass on hard questions.
 - **Hot seat** saves after every turn: reload the page and choose **Resume**.
 
 ### Online rooms
 
 1. Choose **Online**, enter your name and press **Create a room**.
 2. Send the invitation link (or the 5-letter room code) to your friends. They open it, enter their name and join.
-3. The host can also **add computer captains** (🤖 Rookie, Explorer or Genius; tap the level to change it, ✕ to remove).
+3. The host can also **add computer captains** (🤖 Rookie, Explorer or Genius; tap the level to choose another, ✕ to remove).
 4. When everyone is in the lobby, the host presses **Start**.
 
 Each player sees the same map. Only the active player can pick and answer. Everyone else can **guess along**: it doesn't move their ship, but the reveal shows who also knew it ("👀 Also knew it: Ana"), and the final table counts it.
@@ -61,6 +61,7 @@ Under the hood, the host's browser runs the game. All devices exchange messages 
 A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
 - Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks).
+- **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
 - New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
 - Progress per category and level is kept in the browser. Training never changes which questions the games ask.
@@ -83,7 +84,7 @@ How it stays in step: every device runs the same game from the same random seed,
 - **Reload or rejoin:** open the link again (same device, or any device with the same name). The device replays the game without animations and catches up.
 - **Lost connection:** a player is shown as offline at once when the page closes, or after 30 s of silence. **20 s later a bot (Explorer level) plays for them** until they are back. The host makes those decisions, so all devices stay identical.
 - **Idle players:** the answer timer still applies; after 60 s without a roll or choice the host decides for them.
-- The host's page must stay open; online games aren't saved for Resume. On a joining device, the question history and passport of that device are left untouched.
+- The host's page must stay open; online games aren't saved for Resume. On a joining device, that device's own question history is left untouched.
 
 ### Game length
 
@@ -122,7 +123,6 @@ The lengths come from simulating thousands of games.
 ### Between games
 
 - **Save and resume:** the game saves at the start of every turn. Reload the page or leave via ⟲, and the start screen offers **Resume**.
-- **🛂 Passport:** every country a human player finds is stamped in a passport kept in the browser. The win screen lists the new stamps.
 - **No repeats:** see below.
 
 ## Questions (shared by all three parts)

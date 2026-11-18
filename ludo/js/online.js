@@ -53,11 +53,10 @@
   if (joinCode) {
     $('join-banner').hidden = false;
     $('join-code').textContent = joinCode;
-    ['format-section', 'players-section', 'cat-section', 'length-section'].forEach((id) => { $(id).hidden = true; });
+    // the room's settings are the host's: someone joining only enters a name
+    ['format-section', 'players-section', 'cat-section', 'length-section', 'options-section'].forEach((id) => { $(id).hidden = true; });
     $('online-note').hidden = true;
     $('join-btn').hidden = false;
-    document.querySelectorAll('#options-section .toggle').forEach((t) => { if (!t.contains($('opt-fast'))) t.hidden = true; });
-    $('forget-btn').parentElement.hidden = true;
   }
   syncFormat();
 
@@ -104,7 +103,7 @@
       const col = COLORS[seats[i] != null ? seats[i] : i].hex;
       const bot = p.type !== 'human';
       const tags = `${i === 0 ? ' <small>host</small>' : ''}${p.id === room.me ? ' <small>you</small>' : ''}`;
-      const ctl = bot ? (host ? `<button type="button" class="type-select bot" data-skill="${p.id}" title="Tap to change the bot's level">🤖 ${G.BOTS[p.type].label}</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>🤖 ${G.BOTS[p.type].label}</small>`) : '';
+      const ctl = bot ? (host ? `<button type="button" class="type-select bot" data-skill="${p.id}" title="Choose the bot's level" aria-haspopup="listbox">🤖 ${G.BOTS[p.type].label} ▾</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>🤖 ${G.BOTS[p.type].label}</small>`) : '';
       return `<li style="--pc:${col}"><span class="pawn-icon"></span><b>${esc(p.name)}</b>${tags}${ctl}</li>`;
     }).join('');
     $('add-bot-btn').hidden = !host || room.players.length >= MAX_PLAYERS;
@@ -114,10 +113,11 @@
     $('lobby-start-btn').textContent = room.players.length < 2 ? 'Waiting for players…' : `Start the race with ${room.players.length} ✈️`;
     $('lobby-wait').hidden = host;
     if (host) {
-      $('crew').querySelectorAll('[data-skill]').forEach((b) => b.addEventListener('click', () => {
+      $('crew').querySelectorAll('[data-skill]').forEach((b) => b.addEventListener('click', async () => {
         const p = room.players.find((x) => x.id === b.dataset.skill);
-        const ks = Object.keys(G.BOTS);
-        p.type = ks[(ks.indexOf(p.type) + 1) % ks.length];
+        const v = p && await Dialog.menu(b, G.botChoices(), p.type);
+        if (!v || v === p.type || !room.players.includes(p)) return;
+        p.type = v;
         lobbyUpdate();
       }));
       $('crew').querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => {

@@ -710,9 +710,10 @@
   const SAVE_KEY = 'voyage.save.v1';
   const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '' }, store.get(SETUP_KEY) || {});
   if (!Array.isArray(setup.types) || setup.types.length < MAX_PLAYERS) setup.types = ['human', 'explorer', 'human', 'human', 'human', 'human'];
-  const TYPE_ORDER = ['human', ...Object.keys(BOTS)];
-  const typeText = (t) => (t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`);
-  const nextType = (t) => TYPE_ORDER[(TYPE_ORDER.indexOf(t) + 1) % TYPE_ORDER.length];
+  const typeText = (t) => `${t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`} ▾`;
+  const BOT_NOTES = { rookie: 'Bot · makes mistakes', explorer: 'Bot · a fair match', genius: 'Bot · hard to beat' };
+  const botChoices = () => Object.entries(BOTS).map(([k, b]) => ({ value: k, label: `🤖 ${b.label}`, note: BOT_NOTES[k] }));
+  const typeChoices = () => [{ value: 'human', label: '🙂 Human', note: 'A person plays' }, ...botChoices()];
   const saveSetup = () => store.set(SETUP_KEY, setup);
   const params = new URLSearchParams(location.search);
   const joinCode = (params.get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -734,7 +735,7 @@
       row.className = 'name-row';
       row.style.setProperty('--pc', COLORS[i]);
       row.innerHTML = `<span class="pawn-icon"></span><input maxlength="16" aria-label="Player ${i + 1} name"><small>${SHIP_NAMES[i]}</small>
-        <button type="button" class="type-btn" title="Tap to switch: human or computer captain"></button>`;
+        <button type="button" class="type-btn" title="Choose: human or computer captain" aria-haspopup="listbox"></button>`;
       const input = row.querySelector('input');
       input.value = setup.names[i] || '';
       input.addEventListener('input', () => { setup.names[i] = input.value; saveSetup(); });
@@ -747,7 +748,13 @@
         const n = nthOfKind(setup.types.slice(0, setup.count), i);
         input.placeholder = t === 'human' ? `Captain ${n}` : botName(n);
       };
-      tb.addEventListener('click', (e) => { e.preventDefault(); setup.types[i] = nextType(setup.types[i]); syncSetup(); }); // renumbers the default names
+      tb.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const v = await Dialog.menu(tb, typeChoices(), setup.types[i]);
+        if (v == null || v === setup.types[i]) return;
+        setup.types[i] = v;
+        syncSetup(); // renumbers the default names
+      });
       syncType();
       list.appendChild(row);
     }
@@ -826,13 +833,14 @@
     $('share-btn').hidden = !navigator.share;
     $('crew-count').textContent = `${players.length} / ${MAX_PLAYERS}`;
     $('crew').innerHTML = players.map((p, i) => `<li style="--pc:${COLORS[i]}"><span class="pawn-icon"></span><b>${p.bot ? '🤖 ' : ''}${esc(p.name)}</b>${i === 0 ? ' <small>host</small>' : ''}${p.id === view.me ? ' <small>you</small>' : ''}${p.connected === false ? ' <small>offline</small>' : ''}${
-      p.bot ? (isHost ? ` <button type="button" class="type-btn bot" data-skill="${p.id}" title="Tap to change the bot's level">${BOTS[p.bot].label}</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>bot · ${BOTS[p.bot].label}</small>`) : ''}</li>`).join('');
+      p.bot ? (isHost ? ` <button type="button" class="type-btn bot" data-skill="${p.id}" title="Choose the bot's level" aria-haspopup="listbox">${BOTS[p.bot].label} ▾</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>bot · ${BOTS[p.bot].label}</small>`) : ''}</li>`).join('');
     $('add-bot-btn').hidden = !isHost || players.length >= MAX_PLAYERS;
     if (isHost) {
-      $('crew').querySelectorAll('[data-skill]').forEach((b) => b.addEventListener('click', () => {
+      $('crew').querySelectorAll('[data-skill]').forEach((b) => b.addEventListener('click', async () => {
         const p = lobby.players.find((x) => x.id === b.dataset.skill);
-        const ks = Object.keys(BOTS);
-        p.bot = ks[(ks.indexOf(p.bot) + 1) % ks.length];
+        const v = p && await Dialog.menu(b, botChoices(), p.bot);
+        if (!v || v === p.bot || !lobby.players.includes(p)) return;
+        p.bot = v;
         hostLobbyUpdate();
       }));
       $('crew').querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => {
