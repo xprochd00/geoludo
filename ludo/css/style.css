@@ -215,10 +215,11 @@ kbd {
 
 /* human / bot selector */
 .type-select {
-  flex: none; background: rgba(255,255,255,.08); color: var(--text); border: 1px solid var(--panel-border); border-radius: 10px;
-  padding: 6px 8px; font: 600 12.5px var(--font-body); cursor: pointer;
+  flex: none; min-width: 104px; background: rgba(255,255,255,.08); color: var(--text); border: 1px solid var(--panel-border); border-radius: 999px;
+  padding: 6px 12px; font: 600 12.5px var(--font-body); cursor: pointer; transition: background .2s, border-color .2s;
 }
-.type-select option { background: #1b2550; }
+.type-select:hover { background: rgba(255,255,255,.14); }
+.type-select.bot { border-color: var(--accent); background: rgba(255,209,102,.12); }
 .piece-picker[hidden] { display: none; }
 .botbadge { margin-left: 6px; font-size: 10.5px; font-weight: 600; color: var(--muted); }
 .tokens { font-size: 12px; color: var(--text); }
@@ -689,3 +690,13 @@ kbd {
 .v-links details { flex-basis: 100%; margin-top: 6px; }
 .v-links summary { text-align: center; }
 @media (max-width: 640px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ================= IN-GAME DIALOG (replaces the browser's confirm) ================= */
+.g-dialog { z-index: 40; }
+.g-dialog-card { width: min(380px, 100%); padding: 24px 22px 22px; }
+.g-dialog-card h2 { font-size: 22px; margin: 0 0 8px; }
+.g-dialog-card p { line-height: 1.45; }
+.g-dialog-card .win-actions button { min-width: 120px; }
+.g-dialog-icon { font-size: 40px; line-height: 1; margin-bottom: 4px; }
+.btn-primary.danger { background: linear-gradient(180deg, #ff7b7b, #e04f5f); color: #fff; box-shadow: 0 6px 0 #a83442, 0 10px 20px rgba(224, 79, 95, .3); }
+.btn-primary.danger:active { box-shadow: 0 2px 0 #a83442, 0 6px 12px rgba(224, 79, 95, .3); }

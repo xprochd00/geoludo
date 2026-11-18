@@ -881,8 +881,8 @@
     if (!view.hotseat) $('share-link').value = shareUrl(lobby.code || joinCode);
   });
   $('resume-btn').addEventListener('click', () => { $('menu').hidden = true; });
-  $('quit-btn').addEventListener('click', () => {
-    if (!view.hotseat && view.isHost && !confirm('Leave? As the host, this ends the voyage for everyone.')) return;
+  $('quit-btn').addEventListener('click', async () => {
+    if (!view.hotseat && view.isHost && !await Dialog.confirm({ icon: '⚓', title: 'End the voyage?', text: 'You are the host: leaving ends the voyage for everyone in the room.', ok: 'End it', cancel: 'Stay', danger: true })) return;
     leave();
   });
   $('leave-btn').addEventListener('click', leave);

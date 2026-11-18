@@ -102,8 +102,8 @@
     $('progress-table').innerHTML = `<div class="pt-row pt-head"><div></div>${[1, 2, 3, 4, 5, 6].map((l) => `<div style="color:var(--l${l})">${l}</div>`).join('')}</div>${rows}`;
     syncChips();
   }
-  $('reset-btn').addEventListener('click', () => {
-    if (!confirm('Forget all training progress?')) return;
+  $('reset-btn').addEventListener('click', async () => {
+    if (!await Dialog.confirm({ icon: '🧹', title: 'Reset training?', text: 'All your training progress will be forgotten. This cannot be undone.', ok: 'Reset', cancel: 'Keep it', danger: true })) return;
     prog = { n: 0, items: {} };
     save(STORE, prog);
     renderOverview();

@@ -82,19 +82,26 @@
       row.style.setProperty('--pc', col.hex);
       row.innerHTML = `<span class="pawn-icon"></span>
         <input maxlength="16" aria-label="${col.name} player name">
-        <select class="type-select" aria-label="${col.name} player: human or computer">
-          <option value="human">🙂 Human</option>
-          ${Object.entries(BOTS).map(([k, b]) => `<option value="${k}">🤖 Bot · ${b.label}</option>`).join('')}
-        </select>
+        <button type="button" class="type-select" title="Tap to switch: human or computer player"></button>
         <div class="piece-picker" role="radiogroup" aria-label="${col.name} player's number of pieces" title="Number of pieces (a handicap when unequal)" ${preset === 'custom' ? '' : 'hidden'}>
           ${[1, 2, 3, 4].map((n) => `<button type="button" role="radio" data-n="${n}" aria-label="${n} piece${n > 1 ? 's' : ''}">${n}</button>`).join('')}
         </div>`;
       const input = row.querySelector('input');
       input.value = names[seat];
       input.addEventListener('input', () => { names[seat] = input.value; saveSetup(); });
-      const sel = row.querySelector('select');
-      sel.value = types[seat];
-      sel.addEventListener('change', () => { types[seat] = sel.value; saveSetup(); });
+      const typeBtn = row.querySelector('.type-select');
+      const TYPE_ORDER = ['human', ...Object.keys(BOTS)];
+      const syncType = () => {
+        const t = types[seat];
+        typeBtn.textContent = t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`;
+        typeBtn.classList.toggle('bot', t !== 'human');
+        typeBtn.setAttribute('aria-label', `${col.name} player: ${t === 'human' ? 'human' : `computer, ${BOTS[t].label}`}. Tap to change.`);
+      };
+      typeBtn.addEventListener('click', () => {
+        types[seat] = TYPE_ORDER[(TYPE_ORDER.indexOf(types[seat]) + 1) % TYPE_ORDER.length];
+        syncType(); saveSetup();
+      });
+      syncType();
       const sync = () => row.querySelectorAll('.piece-picker button').forEach((b) => {
         const on = +b.dataset.n === pieceCounts[seat];
         b.classList.toggle('active', on);
@@ -948,8 +955,8 @@
   $('hint-btn').addEventListener('click', useHint);
   $('again-btn').addEventListener('click', () => { $('win').hidden = true; startGame(); });
   $('setup-btn').addEventListener('click', toSetup);
-  $('menu-btn').addEventListener('click', () => {
-    if (state && state.phase !== 'over' && !confirm('Leave this game? It is saved: you can resume it from the start screen.')) return;
+  $('menu-btn').addEventListener('click', async () => {
+    if (state && state.phase !== 'over' && !await Dialog.confirm({ icon: '🎲', title: 'Leave this game?', text: 'It is saved: you can resume it from the start screen.', ok: 'Leave', cancel: 'Keep playing' })) return;
     toSetup();
   });
   $('sound-btn').addEventListener('click', () => {
