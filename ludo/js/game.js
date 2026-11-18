@@ -94,6 +94,7 @@
 
   function renderInputs() {
     const box = $('player-inputs');
+    const rowSyncs = []; // switching one seat renumbers the others' default names in place
     box.innerHTML = '';
     SEATS[count].forEach((seat, i) => {
       const col = COLORS[seat];
@@ -120,8 +121,10 @@
       };
       typeBtn.addEventListener('click', () => {
         types[seat] = TYPE_ORDER[(TYPE_ORDER.indexOf(types[seat]) + 1) % TYPE_ORDER.length];
-        saveSetup(); renderInputs(); // numbering of the default names changes
+        saveSetup();
+        rowSyncs.forEach((f) => f());
       });
+      rowSyncs.push(syncType);
       syncType();
       const sync = () => row.querySelectorAll('.piece-picker button').forEach((b) => {
         const on = +b.dataset.n === pieceCounts[seat];
