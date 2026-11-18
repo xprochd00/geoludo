@@ -22,6 +22,10 @@
   const AUTO_NEXT = 5200; // online: move on after a result
   const OFFLINE_GRACE = 12; // online: seconds an offline player keeps their turn before it is skipped
   const LEG_MS = 520; // ship animation per port
+  // Compass tokens: everyone starts with one; land exactly on a treasure port or answer 3 in a
+  // row to find another (max 3). Spend one during your question to see the answer's region.
+  const TOKENS_START = 1, TOKENS_MAX = 3, STREAK_BONUS = 3;
+  const TREASURE = new Set(Array.from({ length: N }, (_, i) => i).filter((i) => i > 0 && i % 5 === 3));
   const CAT_LABEL = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
 
   const store = {
@@ -43,12 +47,13 @@
       phase: 'pick', cats: cfg.cats, n: N,
       players: cfg.players.map((p, i) => ({
         id: p.id, name: p.name, color: COLORS[i % COLORS.length], ship: SHIP_NAMES[i % SHIP_NAMES.length],
-        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true,
+        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0,
       })),
       turn: 0, round: 1, finalRound: false, finishers: [],
       q: null, res: null, ranking: null, seq: 0, log: [],
     };
     if (cfg.resume) Object.assign(S, cfg.resume, { phase: 'pick', q: null, res: null, gid: S.gid });
+    S.players.forEach((p) => { if (p.tokens == null) Object.assign(p, { tokens: TOKENS_START, found: 0, hints: 0 }); });
     let secret = null; // the current question including its answer (never sent to guests)
     let guesses = {};
     let timer = null;
@@ -78,7 +83,7 @@
       const time = long ? Q_TIME_LONG : Q_TIME;
       S.q = {
         level, levelLabel: LEVELS[level].label, tag: secret.tag, type: secret.type, kind: secret.kind,
-        prompt: secret.prompt, flag: secret.flag || null, time, started: Date.now(), auto: !!auto,
+        prompt: secret.prompt, flag: secret.flag || null, time, started: Date.now(), auto: !!auto, hint: null,
       };
       S.phase = 'question';
       guesses = {};
@@ -112,22 +117,40 @@
         to = Math.min(N, from + S.q.level);
         p.pos = to;
       } else p.streak = 0;
+      // compass tokens: treasure port reached exactly, or a streak of correct answers
+      const gains = [];
+      if (ok && TREASURE.has(to)) gains.push('treasure');
+      if (ok && p.streak > 0 && p.streak % STREAK_BONUS === 0) gains.push('streak');
+      const gained = Math.min(gains.length, TOKENS_MAX - p.tokens);
+      p.tokens += gained; p.found += gained;
       const knew = S.players.filter((o) => o !== p && guesses[o.id] === c.id);
       knew.forEach((o) => { o.knew++; });
       const clicked = countryId ? byId(countryId) : null;
       S.res = {
         pid: p.id, ok, level: S.q.level, from, to, clicked: countryId, clickedName: clicked ? clicked.name : null,
         answer: c.id, answerName: c.name, fact: factFor(secret), pin: secret.pin ? { p: secret.pin, name: secret.city } : null,
-        knew: knew.map((o) => o.name), timeout: countryId === null,
+        knew: knew.map((o) => o.name), timeout: countryId === null, gains: gained ? gains : [], gained, hinted: !!S.q.hint,
       };
       log(ok ? `✓ ${p.name} sailed ${to - from} port${to - from === 1 ? '' : 's'} to ${portName(to)} (${LEVELS[S.q.level].label})`
         : `✗ ${p.name} missed: ${c.name}`);
+      if (gained) log(`🧭 ${p.name} found a compass token${gains.includes('treasure') ? ` in ${portName(to)}` : ` (${p.streak} in a row)`}.`);
       if (to >= N && !S.finishers.includes(p.id)) {
         S.finishers.push(p.id);
         if (!S.finalRound) { S.finalRound = true; log(`⚓ ${p.name} is home! Last round.`); }
       }
       S.phase = 'result';
       if (S.online) timer = setTimeout(() => next(null, true), AUTO_NEXT + (to - from) * LEG_MS);
+      publish();
+    }
+
+    function useHint(pid) {
+      const p = active();
+      if (S.phase !== 'question' || pid !== p.id || S.q.hint || p.tokens <= 0) return;
+      const c = secret.country;
+      const ids = W.countries.filter((x) => x.fame && x.region === c.region).map((x) => x.id);
+      p.tokens--; p.hints++;
+      S.q.hint = { region: c.region, ids: ids.length > 1 ? ids : [c.id] };
+      log(`🧭 ${p.name} used a compass: the answer is in ${c.region}.`);
       publish();
     }
 
@@ -187,6 +210,7 @@
       if (a.t === 'pick') pick(pid, +a.level);
       else if (a.t === 'answer') answer(pid, a.id || null);
       else if (a.t === 'guess') guess(pid, a.id);
+      else if (a.t === 'hint') useHint(pid);
       else if (a.t === 'next') next(pid);
     }
 
@@ -195,6 +219,7 @@
       handle, setConnected,
       get state() { return S; },
       snapshot() { return JSON.parse(JSON.stringify(S)); },
+      peek() { return secret && secret.country.id; }, // debug / tests only (host side)
       stop() { clearTimer(); },
     };
   }
@@ -233,6 +258,12 @@
       if (i === N) return; // finish = start
       const g = mk('g', { class: 'port' + (i === 0 ? ' home' : ''), 'data-i': i }, portLayer);
       mk('circle', { cx: pt.p[0], cy: pt.p[1], r: 3, class: 'port-dot', 'vector-effect': 'non-scaling-stroke' }, g);
+      if (TREASURE.has(i)) {
+        g.classList.add('treasure');
+        const t = mk('text', { x: pt.p[0], y: pt.p[1], class: 'port-label treasure-label' }, g);
+        t.textContent = '🧭';
+        mk('title', {}, g).textContent = `${pt.name}: land here exactly to find a compass token`;
+      }
       if (i === 0) {
         const t = mk('text', { x: pt.p[0], y: pt.p[1], class: 'port-label home-label' }, g);
         t.textContent = '⚓ Lisbon · start & finish';
@@ -294,7 +325,8 @@
   WorldMap.onScale((u) => {
     unit = u;
     portLayer.querySelectorAll('.port-dot').forEach((c) => c.setAttribute('r', 3.2 * u));
-    portLayer.querySelectorAll('.port-label').forEach((t) => {
+    portLayer.querySelectorAll('.treasure-label').forEach((t) => { t.setAttribute('font-size', 14 * u); t.setAttribute('dy', -6 * u); });
+    portLayer.querySelectorAll('.home-label').forEach((t) => {
       t.setAttribute('font-size', 12 * u); t.setAttribute('dx', -26 * u); t.setAttribute('dy', 4 * u); t.setAttribute('stroke-width', 3 * u);
     });
     targetLayer.querySelectorAll('circle').forEach((c) => c.setAttribute('r', 9 * u));
@@ -380,7 +412,7 @@
       return `<div class="vp${i === s.turn && s.phase !== 'over' ? ' active' : ''}${p.connected ? '' : ' off'}" style="--pc:${p.color}" title="${esc(p.name)}: port ${p.pos}/${N}, ${p.correct}/${p.asked} correct">
         <span class="vp-name">${esc(p.name)}${isMe ? ' (you)' : ''}</span>
         <span class="vp-bar"><i style="width:${pct}%"></i></span>
-        <span class="vp-num">${p.pos}/${N}${p.streak >= 3 ? ` · 🔥${p.streak}` : ''}</span></div>`;
+        <span class="vp-num">${p.pos}/${N} · 🧭${p.tokens}${p.streak >= 3 ? ` · 🔥${p.streak}` : ''}</span></div>`;
     }).join('');
   }
 
@@ -389,7 +421,8 @@
     const box = $('levels');
     box.innerHTML = [1, 2, 3, 4, 5, 6].map((l) => {
       const to = Math.min(N, p.pos + l);
-      return `<button type="button" data-l="${l}" style="--c:var(--l${l})"><b>${l}</b><span>${LEVELS[l].label}</span><em>${to >= N ? '🏁 Finish' : `→ ${esc(portName(to))}`}</em></button>`;
+      const gem = TREASURE.has(to) && p.tokens < TOKENS_MAX ? '<i class="lv-gem" title="Treasure port: find a compass token">🧭</i>' : '';
+      return `<button type="button" data-l="${l}" style="--c:var(--l${l})">${gem}<b>${l}</b><span>${LEVELS[l].label}</span><em>${to >= N ? '🏁 Finish' : `→ ${esc(portName(to))}`}</em></button>`;
     }).join('');
     box.querySelectorAll('button').forEach((b) => {
       const l = +b.dataset.l;
@@ -460,6 +493,8 @@
         WorldMap.focusPoints(ahead, 800, 90);
         if (mine && !view.hotseat) Sound.tone(880, 0.12, 'triangle', 0.12);
       }
+    } else if (s.phase === 'question' && prev && prev.gid === s.gid && prev.phase === 'question' && prev.q && prev.q.started === s.q.started) {
+      syncHint(s, true); // same question, e.g. a compass was used
     } else if (s.phase === 'question') {
       view.qReceived = Date.now();
       view.guessed = null;
@@ -501,6 +536,7 @@
         });
       } else { WorldMap.clear(); WorldMap.lock(); }
       runTimer(q);
+      syncHint(s, false);
       if (mine) Sound.whoosh();
     } else if (s.phase === 'result') {
       stopTimer();
@@ -515,6 +551,27 @@
       $('quiz-card').hidden = true;
       showFinish(s);
     }
+  }
+
+  /** The compass button (active player) and the region highlight once a compass was used. */
+  function syncHint(s, fresh) {
+    const p = activeP(s);
+    const q = s.q;
+    const btn = $('hint-btn');
+    btn.hidden = !canAct(s) || !!q.hint;
+    btn.disabled = p.tokens <= 0;
+    btn.querySelector('b').textContent = p.tokens;
+    btn.title = p.tokens > 0 ? 'Spend a compass token to see the region of the answer (H)' : 'No compass tokens: land exactly on a 🧭 port or answer 3 in a row';
+    if (!q.hint) return;
+    $('q-kind').textContent = `🧭 Hint: it's somewhere in ${q.hint.region}`;
+    WorldMap.hint(q.hint.ids);
+    if (fresh) Sound.tone(660, 0.15, 'triangle', 0.1);
+  }
+  function askHint() {
+    const s = view.state;
+    if (!s || s.phase !== 'question' || !canAct(s) || s.q.hint || activeP(s).tokens <= 0) return;
+    $('hint-btn').hidden = true;
+    view.send({ t: 'hint' });
   }
 
   async function showResult(s) {
@@ -538,6 +595,7 @@
     if (!view.hotseat && view.me && view.me !== r.pid && view.guessed) {
       sub += view.guessed === r.answer ? ' <b class="gold">You knew it too!</b>' : ' <span class="muted">Your guess was wrong.</span>';
     }
+    if (r.gained) sub += ` <b class="gold">🧭 +${r.gained} compass${r.gains.includes('treasure') ? ` found in ${esc(portName(r.to))}` : ` for ${p.streak} in a row`}!</b>`;
     $('result-sub').innerHTML = sub;
     $('panel-title').textContent = r.ok ? `${p.name} sets sail` : `${p.name} stays in ${portName(r.from)}`;
     setPanelSub('');
@@ -574,7 +632,7 @@
     $('podium').innerHTML = order.map((p, i) => {
       const acc = p.asked ? Math.round((p.correct / p.asked) * 100) : 0;
       return `<li style="--pc:${p.color}"><b>${['🥇', '🥈', '🥉'][i] || i + 1 + '.'}</b><span class="pawn-icon"></span><span>${esc(p.name)}</span>
-        <span>${p.dist >= N ? '🏁' : `${p.pos}/${N}`} · ${acc}% ✓${p.best >= 3 ? ` · 🔥${p.best}` : ''}${!view.hotseat && p.knew ? ` · 👀${p.knew}` : ''}</span></li>`;
+        <span>${p.dist >= N ? '🏁' : `${p.pos}/${N}`} · ${acc}% ✓${p.found ? ` · 🧭${p.found}` : ''}${p.best >= 3 ? ` · 🔥${p.best}` : ''}${!view.hotseat && p.knew ? ` · 👀${p.knew}` : ''}</span></li>`;
     }).join('');
     $('again-btn').hidden = !(view.hotseat || view.isHost);
     setTimeout(() => { $('finish').hidden = false; Sound.win(); Confetti.rain(200); }, 600);
@@ -913,12 +971,14 @@
     stopTimer();
     location.href = 'index.html';
   }
+  $('hint-btn').addEventListener('click', askHint);
   $('sound-btn').addEventListener('click', () => { Sound.enabled = !Sound.enabled; $('sound-btn').textContent = Sound.enabled ? '🔊' : '🔇'; });
   document.addEventListener('keydown', (e) => {
     const s = view.state;
     if (!s || !$('game').classList.contains('active') || e.target.tagName === 'INPUT') return;
     if (s.phase === 'pick' && canAct(s) && /^[1-6]$/.test(e.key)) { e.preventDefault(); view.send({ t: 'pick', level: +e.key }); }
     else if (s.phase === 'result' && e.key === 'Enter' && !$('next-btn').hidden) { e.preventDefault(); view.send({ t: 'next' }); }
+    else if (s.phase === 'question' && (e.key === 'h' || e.key === 'H')) { e.preventDefault(); askHint(); }
     else if (e.key === 'Escape') $('menu').hidden = !$('menu').hidden;
   });
 

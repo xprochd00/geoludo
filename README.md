@@ -32,6 +32,7 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 - **Setup:** choose the question categories (one, or several to mix them in equal shares), then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
 - **Your turn:** pick a challenge from **1 (Very easy) to 6 (Expert)**. Each button shows the port you would reach. Answer correctly and your ship sails that many ports. A wrong answer costs nothing; you just stay in port.
 - **The route:** 30 legs around the world, westward from Lisbon via Dakar, Rio, Cape Horn, Tahiti, Sydney, Singapore, the Maldives, Mumbai, Djibouti and the Suez Canal, back to Lisbon (`data/route.json`).
+- **Compass tokens 🧭:** everyone starts with one (max 3). Land **exactly** on one of the six 🧭 treasure ports (the level buttons mark the challenge that lands there), or answer **3 in a row**, to find another. During your question, spend one (button or **H**) to highlight the region the answer is in.
 - **No attacks:** ships can share ports. Nobody is captured or sent back.
 - **Fair finish:** when the first ship reaches Lisbon, the round is completed so everyone has had the same number of turns. The ship that sailed furthest wins (overshooting the finish counts), then the best accuracy.
 - **Timer:** 30 s per question, 45 s for longer text questions.
@@ -156,7 +157,8 @@ css/voyage.css      Voyage styles
 train.html, js/train.js, css/train.css   🎯 Solo training
 ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/)
 css/style.css       shared base styles (cards, buttons, map, question card)
-js/map.js           world map: rendering, pan/zoom/pinch, picking, answer reveal, overlay layer for the route & ships
+js/map.js           world map: rendering, pan/zoom/pinch, picking (larger tap areas for tiny nations), answer reveal, overlay layer
+js/dialog.js        in-game confirm/alert dialogs (copy in ludo/js/)
 js/quiz.js          question pools and selection (6 levels, categories, no repeats)
 js/fx.js            sound (WebAudio), confetti
 data/world.js       generated: projected country outlines, capitals, cities, fame levels, the voyage route

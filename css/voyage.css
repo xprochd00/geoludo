@@ -185,3 +185,16 @@ body.answering #map .overlay { opacity: .22; }
 
 /* while answering, the question card says it all: free the bottom of the map */
 body.answering .v-panel { display: none; }
+
+/* compass tokens */
+#map .treasure-label { stroke-width: 0; text-anchor: middle; }
+.v-levels button { position: relative; }
+.lv-gem { position: absolute; top: -8px; right: -4px; font-style: normal; font-size: 15px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); animation: bob-ship 1.6s ease-in-out infinite; }
+.hint-btn {
+  align-self: flex-start; margin-top: 6px; padding: 6px 12px; border-radius: 999px; font: 700 13px var(--font-body); color: var(--text);
+  background: rgba(255, 209, 102, .14); border: 1px solid var(--accent); cursor: pointer; transition: background .15s;
+}
+.hint-btn:hover:not(:disabled) { background: rgba(255, 209, 102, .28); }
+.hint-btn:disabled { opacity: .45; cursor: not-allowed; border-color: var(--panel-border); }
+.hint-btn small { color: var(--muted); font-weight: 600; }
+.hint-btn[hidden] { display: none; }
