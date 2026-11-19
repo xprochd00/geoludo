@@ -56,7 +56,7 @@
   function createEngine(cfg, emit) {
     const S = {
       v: 1, gid: Math.random().toString(36).slice(2, 8), online: !!cfg.online, room: cfg.room || null,
-      phase: 'pick', cats: cfg.cats, n: N,
+      phase: 'pick', cats: cfg.cats, geoType: cfg.geoType || 'all', n: N,
       players: cfg.players.map((p, i) => ({
         id: p.id, name: p.name, color: COLORS[i % COLORS.length], ship: SHIP_NAMES[i % SHIP_NAMES.length],
         pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0, bot: BOTS[p.bot] ? p.bot : null, auto: false,
@@ -92,7 +92,7 @@
       const p = active();
       if (S.phase !== 'pick' || pid !== p.id || !(level >= 1 && level <= 6)) return;
       clearTimer();
-      secret = Quiz.next(level, mode(), S.cats);
+      secret = Quiz.next(level, mode(), S.cats, S.geoType || 'all');
       const long = ['history', 'sports', 'culture', 'geoq'].includes(secret.type);
       const time = long ? Q_TIME_LONG : Q_TIME;
       S.q = {
@@ -708,7 +708,10 @@
    * ==================================================================== */
   const SETUP_KEY = 'voyage.setup.v1';
   const SAVE_KEY = 'voyage.save.v1';
-  const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '' }, store.get(SETUP_KEY) || {});
+  const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '', geoType: 'all' }, store.get(SETUP_KEY) || {});
+  if (!Quiz.GEO_TYPES[setup.geoType]) setup.geoType = 'all';
+  /** "Geography (Flags)" when the geography questions are limited to one type. */
+  const catLabel = (c, geoType) => (c === 'geo' && geoType && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : CAT_LABEL[c]);
   if (!Array.isArray(setup.types) || setup.types.length < MAX_PLAYERS) setup.types = ['human', 'explorer', 'human', 'human', 'human', 'human'];
   const typeText = (t) => `${t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`} ▾`;
   const BOT_NOTES = { rookie: 'Bot · makes mistakes', explorer: 'Bot · a fair match', genius: 'Bot · hard to beat' };
@@ -718,11 +721,14 @@
   const params = new URLSearchParams(location.search);
   const joinCode = (params.get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
+  const catPick = MultiPick({ order: Quiz.CATEGORIES, get: () => setup.cats, set: (v) => { setup.cats = v; }, onChange: () => syncSetup() });
   function syncSetup() {
     document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.classList.toggle('active', setup.cats.includes(b.dataset.cat)));
     $('cat-hint').textContent = setup.cats.length > 1
-      ? `Mixed: ${setup.cats.map((c) => CAT_LABEL[c]).join(' + ')}, in equal shares.`
-      : `${CAT_LABEL[setup.cats[0]]} questions only. Pick more to mix them.`;
+      ? `Mixed: ${setup.cats.map((c) => catLabel(c, setup.geoType)).join(' + ')}, in equal shares.`
+      : `${catLabel(setup.cats[0], setup.geoType)} questions only. Pick more to mix them.`;
+    $('cat-all').setAttribute('aria-pressed', catPick.isAll());
+    $('geo-type').textContent = `${Quiz.GEO_TYPES[setup.geoType]} ▾`;
     document.querySelectorAll('.format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
     // an invitation link always shows the join form
     $('hotseat-section').hidden = !!joinCode || setup.format !== 'hotseat';
@@ -761,12 +767,21 @@
     $('my-name').value = setup.myName || '';
     saveSetup();
   }
-  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => {
-    const c = b.dataset.cat;
-    if (setup.cats.includes(c)) { if (setup.cats.length > 1) setup.cats = setup.cats.filter((x) => x !== c); }
-    else setup.cats = Quiz.CATEGORIES.filter((x) => x === c || setup.cats.includes(x));
+  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => catPick.toggle(b.dataset.cat)));
+  $('cat-all').addEventListener('click', () => catPick.all());
+  // the type of geography questions, chosen on the Geography tile itself
+  async function chooseGeoType(e) {
+    e.preventDefault();
+    e.stopPropagation(); // not a click on the Geography tile
+    const items = Object.entries(Quiz.GEO_TYPES).map(([value, label]) => ({ value, label }));
+    const v = await Dialog.menu($('geo-type'), items, setup.geoType);
+    if (v == null) return;
+    setup.geoType = v;
+    catPick.on('geo');
     syncSetup();
-  }));
+  }
+  $('geo-type').addEventListener('click', chooseGeoType);
+  $('geo-type').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') chooseGeoType(e); });
   document.querySelectorAll('.format-btn').forEach((b) => b.addEventListener('click', () => { setup.format = b.dataset.format; syncSetup(); }));
   $('minus-btn').addEventListener('click', () => { setup.count = Math.max(1, setup.count - 1); syncSetup(); });
   $('plus-btn').addEventListener('click', () => { setup.count = Math.min(MAX_PLAYERS, setup.count + 1); syncSetup(); });
@@ -783,7 +798,7 @@
     });
     view.hotseat = true; view.me = null; view.isHost = true; view.state = null; view.shownRes = null;
     Quiz.newGame();
-    engine = createEngine({ cats: resume ? resume.cats : setup.cats.slice(), players, resume }, (s) => {
+    engine = createEngine({ cats: resume ? resume.cats : setup.cats.slice(), geoType: resume ? resume.geoType : setup.geoType, players, resume }, (s) => {
       if (s.phase === 'pick') store.set(SAVE_KEY, s);
       render(s);
     });
@@ -812,7 +827,7 @@
    * ONLINE
    * ==================================================================== */
   let net = null; // { host api } or { guest api }
-  const lobby = { players: [], cats: [] }; // host-side lobby
+  const lobby = { players: [], cats: [], geoType: 'all' }; // host-side lobby
   const connOf = new Map(); // pid -> conn (host)
   let pingTimer = null;
 
@@ -826,7 +841,7 @@
     return u.toString();
   }
 
-  function renderLobby(players, cats, code, isHost) {
+  function renderLobby(players, cats, code, isHost, geoType) {
     show('lobby');
     $('room-code').textContent = code;
     $('share-link').value = shareUrl(code);
@@ -848,7 +863,7 @@
         hostLobbyUpdate();
       }));
     }
-    $('lobby-cats').textContent = `Questions: ${cats.map((c) => CAT_LABEL[c]).join(' + ')}`;
+    $('lobby-cats').textContent = `Questions: ${cats.map((c) => catLabel(c, geoType)).join(' + ')}`;
     $('lobby-start-btn').hidden = !isHost;
     $('lobby-start-btn').disabled = players.length < 2;
     $('lobby-start-btn').textContent = players.length < 2 ? 'Waiting for players…' : `Start the voyage with ${players.length} ⛵`;
@@ -885,13 +900,14 @@
     view.hotseat = false; view.isHost = true; view.me = uid(); view.state = null; view.shownRes = null;
     lobby.players = [{ id: view.me, name, connected: true }];
     lobby.cats = setup.cats.slice();
+    lobby.geoType = setup.geoType;
     net = Net.host({
       onReady(code, relayKey) {
         lobby.code = code;
         lobby.relay = relayKey;
         $('create-btn').disabled = false;
         $('net-status').textContent = '';
-        renderLobby(lobby.players, lobby.cats, code, true);
+        renderLobby(lobby.players, lobby.cats, code, true, lobby.geoType);
         clearInterval(pingTimer);
         pingTimer = setInterval(() => {
           net.broadcast({ t: 'ping' });
@@ -919,8 +935,8 @@
   });
 
   function hostLobbyUpdate() {
-    renderLobby(lobby.players, lobby.cats, lobby.code, true);
-    net.broadcast({ t: 'lobby', players: lobby.players, cats: lobby.cats, code: lobby.code });
+    renderLobby(lobby.players, lobby.cats, lobby.code, true, lobby.geoType);
+    net.broadcast({ t: 'lobby', players: lobby.players, cats: lobby.cats, geoType: lobby.geoType, code: lobby.code });
   }
 
   function hostMessage(conn, msg) {
@@ -968,7 +984,7 @@
   $('lobby-start-btn').addEventListener('click', () => {
     if (!view.isHost || lobby.players.length < 2) return;
     Quiz.newGame();
-    engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, players: lobby.players }, (s) => {
+    engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, players: lobby.players }, (s) => {
       net.broadcast({ t: 'state', s, remaining: remainingFor(s) });
       s.q && (s.q.remaining = remainingFor(s));
       render(s);
@@ -1020,7 +1036,7 @@
           if (msg.pid) store.set(seatKey(joinCode), msg.pid);
           banner(null);
         } else if (msg.t === 'lobby') {
-          renderLobby(msg.players, msg.cats, msg.code, false);
+          renderLobby(msg.players, msg.cats, msg.code, false, msg.geoType);
         } else if (msg.t === 'full') {
           $('join-btn').disabled = false;
           $('net-status').textContent = 'This voyage is full (6 ships).';
@@ -1065,7 +1081,7 @@
     if (view.isHost && engine) {
       engine.stop();
       const players = engine.state.players.filter((p) => p.connected).map((p) => ({ id: p.id, name: p.name }));
-      engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, players }, (s) => {
+      engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, players }, (s) => {
         net.broadcast({ t: 'state', s, remaining: remainingFor(s) });
         render(s);
       });

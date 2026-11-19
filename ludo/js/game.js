@@ -89,7 +89,7 @@
   $('opt-fast').checked = !!saved.fast;
 
   function saveSetup() {
-    store.set(SETUP_KEY, { count, mode, preset, names, types, pieceCounts, mixCats, custom, timer: $('opt-timer').checked, fast: $('opt-fast').checked });
+    store.set(SETUP_KEY, { count, mode, geoType, preset, names, types, pieceCounts, mixCats, custom, timer: $('opt-timer').checked, fast: $('opt-fast').checked });
   }
 
   function renderInputs() {
@@ -151,24 +151,37 @@
   const CAT_SHORT = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
   // Categories: pick one, or several to mix them in equal shares (same picker as Voyage).
   let cats = mode === 'mixed' ? mixCats.slice() : [mode];
+  let geoType = Quiz.GEO_TYPES[saved.geoType] ? saved.geoType : 'all'; // one type of geography question, or all
+  const catPick = MultiPick({ order: Quiz.CATEGORIES, get: () => cats, set: (v) => { cats = v; }, onChange: () => { applyCats(); syncMode(); saveSetup(); } });
   function applyCats() {
     mode = cats.length > 1 ? 'mixed' : cats[0];
     mixCats = cats.length > 1 ? cats.slice() : Quiz.CATEGORIES.slice();
   }
   function syncMode() {
     document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.classList.toggle('active', cats.includes(b.dataset.cat)));
+    const nm = (c, names) => (c === 'geo' && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : names[c]);
     $('cat-hint').textContent = cats.length > 1
-      ? `Mixed: ${cats.map((c) => CAT_SHORT[c]).join(' + ')}, in equal shares.`
-      : `${CAT_NAMES[cats[0]]} questions only. Pick more to mix them.`;
+      ? `Mixed: ${cats.map((c) => nm(c, CAT_SHORT)).join(' + ')}, in equal shares.`
+      : `${nm(cats[0], CAT_NAMES)} questions only. Pick more to mix them.`;
+    $('cat-all').setAttribute('aria-pressed', catPick.isAll());
+    $('geo-type').textContent = `${Quiz.GEO_TYPES[geoType]} ▾`;
   }
-  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => {
-    const c = b.dataset.cat;
-    if (cats.includes(c)) { if (cats.length > 1) cats = cats.filter((x) => x !== c); }
-    else cats = Quiz.CATEGORIES.filter((x) => x === c || cats.includes(x));
-    applyCats();
+  document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => catPick.toggle(b.dataset.cat)));
+  $('cat-all').addEventListener('click', () => catPick.all());
+  // the type of geography questions, chosen on the Geography tile itself
+  async function chooseGeoType(e) {
+    e.preventDefault();
+    e.stopPropagation(); // not a click on the Geography tile
+    const items = Object.entries(Quiz.GEO_TYPES).map(([value, label]) => ({ value, label }));
+    const v = await Dialog.menu($('geo-type'), items, geoType);
+    if (v == null) return;
+    geoType = v;
+    catPick.on('geo'); // also saves and redraws
     syncMode();
     saveSetup();
-  }));
+  }
+  $('geo-type').addEventListener('click', chooseGeoType);
+  $('geo-type').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') chooseGeoType(e); });
 
   /* Game-length presets + custom rules. */
   function syncPreset() {
@@ -203,7 +216,7 @@
     if (sv) {
       const s = sv.state;
       const who = s.players[s.turn];
-      $('resume-info').textContent = `${s.players.map((p) => p.name).join(', ')} · ${modeLabelFor(s.mode, s.cats)} · ${who.name} to play`;
+      $('resume-info').textContent = `${s.players.map((p) => p.name).join(', ')} · ${modeLabelFor(s.mode, s.cats, s.geoType)} · ${who.name} to play`;
     }
   }
   $('discard-btn').addEventListener('click', () => { store.del(SAVE_KEY); syncNotes(); });
@@ -220,10 +233,12 @@
     startGame();
   });
 
-  function modeLabelFor(m, cats) {
-    return m === 'mixed' && cats.length < Quiz.CATEGORIES.length
-      ? `Mixed: ${cats.map((c) => CAT_SHORT[c]).join(' + ')}`
-      : Quiz.MODES[m].label;
+  function modeLabelFor(m, cats, gt = 'all') {
+    const one = gt && gt !== 'all' && Quiz.GEO_TYPES[gt];
+    const nm = (c) => (c === 'geo' && one ? `Geography (${one})` : CAT_SHORT[c]);
+    if (m === 'mixed' && cats.length < Quiz.CATEGORIES.length) return `Mixed: ${cats.map(nm).join(' + ')}`;
+    if (m === 'geo' && one) return nm('geo');
+    return Quiz.MODES[m].label + (one && cats.includes('geo') ? ` · geography: ${one.toLowerCase()}` : '');
   }
 
   /* ================= STATE ================= */
@@ -234,7 +249,7 @@
     const rules = preset === 'custom' ? { ...custom } : { ...PRESETS[preset] };
     return {
       opts: { ...rules, timer: $('opt-timer').checked },
-      preset, mode, cats: cats.slice(),
+      preset, mode, cats: cats.slice(), geoType,
       pieces: [0, 1, 2, 3].map((seat) => (preset === 'custom' ? pieceCounts[seat] : rules.pieces)),
     };
   }
@@ -254,13 +269,14 @@
       turn: 0,
       mode: cfg.mode,
       cats: cfg.cats.slice(),
+      geoType: cfg.geoType || 'all',
       opts,
       preset: cfg.preset,
       stamps: [],
     };
     launch();
     const rulesLine = opts.choose ? 'Pick your challenge after each roll' : 'The dice sets the question level';
-    log(`🌍 A ${modeLabelFor(state.mode, state.cats).toLowerCase()} race begins! ${rulesLine}.${opts.board ? '' : ' Roll a <b>6</b> to bring a piece onto the board.'}`);
+    log(`🌍 A ${modeLabelFor(state.mode, state.cats, state.geoType).toLowerCase()} race begins! ${rulesLine}.${opts.board ? '' : ' Roll a <b>6</b> to bring a piece onto the board.'}`);
     beginTurn();
   }
 
@@ -292,16 +308,16 @@
     prism.classList.add('flat');
     $('result').hidden = true;
     $('level-picker').hidden = true;
-    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats);
+    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats, state.geoType);
     $('zone-legend').hidden = !state.opts.rescue;
     Board.render(state.players);
   }
 
   function saveGame() {
     if (!state || state.phase === 'over' || NET.on) return;
-    const { players, turn, mode: m, cats, opts, preset: pr, stamps } = state;
+    const { players, turn, mode: m, cats, geoType: gt, opts, preset: pr, stamps } = state;
     const items = [...$('log').children].slice(0, 40).map((li) => li.outerHTML).join('');
-    store.set(SAVE_KEY, { v: 1, state: { players, turn, mode: m, cats, opts, preset: pr, stamps }, log: items });
+    store.set(SAVE_KEY, { v: 1, state: { players, turn, mode: m, cats, geoType: gt, opts, preset: pr, stamps }, log: items });
   }
 
   const current = () => state.players[state.turn];
@@ -753,7 +769,7 @@
   let timerHandle = null;
   async function askQuestion(ctx) {
     const p = ctx.player;
-    const q = Quiz.next(ctx.level, state.mode, state.cats);
+    const q = Quiz.next(ctx.level, state.mode, state.cats, state.geoType || 'all');
     state.q = q;
     state.phase = 'question';
     state.stealer = null;

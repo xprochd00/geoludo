@@ -98,3 +98,4 @@ body.train.playing { overflow: hidden; }
   @keyframes pop-up-t { from { transform: translate(-50%, 40px); opacity: 0; } }
 }
 .area-note { margin: 8px 0 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+.chip-btn.all-chip { font-weight: 800; }

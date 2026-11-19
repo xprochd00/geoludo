@@ -126,6 +126,40 @@
     });
   }
 
+  /* A multi-choice row with an "All" switch (question categories, levels, parts of the world …).
+   *   const m = MultiPick({ order, get, set, onChange })
+   *   m.toggle(v)  turn one option on/off (at least one stays on)
+   *   m.all()      everything on; when everything already is, back to the option chosen last
+   *   m.isAll()    */
+  function MultiPick({ order, get, set, onChange }) {
+    let history = order.filter((x) => get().includes(x)); // options in the order they were turned on
+    const latest = () => history.filter((x) => get().includes(x)).pop() || get()[0] || order[0];
+    const commit = (sel) => { set(order.filter((x) => sel.includes(x))); if (onChange) onChange(); };
+    return {
+      toggle(v) {
+        const sel = get();
+        if (sel.includes(v)) {
+          if (sel.length === 1) return;
+          history = history.filter((x) => x !== v);
+          commit(sel.filter((x) => x !== v));
+        } else {
+          history = history.filter((x) => x !== v).concat(v);
+          commit(sel.concat(v));
+        }
+      },
+      on(v) { // make sure v is on, as the latest choice
+        history = history.filter((x) => x !== v).concat(v);
+        if (!get().includes(v)) commit(get().concat(v));
+      },
+      all() {
+        if (order.every((x) => get().includes(x))) commit([latest()]);
+        else commit(order.slice());
+      },
+      isAll: () => order.every((x) => get().includes(x)),
+    };
+  }
+  window.MultiPick = MultiPick;
+
   window.Dialog = {
     confirm: (o) => show({ cancel: 'Cancel', ...o }),
     alert: (o) => show({ ...o, cancel: null }),

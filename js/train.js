@@ -43,6 +43,7 @@
   settings.areas = (settings.areas || []).filter((a) => AREAS.includes(a));
   if (!settings.areas.length) settings.areas = AREAS.slice();
   Sound.enabled = settings.sound;
+  let picks = null; // the option rows (set up below)
 
   /* ---------- Question catalogue ---------- */
   // Every question once (a question text appearing in two files is one entry).
@@ -73,7 +74,12 @@
     document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.cats.includes(b.dataset.cat)));
     document.querySelectorAll('#type-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.types.includes(b.dataset.type)));
     document.querySelectorAll('#level-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.levels.includes(+b.dataset.l)));
-    document.querySelectorAll('#area-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.areas.includes(b.dataset.area)));
+    document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.classList.toggle('active', settings.areas.includes(b.dataset.area)));
+    document.querySelectorAll('.all-chip').forEach((b) => {
+      const on = !!picks && picks[b.dataset.all].isAll();
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on);
+    });
     $('type-row').hidden = !settings.cats.includes('geo');
     $('opt-timer').checked = settings.timer;
     $('sound-btn').textContent = settings.sound ? '🔊' : '🔇';
@@ -88,14 +94,18 @@
     $('mistakes-btn').disabled = !mis;
     save(SETTINGS, settings);
   }
-  function toggleIn(arr, v) {
-    const i = arr.indexOf(v);
-    if (i >= 0) { if (arr.length > 1) arr.splice(i, 1); } else arr.push(v);
-  }
-  document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.cats, b.dataset.cat); syncChips(); }));
-  document.querySelectorAll('#type-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.types, b.dataset.type); syncChips(); }));
-  document.querySelectorAll('#level-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.levels, +b.dataset.l); syncChips(); }));
-  document.querySelectorAll('#area-chips .chip-btn').forEach((b) => b.addEventListener('click', () => { toggleIn(settings.areas, b.dataset.area); syncChips(); }));
+  // Each row: tap options on/off, or "All" (tapped again: back to the option chosen last).
+  picks = {
+    cats: MultiPick({ order: CATS, get: () => settings.cats, set: (v) => { settings.cats = v; }, onChange: syncChips }),
+    types: MultiPick({ order: GEO_TYPES, get: () => settings.types, set: (v) => { settings.types = v; }, onChange: syncChips }),
+    levels: MultiPick({ order: [1, 2, 3, 4, 5, 6], get: () => settings.levels, set: (v) => { settings.levels = v; }, onChange: syncChips }),
+    areas: MultiPick({ order: AREAS, get: () => settings.areas, set: (v) => { settings.areas = v; }, onChange: syncChips }),
+  };
+  document.querySelectorAll('#cat-chips .chip-btn[data-cat]').forEach((b) => b.addEventListener('click', () => picks.cats.toggle(b.dataset.cat)));
+  document.querySelectorAll('#type-chips .chip-btn[data-type]').forEach((b) => b.addEventListener('click', () => picks.types.toggle(b.dataset.type)));
+  document.querySelectorAll('#level-chips .chip-btn[data-l]').forEach((b) => b.addEventListener('click', () => picks.levels.toggle(+b.dataset.l)));
+  document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.addEventListener('click', () => picks.areas.toggle(b.dataset.area)));
+  document.querySelectorAll('.all-chip').forEach((b) => b.addEventListener('click', () => picks[b.dataset.all].all()));
   $('opt-timer').addEventListener('change', () => { settings.timer = $('opt-timer').checked; syncChips(); });
   $('sound-btn').addEventListener('click', () => { settings.sound = !settings.sound; Sound.enabled = settings.sound; syncChips(); });
 

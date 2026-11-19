@@ -89,7 +89,7 @@
   /* ---------- lobby ---------- */
   const rulesLine = (cfg) => {
     const len = cfg.preset === 'quick' ? 'Quick' : cfg.preset === 'classic' ? 'Classic' : 'Custom rules';
-    return `${G.modeLabelFor(cfg.mode, cfg.cats)} · ${len}${cfg.opts.timer ? '' : ' · no timer'}`;
+    return `${G.modeLabelFor(cfg.mode, cfg.cats, cfg.geoType)} · ${len}${cfg.opts.timer ? '' : ' · no timer'}`;
   };
   function renderLobby() {
     show('lobby');
