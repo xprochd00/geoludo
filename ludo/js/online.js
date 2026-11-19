@@ -98,13 +98,19 @@
     $('share-link').value = shareUrl(room.code);
     $('share-btn').hidden = !navigator.share;
     const seats = G.SEATS[Math.max(2, room.players.length)] || G.SEATS[4];
+    const custom = !!room.cfg && room.cfg.preset === 'custom';
     $('crew-count').textContent = `${room.players.length} / ${MAX_PLAYERS}`;
     $('crew').innerHTML = room.players.map((p, i) => {
       const col = COLORS[seats[i] != null ? seats[i] : i].hex;
       const bot = p.type !== 'human';
       const tags = `${i === 0 ? ' <small>host</small>' : ''}${p.id === room.me ? ' <small>you</small>' : ''}`;
       const ctl = bot ? (host ? `<button type="button" class="type-select bot" data-skill="${p.id}" title="Choose the bot's level" aria-haspopup="listbox">🤖 ${G.BOTS[p.type].label} ▾</button><button type="button" class="crew-x" data-rm="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>` : ` <small>🤖 ${G.BOTS[p.type].label}</small>`) : '';
-      return `<li style="--pc:${col}"><span class="pawn-icon"></span><b>${esc(p.name)}</b>${tags}${ctl}</li>`;
+      // Custom rules: pieces per player are set here (players are only known in the room)
+      const n = piecesOf(p);
+      const pieces = !custom ? '' : host
+        ? `<div class="piece-picker" role="radiogroup" aria-label="${esc(p.name)}'s number of pieces" title="Number of pieces (a handicap when unequal)">${[1, 2, 3, 4].map((k) => `<button type="button" role="radio" data-pc="${p.id}" data-n="${k}" class="${k === n ? 'active' : ''}" aria-checked="${k === n}">${k}</button>`).join('')}</div>`
+        : `<small class="crew-pieces">${n} piece${n > 1 ? 's' : ''}</small>`;
+      return `<li style="--pc:${col}"><span class="pawn-icon"></span><b>${esc(p.name)}</b>${tags}<div class="crew-ctl">${pieces}${ctl}</div></li>`;
     }).join('');
     $('add-bot-btn').hidden = !host || room.players.length >= MAX_PLAYERS;
     $('lobby-rules').textContent = room.cfg ? rulesLine(room.cfg) : '';
@@ -120,12 +126,20 @@
         p.type = v;
         lobbyUpdate();
       }));
+      $('crew').querySelectorAll('[data-pc]').forEach((b) => b.addEventListener('click', () => {
+        const p = room.players.find((x) => x.id === b.dataset.pc);
+        if (!p) return;
+        p.pieces = +b.dataset.n;
+        lobbyUpdate();
+      }));
       $('crew').querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => {
         room.players = room.players.filter((x) => x.id !== b.dataset.rm);
         lobbyUpdate();
       }));
     }
   }
+  /** Pieces for a player in a Custom room (default: 2, like the hot-seat default). */
+  const piecesOf = (p) => (p.pieces >= 1 && p.pieces <= 4 ? p.pieces : 2);
   function lobbyUpdate() {
     renderLobby();
     net.broadcast({ t: 'lobby', players: room.players, cfg: room.cfg, code: room.code });
@@ -232,6 +246,10 @@
     const humansAndBots = room.players.slice(0, MAX_PLAYERS);
     const seats = G.SEATS[humansAndBots.length];
     room.cfg = G.currentConfig();
+    if (room.cfg.preset === 'custom') { // per player, as set in the lobby
+      room.cfg.pieces = [2, 2, 2, 2];
+      humansAndBots.forEach((p, i) => { room.cfg.pieces[seats[i]] = piecesOf(p); });
+    }
     game.seed = (Math.random() * 2 ** 31) | 0;
     game.players = humansAndBots.map((p, i) => ({ seat: seats[i], name: p.name, type: p.type, pid: p.type === 'human' ? p.id : null }));
     game.log = [];

@@ -76,7 +76,7 @@ The earlier Ludo-board version is kept in `ludo/` with frozen copies of its code
 ### Online rooms
 
 1. Choose **Online**, pick the questions, game length and options, enter your name and press **Create a room**.
-2. Send the invitation link. Friends open it, enter their name and join (up to 4 players). The host can add, re-level and remove 🤖 computer players.
+2. Send the invitation link. Friends open it, enter their name and join (up to 4 players). The host can add, re-level and remove 🤖 computer players. With **Custom** rules, the host also sets each player's number of pieces (1–4) in the lobby.
 3. The host presses **Start**. Each player rolls, picks and answers on their own device; everyone sees the same board and map.
 
 How it stays in step: every device runs the same game from the same random seed, so dice, questions and bots come out identical everywhere. Only decisions travel (roll, piece, level, answer, hint, continue): the host numbers them and sends them to all devices through the same public relay as Voyage (`ludo/js/net.js`, its own channel), and each device applies a decision when its game reaches that point (`ludo/js/online.js`, `point()` in `ludo/js/game.js`).
