@@ -106,10 +106,24 @@
   }
 
   /** cats: the categories combined in Mixed mode (default: all three). */
-  function next(level, mode, cats = CATEGORIES) {
+  function next(level, mode, cats = CATEGORIES, geoType = 'all') {
     const cat = mode === 'mixed' ? pickCategory(level, cats) : (POOLS[mode] ? mode : 'geo');
     catCount[cat]++;
-    return describe(draw(POOLS[cat][level]), level, cat);
+    return describe(draw(geoPool(cat, level, geoType)), level, cat);
+  }
+
+  /* Geography question types a game can be limited to (one, or all). */
+  const GEO_TYPES = { all: 'All types', name: 'Countries', flag: 'Flags', capital: 'Capitals', city: 'Cities', geoq: 'Landmarks & facts' };
+  /** The pool to draw from; for one geography type, its questions at this level (or the nearest level that has some). */
+  function geoPool(cat, level, geoType) {
+    if (cat !== 'geo' || !geoType || geoType === 'all' || !GEO_TYPES[geoType]) return POOLS[cat][level];
+    for (let d = 0; d < 6; d++) {
+      for (const l of [level - d, level + d]) {
+        const pool = l >= 1 && l <= 6 ? POOLS.geo[l].filter((q) => q.type === geoType) : [];
+        if (pool.length) return pool;
+      }
+    }
+    return POOLS.geo[level];
   }
 
   /** Turn a pool entry into a question object for the UI (also used by the training page). */
@@ -159,5 +173,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { GEO_TYPES, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();

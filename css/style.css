@@ -694,3 +694,18 @@ kbd {
 .g-menu-item.current { background: rgba(255,209,102,.12); }
 .g-menu-item.current i { visibility: visible; }
 .g-menu-item:hover, .g-menu-item:focus-visible { background: rgba(255,255,255,.1); outline: none; }
+
+/* ================= "All" switch + geography type on the category picker ================= */
+.h2-row { display: flex; align-items: center; gap: 10px; }
+.all-btn {
+  margin-left: auto; padding: 4px 12px; border-radius: 999px; cursor: pointer; text-transform: none; letter-spacing: 0;
+  font: 700 12px var(--font-body); color: var(--muted); background: rgba(255,255,255,.06); border: 1px solid var(--panel-border);
+}
+.all-btn:hover { color: var(--text); background: rgba(255,255,255,.12); }
+.all-btn.active, .all-btn[aria-pressed="true"] { color: #10142a; background: var(--accent); border-color: var(--accent); }
+.cat-btn .geo-type {
+  margin-top: 2px; padding: 3px 8px; border-radius: 999px; font: 600 11px var(--font-body); color: var(--text); white-space: nowrap;
+  background: rgba(255,255,255,.1); border: 1px solid var(--panel-border); cursor: pointer;
+}
+.cat-btn .geo-type:hover, .cat-btn .geo-type:focus-visible { background: rgba(255,255,255,.2); outline: none; }
+.cat-btn.active .geo-type { border-color: var(--accent); }

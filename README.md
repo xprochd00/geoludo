@@ -29,7 +29,7 @@ In the repository: **Settings → Pages → Deploy from a branch → `main` / ro
 
 ## ⛵ Voyage rules
 
-- **Setup:** choose the question categories (one, or several to mix them in equal shares), then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
+- **Setup:** choose the question categories (one, several to mix them in equal shares, or **All**; tapping *All* again goes back to the category you chose last). The **type of geography questions** (all, countries, flags, capitals, cities, landmarks & facts) is chosen on the Geography tile; the same choices exist in GeoLudo, then **Hot seat** (take turns on one device, 1–6 players) or **Online** (2–6 players, each on their own device).
 - **Your turn:** pick a challenge from **1 (Very easy) to 6 (Expert)**. Each button shows the port you would reach. Answer correctly and your ship sails that many ports. A wrong answer costs nothing; you just stay in port.
 - **The route:** 30 legs around the world, westward from Lisbon via Dakar, Rio, Cape Horn, Tahiti, Sydney, Singapore, the Maldives, Mumbai, Djibouti and the Suez Canal, back to Lisbon (`data/route.json`).
 - **Compass tokens 🧭:** everyone starts with one (max 3). Land **exactly** on one of the six 🧭 treasure ports (the level buttons mark the challenge that lands there), or answer **3 in a row**, to find another. During your question, spend one (button or **H**) to highlight the region the answer is in.
@@ -60,7 +60,7 @@ Under the hood, the host's browser runs the game. All devices exchange messages 
 
 A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
-- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks).
+- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). Each row has an **All** chip; tapping it again keeps only the option you chose last.
 - **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
 - New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
