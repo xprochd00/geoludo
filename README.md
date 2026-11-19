@@ -62,7 +62,7 @@ A phone-friendly practice page with just the questions and the map, no board. Op
 
 - Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). Each row has an **All** chip; tapping it again keeps only the option you chose last.
 - **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
-- New questions come first. **Missed questions come back** a few questions later (never straight away) until you get them right twice in a row; then they count as *mastered*. Every 4th question revisits a mastered one (the one practised longest ago), and questions from the last few turns are avoided, so a fully mastered set keeps rotating.
+- New questions come first. **Missed questions come back** a few questions later (never straight away) until you get them right twice in a row; then they count as *mastered*. Every 6th question revisits a mastered one (the one practised longest ago), and questions from the last few turns are avoided, so a fully mastered set keeps rotating.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
 - Progress per category and level is kept in the browser. Training never changes which questions the games ask.
 

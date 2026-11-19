@@ -3,7 +3,7 @@
  *
  * Selection order for the next question:
  *   1. a missed question that is due again (missed questions come back after a few others, never at once),
- *   2. every 4th question: a mastered question, the one practised longest ago (review),
+ *   2. every 6th question: a mastered question, the one practised longest ago (review),
  *   3. a question never practised,
  *   4. a practised but not yet mastered question,
  *   5. the mastered question practised longest ago.
@@ -179,7 +179,7 @@
   $('start-btn').addEventListener('click', () => startSession(false));
   $('mistakes-btn').addEventListener('click', () => startSession(true));
 
-  const REVIEW_EVERY = 4; // every 4th question revisits a mastered one (practised longest ago)
+  const REVIEW_EVERY = 6; // every 6th question revisits a mastered one (practised longest ago)
   const RECENT = 4; // questions from the last few turns are avoided while there is any alternative
   function choose() {
     const pool = session.pool;

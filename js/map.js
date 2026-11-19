@@ -272,7 +272,8 @@
   }
   function bbox(id) {
     const c = byId.get(id);
-    let [[x0, y0], [x1, y1]] = c.b;
+    // the main territory when the country has far-off parts (France without French Guiana …)
+    let [[x0, y0], [x1, y1]] = c.mb || c.b;
     // Countries spanning the antimeridian / with far-flung islands: fall back to centroid area.
     if (x1 - x0 > W.w * 0.5) { x0 = c.c[0] - 60; x1 = c.c[0] + 60; }
     return { x0, y0, x1, y1 };
@@ -318,12 +319,10 @@
       el('circle', { cx: pin.p[0], cy: pin.p[1], r: 1, class: 'citypin' }, fxLayer);
       const t = el('text', { x: pin.p[0], y: pin.p[1], class: 'label citylabel', dy: '-0.9em' }, labelLayer);
       t.textContent = '📍 ' + pin.name;
-      // close to the country's own label (e.g. Moscow and Russia): put it beside the pin, away from it
+      // close to the country's own label (Moscow and Russia, Amsterdam and the Netherlands): stack them,
+      // the city's name on the far side of the pin from the country's label
       if (Math.hypot(c.c[0] - pin.p[0], c.c[1] - pin.p[1]) / unitsPerPx() < 70) {
-        const left = c.c[0] >= pin.p[0];
-        t.setAttribute('dy', '0.35em');
-        t.setAttribute('dx', left ? '-0.6em' : '0.6em');
-        t.style.textAnchor = left ? 'end' : 'start';
+        t.setAttribute('dy', c.c[1] > pin.p[1] ? '-1.2em' : '1.6em');
         t.textContent = pin.name; // the pin's dot marks the spot
       }
       apply();

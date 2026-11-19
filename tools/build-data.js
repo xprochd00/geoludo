@@ -137,12 +137,32 @@ for (const f of features) {
   const projected = best.map(ring => ring.map(pt => proj(pt)));
   const [cx, cy] = area < 6 ? pathGen.centroid(f) : polylabel(projected, 0.5);
   const b = pathGen.bounds(f);
+  // Main territory, for zooming: the largest polygon plus every part within MAIN_GAP of it (grown step
+  // by step, so island chains stay together); far-flung parts like French Guiana are left out.
+  const MAIN_GAP = 25; // map units (the map is 1000 wide, so about 9 degrees)
+  const pb = polys.map((poly) => ({ poly, bb: pathGen.bounds({ type: 'Polygon', coordinates: poly }) }));
+  let mb = pathGen.bounds({ type: 'Polygon', coordinates: best });
+  const rest = pb.filter((x) => x.poly !== best);
+  for (let grew = true; grew;) {
+    grew = false;
+    for (let i = rest.length - 1; i >= 0; i--) {
+      const q = rest[i].bb;
+      const gx = Math.max(0, q[0][0] - mb[1][0], mb[0][0] - q[1][0]);
+      const gy = Math.max(0, q[0][1] - mb[1][1], mb[0][1] - q[1][1]);
+      if (Math.max(gx, gy) <= MAIN_GAP) {
+        mb = [[Math.min(mb[0][0], q[0][0]), Math.min(mb[0][1], q[0][1])], [Math.max(mb[1][0], q[1][0]), Math.max(mb[1][1], q[1][1])]];
+        rest.splice(i, 1);
+        grew = true;
+      }
+    }
+  }
   const rec = {
     id: c ? c.cca3 : 'X' + f.key.replace(/\W/g, ''),
     name: c ? c.name.common : f.atlasName,
     d,
     c: [Math.round(cx * 10) / 10, Math.round(cy * 10) / 10],
     b: b.map(p => p.map(v => Math.round(v))),
+    ...(rest.length ? { mb: mb.map(p => p.map(v => Math.round(v))) } : {}), // only when parts were left out
     // Marked with a clickable dot: tiny countries, and archipelagos whose islands are all small
     // (Solomon Islands, Bahamas, Vanuatu, New Caledonia ...), which are hard to hit at world zoom.
     small: area < 10 || (bestA < 15 && polys.length >= 3) ? 1 : 0,
