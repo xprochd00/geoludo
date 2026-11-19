@@ -790,3 +790,8 @@ kbd {
 .g-menu-item.current { background: rgba(255,209,102,.12); }
 .g-menu-item.current i { visibility: visible; }
 .g-menu-item:hover, .g-menu-item:focus-visible { background: rgba(255,255,255,.1); outline: none; }
+.crew li { flex-wrap: wrap; }
+.crew-ctl { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.crew-ctl:empty { display: none; }
+.crew li .crew-ctl .type-select { margin-left: 0; }
+.crew-pieces { white-space: nowrap; }
