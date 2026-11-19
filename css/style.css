@@ -572,7 +572,8 @@ kbd {
 .hint-btn:disabled { opacity: .45; cursor: not-allowed; }
 .hint-btn[hidden] { display: none; }
 #map .country.dim { opacity: .28; }
-#map .country.hinted { stroke: #ffd166; stroke-width: 1.2; }
+/* the region stays readable: dark borders between its countries, a soft gold glow around them */
+#map .country.hinted { stroke: rgba(10, 30, 60, .95); filter: drop-shadow(0 0 1.5px rgba(255, 209, 102, .9)); }
 .quiz-card.steal { border-color: #ff9f1c; box-shadow: 0 0 0 2px rgba(255,159,28,.35), 0 10px 30px rgba(0,0,0,.3); }
 .quiz-card.steal .q-kind { color: #ffc773; font-weight: 600; }
 .result.compact { bottom: auto; top: 12px; animation: none; }

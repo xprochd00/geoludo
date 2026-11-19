@@ -501,16 +501,6 @@
     }
   },
   {
-    "id": "G051",
-    "difficulty": 6,
-    "category": "geography",
-    "question": "Which is the westernmost country on mainland Africa?",
-    "answer": {
-      "iso2": "SN",
-      "name": "Senegal"
-    }
-  },
-  {
     "id": "G052",
     "difficulty": 6,
     "category": "geography",

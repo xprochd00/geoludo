@@ -314,6 +314,14 @@
       el('circle', { cx: pin.p[0], cy: pin.p[1], r: 1, class: 'citypin' }, fxLayer);
       const t = el('text', { x: pin.p[0], y: pin.p[1], class: 'label citylabel', dy: '-0.9em' }, labelLayer);
       t.textContent = '📍 ' + pin.name;
+      // close to the country's own label (e.g. Moscow and Russia): put it beside the pin, away from it
+      if (Math.hypot(c.c[0] - pin.p[0], c.c[1] - pin.p[1]) / unitsPerPx() < 70) {
+        const left = c.c[0] >= pin.p[0];
+        t.setAttribute('dy', '0.35em');
+        t.setAttribute('dx', left ? '-0.6em' : '0.6em');
+        t.style.textAnchor = left ? 'end' : 'start';
+        t.textContent = pin.name; // the pin's dot marks the spot
+      }
       apply();
     }
     const u = unitsPerPx();

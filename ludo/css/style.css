@@ -490,6 +490,15 @@ kbd {
   display: grid; padding: 14px; grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 }
 .df i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #555, #111); place-self: center; }
+/* Solid inner cube (38px deep, outer 42px): the rounded faces leave the cube's corners open,
+ * and without it you could see through them. */
+.dcore { position: absolute; left: 3px; top: 3px; width: 78px; height: 78px; background: #d9dfef; } /* a bit wider than deep: no seams at its edges */
+.dcore.c1 { transform: translateZ(38px); }
+.dcore.c2 { transform: rotateY(90deg) translateZ(38px); }
+.dcore.c3 { transform: rotateX(90deg) translateZ(38px); }
+.dcore.c4 { transform: rotateX(-90deg) translateZ(38px); }
+.dcore.c5 { transform: rotateY(-90deg) translateZ(38px); }
+.dcore.c6 { transform: rotateY(180deg) translateZ(38px); }
 .f1 { transform: translateZ(42px); }
 .f2 { transform: rotateY(90deg) translateZ(42px); }
 .f3 { transform: rotateX(90deg) translateZ(42px); }
@@ -573,7 +582,8 @@ kbd {
 .hint-btn:disabled { opacity: .45; cursor: not-allowed; }
 .hint-btn[hidden] { display: none; }
 #map .country.dim { opacity: .28; }
-#map .country.hinted { stroke: #ffd166; stroke-width: 1.2; }
+/* the region stays readable: dark borders between its countries, a soft gold glow around them */
+#map .country.hinted { stroke: rgba(10, 30, 60, .95); filter: drop-shadow(0 0 1.5px rgba(255, 209, 102, .9)); }
 .quiz-card.steal { border-color: #ff9f1c; box-shadow: 0 0 0 2px rgba(255,159,28,.35), 0 10px 30px rgba(0,0,0,.3); }
 .quiz-card.steal .q-kind { color: #ffc773; font-weight: 600; }
 .result.compact { bottom: auto; top: 12px; animation: none; }

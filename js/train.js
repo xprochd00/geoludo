@@ -2,10 +2,12 @@
  * Progress is kept in its own storage key, so training never changes which questions the real game asks.
  *
  * Selection order for the next question:
- *   1. a missed question that is due again (missed questions come back after a few others),
- *   2. a question never practised,
- *   3. a practised but not yet mastered question,
- *   4. the mastered question practised longest ago.
+ *   1. a missed question that is due again (missed questions come back after a few others, never at once),
+ *   2. every 4th question: a mastered question, the one practised longest ago (review),
+ *   3. a question never practised,
+ *   4. a practised but not yet mastered question,
+ *   5. the mastered question practised longest ago.
+ * Questions from the last few turns are avoided while there is any alternative.
  * Mastered = last answer correct without a hint, and (if it was ever missed) correct twice in a row. */
 (function () {
   const { Sound, Confetti } = FX;
@@ -177,31 +179,46 @@
   $('start-btn').addEventListener('click', () => startSession(false));
   $('mistakes-btn').addEventListener('click', () => startSession(true));
 
+  const REVIEW_EVERY = 4; // every 4th question revisits a mastered one (practised longest ago)
+  const RECENT = 4; // questions from the last few turns are avoided while there is any alternative
   function choose() {
     const pool = session.pool;
     const n = prog.n;
-    const avoid = (e) => e.key === session.last || e.pick.c.id === session.lastCountry;
+    session.picks = (session.picks || 0) + 1;
+    const recent = session.recent || [];
+    const avoid = (e) => recent.includes(e.key) || e.pick.c.id === session.lastCountry;
     const prefer = (list) => { const v = list.filter((e) => !avoid(e)); return v.length ? v : list; };
     const rand = (list) => list[Math.floor(Math.random() * list.length)];
+    const oldest = (list) => list.slice().sort((a, b) => rec(a.key).at - rec(b.key).at)[0];
+    // a missed question waits until it is due, so it comes back after a few others, not straight away
+    const waiting = (e) => { const r = rec(e.key); return isMistake(r) && r.due > n; };
     // 1. missed questions that are due again
-    const due = pool.filter((e) => { const r = rec(e.key); return isMistake(r) && r.due <= n && e.key !== session.last; });
+    const due = pool.filter((e) => { const r = rec(e.key); return isMistake(r) && r.due <= n && !recent.includes(e.key); });
     if (due.length) return due.sort((a, b) => rec(a.key).due - rec(b.key).due)[0];
     if (session.mistakesOnly) {
       const left = pool.filter((e) => isMistake(rec(e.key)));
       if (!left.length) return null; // all fixed!
-      return rand(prefer(left));
+      const ready = left.filter((e) => !avoid(e));
+      if (ready.length) return rand(ready);
+      // only just-asked ones left: put another practised question in between
+      const chosen = new Set(filtered().map((e) => e.key)); // the categories, levels … currently selected
+      const other = ALL.filter((e) => chosen.has(e.key) && rec(e.key) && !isMistake(rec(e.key)) && !avoid(e));
+      return other.length ? oldest(other) : rand(left);
     }
-    // 2. never practised
+    const masteredOnes = pool.filter((e) => mastered(rec(e.key)) && !avoid(e));
+    // 2. now and then, a mastered question comes back for review
+    if (session.picks % REVIEW_EVERY === 0 && masteredOnes.length) return oldest(masteredOnes);
+    // 3. never practised
     const fresh = pool.filter((e) => !rec(e.key));
     if (fresh.length) return rand(prefer(fresh));
-    // 3. practised, not mastered
-    const weak = pool.filter((e) => !mastered(rec(e.key)));
-    if (weak.length) return rand(prefer(weak));
-    // 4. mastered, oldest first
-    const old = prefer(pool).slice().sort((a, b) => rec(a.key).at - rec(b.key).at);
-    return old[0];
+    // 4. practised, not mastered (missed ones only once they are due)
+    const weak = pool.filter((e) => !mastered(rec(e.key)) && !waiting(e) && !avoid(e));
+    if (weak.length) return rand(weak);
+    // 5. mastered, practised longest ago
+    if (masteredOnes.length) return oldest(masteredOnes);
+    // 6. nothing else: whatever is least recent
+    return oldest(prefer(pool.filter((e) => rec(e.key)))) || rand(pool);
   }
-
   function nextQuestion() {
     clearInterval(timerHandle);
     const e = choose();
@@ -209,6 +226,7 @@
     const q = Quiz.describe(e.pick, e.lvl, e.cat);
     session.cur = { e, q, hinted: false, done: false };
     session.last = e.key;
+    session.recent = [e.key, ...(session.recent || [])].slice(0, RECENT);
     session.lastCountry = q.country.id;
     const r = rec(e.key);
     const diff = $('q-diff');
@@ -370,7 +388,7 @@
     else if ((e.key === 'h' || e.key === 'H') && !$('hint-btn').disabled) $('hint-btn').click();
   });
 
-  if (/[?&]debug\b/.test(location.search)) window.__train = { get session() { return session; }, get prog() { return prog; } };
+  if (/[?&]debug\b/.test(location.search)) window.__train = { get session() { return session; }, get prog() { return prog; }, answer, nextQuestion, ALL, mastered: (k) => mastered(rec(k)) };
 
   renderOverview();
 })();

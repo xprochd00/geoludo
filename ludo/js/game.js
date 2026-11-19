@@ -24,7 +24,7 @@
   const PRESET_SUMMARY = {
     quick: [
       '1 piece each, starting on the board',
-      '<b>Pick your challenge:</b> choose the question level after rolling, move roll + level',
+      '<b>Pick your challenge:</b> choose the question level, then roll; move roll + level',
       '<b>Steals &amp; hints</b> keep everyone in the game',
       'Rescue questions when a piece is about to be captured',
     ],
@@ -380,7 +380,7 @@
         const o = botPickPiece(p, opts);
         return { t: 'choose', idx: o.idx, action: o.action };
       }
-      case 'level': return { t: 'level', l: botPickLevel(p, p.pieces[state.choice.idx], state.roll, Math.random, 'explorer') };
+      case 'level': return { t: 'level', l: botPickLevel(p, leadPiece(p), AVG_ROLL, Math.random, 'explorer') };
       case 'question': return { t: 'answer', id: auto ? botGuess('explorer', state.pending.ctx.level, state.wrongPicks, Math.random) : null };
       case 'result': return { t: 'continue' };
       default: return null;
@@ -525,17 +525,28 @@
   }
 
   /* ================= TURN FLOW ================= */
-  function beginTurn() {
+  async function beginTurn() {
     state.phase = 'roll';
     state.choice = null;
     state.attempts = 0;
+    state.level = null;
     const p = current();
     setTurnPill();
     renderStandings();
     Board.setSelectable([]);
     Board.showTarget(null);
-    $('roll-btn').disabled = isBot(p) || !local(p);
     saveGame();
+    // Pick your challenge: the level is chosen first, then the dice is rolled (move roll + level).
+    // With no piece on the board there is nothing to answer for yet: just roll for the 6.
+    if (state.opts.choose && p.pieces.some((pc) => pc.pos > 0 && pc.pos < FIN)) {
+      $('roll-btn').disabled = true;
+      const gen = state.gen;
+      const l = await pickLevel(p);
+      if (!state || state.gen !== gen || state.phase === 'over') return;
+      state.level = l;
+      state.phase = 'roll';
+    }
+    $('roll-btn').disabled = isBot(p) || !local(p);
     point('roll');
     if (state.phase !== 'roll') return; // decided already (replaying)
     const noneActive = !p.pieces.some((pc) => pc.pos > 0 && pc.pos < FIN);
@@ -547,13 +558,13 @@
     if (!local(p)) { status(`Waiting for ${who(p)} to roll…`); return; }
     status(noneActive && !state.opts.board
       ? `${who(p)}, roll a <b>6</b> to bring a piece out — ${MAX_ATTEMPTS} attempts.`
-      : `${who(p)}, roll the dice!`);
+      : state.level ? `${who(p)}: ${lvlSpan(state.level)} it is — now roll the dice! You move roll + ${state.level} if correct.` : `${who(p)}, roll the dice!`);
   }
 
   /** The moves the current player may make with roll n. */
   function optionsFor(p, n) {
     const out = [];
-    const minMove = state.opts.choose ? n + 1 : n;
+    const minMove = state.opts.choose ? n + (state.level || 1) : n;
     p.pieces.forEach((pc, idx) => {
       if (pc.pos <= 0) {
         // Pieces at home are interchangeable, so only one of them is offered.
@@ -642,7 +653,8 @@
       return endOfMove(true);
     }
     const n = state.roll;
-    const level = state.opts.choose ? await pickLevel(p, pc, n) : n;
+    // (Pick your challenge: chosen before the roll; a piece just brought out has no level yet.)
+    const level = state.opts.choose ? (state.level || (state.level = await pickLevel(p))) : n;
     const moves = Math.min(FIN - pc.pos, state.opts.choose ? n + level : n);
     const target = pc.pos + moves;
     Board.showTarget(p.seat, target);
@@ -668,51 +680,49 @@
   }
 
   /* ---------- Pick your challenge ---------- */
-  function pickLevel(p, pc, n) {
+  /** The piece a level is mostly chosen for: the one furthest along (still on its way). */
+  const leadPiece = (p) => p.pieces.filter((pc) => pc.pos > 0 && pc.pos < FIN).sort((a, b) => b.pos - a.pos)[0] || p.pieces[0];
+  const AVG_ROLL = 3.5;
+
+  /** Pick your challenge, before rolling: the level of the question; a correct answer moves roll + level. */
+  function pickLevel(p) {
     return new Promise((resolve) => {
       state.phase = 'level';
       const panel = $('level-picker');
-      $('lp-who').textContent = `${isBot(p) ? '🤖 ' : ''}${p.name} rolled ${n}`;
-      $('lp-sub').textContent = '— pick your challenge: a correct answer moves roll + level';
+      $('lp-who').textContent = `${isBot(p) ? '🤖 ' : ''}${p.name}, pick your challenge`;
+      $('lp-sub').textContent = '— then roll: a correct answer moves roll + level';
       panel.style.setProperty('--pc', COLORS[p.seat].hex);
       const btns = $('lp-btns');
-      btns.innerHTML = [1, 2, 3, 4, 5, 6].map((l) => {
-        const move = Math.min(FIN - pc.pos, n + l);
-        const blocked = state.opts.exact && pc.pos + n + l > FIN;
-        return `<button type="button" data-l="${l}" style="--c:var(--l${l})" ${blocked || isBot(p) || !local(p) ? 'disabled' : ''}>
-          <b>${l}</b><span>${Quiz.LEVELS[l].label}</span><em>+${move}</em></button>`;
-      }).join('');
+      btns.innerHTML = [1, 2, 3, 4, 5, 6].map((l) => `<button type="button" data-l="${l}" style="--c:var(--l${l})" ${isBot(p) || !local(p) ? 'disabled' : ''}>
+          <b>${l}</b><span>${Quiz.LEVELS[l].label}</span><em>🎲+${l}</em></button>`).join('');
       panel.hidden = false;
       const done = (l) => {
         if (state.phase !== 'level') return;
         state.phase = 'busy';
         panel.hidden = true;
         state.levelPick = null;
-        log(`🎯 ${who(p)} picks ${lvlSpan(l)} (move ${Math.min(FIN - pc.pos, n + l)} if correct).`, p.seat);
+        log(`🎯 ${who(p)} picks ${lvlSpan(l)} (move roll + ${l} if correct).`, p.seat);
         resolve(l);
       };
       btns.querySelectorAll('button').forEach((b) => {
         const l = +b.dataset.l;
         b.addEventListener('click', () => { if (!isBot(p) && local(p)) act({ t: 'level', l }); });
-        b.addEventListener('pointerenter', () => Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l)));
-        b.addEventListener('focus', () => Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l)));
       });
       state.levelPick = done;
       point('level');
       if (state.phase !== 'level') return;
       if (isBot(p)) {
         status(`${who(p)} is picking a challenge…`);
-        const l = botPickLevel(p, pc, n);
+        const l = botPickLevel(p, leadPiece(p), AVG_ROLL);
         later(700, () => {
           const b = btns.querySelector(`[data-l="${l}"]`);
           if (b) b.classList.add('chosen');
-          Board.showTarget(p.seat, pc.pos + Math.min(FIN - pc.pos, n + l));
           later(800, () => done(l));
         });
       } else if (!local(p)) {
-        status(`Rolled <b>${n}</b> → ${who(p)} is picking a challenge…`);
+        status(`${who(p)} is picking a challenge…`);
       } else {
-        status(`Rolled <b>${n}</b> → pick your challenge (keys <kbd>1</kbd>–<kbd>6</kbd>). Harder questions move you further.`);
+        status(`${who(p)}, pick your challenge first (keys <kbd>1</kbd>–<kbd>6</kbd>), then roll. Harder questions move you further.`);
         setTimeout(() => { const b = btns.querySelector('button:not([disabled])'); if (b) b.focus({ preventScroll: true }); }, 50);
       }
     });
@@ -1099,7 +1109,7 @@
     if (!state || state.phase === 'over') return;
     if (!extra) state.turn = (state.turn + 1) % state.players.length;
     beginTurn();
-    if (extra && !isBot(current())) status(`🎲 Six! ${who(current())}, roll again!`);
+    if (extra && !isBot(current()) && state.phase === 'roll') status(`🎲 Six! ${who(current())}, roll again!`);
   }
 
   function win(p) {

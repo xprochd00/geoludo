@@ -143,7 +143,10 @@
       case 'name':
         q.kind = 'Find this country on the map'; q.prompt = c.name; q.tag = 'Country'; break;
       case 'capital':
-        q.kind = 'Which country has this capital city?'; q.prompt = c.capital; q.tag = 'Capital'; break;
+        q.kind = 'Which country has this capital city?'; q.prompt = c.capital; q.tag = 'Capital';
+        // shown on the map with the answer (not when it lies across the date line from the country's marker)
+        if (c.cp && Math.hypot(c.cp[0] - c.c[0], c.cp[1] - c.c[1]) < 250) { q.pin = c.cp; q.city = c.capital; }
+        break;
       case 'city':
         q.kind = 'In which country is this city?'; q.prompt = pick.city.name; q.city = pick.city.name;
         q.pin = pick.city.p; q.tag = 'City'; break;

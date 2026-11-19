@@ -62,7 +62,7 @@ A phone-friendly practice page with just the questions and the map, no board. Op
 
 - Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). Each row has an **All** chip; tapping it again keeps only the option you chose last.
 - **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
-- New questions come first. **Missed questions come back** a few questions later until you get them right twice in a row; then they count as *mastered*.
+- New questions come first. **Missed questions come back** a few questions later (never straight away) until you get them right twice in a row; then they count as *mastered*. Every 4th question revisits a mastered one (the one practised longest ago), and questions from the last few turns are avoided, so a fully mastered set keeps rotating.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.
 - Progress per category and level is kept in the browser. Training never changes which questions the games ask.
 
@@ -98,7 +98,7 @@ The lengths come from simulating thousands of games.
 
 ### Core rules
 
-- **Pick your challenge** (Quick): after rolling, choose a question level from 1 (Very easy) to 6 (Expert). A correct answer moves you **roll + level** squares. Expert questions are worth up to 12 squares, Very easy ones 2–7. The best choice depends on what *you* know.
+- **Pick your challenge** (Quick): first choose a question level from 1 (Very easy) to 6 (Expert), then roll. A correct answer moves you **roll + level** squares. Expert questions are worth up to 12 squares, Very easy ones 2–7. Choosing before the roll means you commit to a challenge without knowing how far it will take you; the best choice depends on what *you* know. (With no piece on the board yet, you simply roll for the 6.)
 - **Dice sets the level** (Classic): the number rolled is the level (1 Very easy … 6 Expert), and you move that many squares.
 - **Answering:** the board rolls away and a world map rolls into view. Click the right country. A wrong click or running out of time leaves the piece where it is.
 - **Steals & hints:**
@@ -158,7 +158,7 @@ Questions added to reach these sizes are marked `"source": "generated"` in the J
 | Capital | fame + 1 + the country's `CAP_ADJ` |
 | Non-capital city | the city's tier (1–6) in `data/cities.json` |
 
-All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: the 100 non-capital cities in `data/cities.json`. When a city question is answered, a 📍 pin shows where the city is. Antigua Guatemala is skipped because its name gives the answer away. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
+All 197 countries are included: the 193 UN members plus Vatican City, Palestine, Kosovo and Taiwan, each with its flag and capital. Also included: the 100 non-capital cities in `data/cities.json`. When a city or capital question is answered, a 📍 pin shows where the city is (capital positions: `data/capitals.json`, from GeoNames). Antigua Guatemala is skipped because its name gives the answer away. Capitals that are disputed or ambiguous are never asked: Israel, Palestine, Bolivia and Eswatini.
 
 **Controls:** on the map, scroll or pinch to zoom, drag to pan, or use the + / − / ⤢ buttons. Very small countries are marked with dots. Voyage keys: <kbd>1</kbd>–<kbd>6</kbd> pick a challenge, <kbd>Enter</kbd> next, <kbd>Esc</kbd> menu.
 
@@ -183,6 +183,7 @@ data/culture-questions.json   culture questions (edit this)
 data/sports-questions.json    sports questions (edit this)
 data/geography-extra-questions.json   extra geography questions (edit this)
 data/cities.json    non-capital cities with tiers 1-6 (edit this)
+data/capitals.json  capital positions (lat/lon per country), shown as a pin after capital questions
 data/history.js, culture.js, sports.js, geo-extra.js   generated from the question files
 flags/*.svg         country flags (from flag-icons)
 tools/build-data.js     regenerates data/world.js (including the route) and flags/

@@ -190,6 +190,16 @@ for (const c of JSON.parse(fs.readFileSync(CITY_FILE, 'utf8'))) {
   if (c.note) rec.note = c.note;
   cityList.push(rec);
 }
+// Capitals: projected position, shown as a pin when a capital question is revealed.
+// data/capitals.json (lat/lon per country) was made once from GeoNames (all-the-cities, featureCode PPLC).
+const CAPITAL_FILE = path.join(__dirname, '..', 'data/capitals.json');
+const capitals = JSON.parse(fs.readFileSync(CAPITAL_FILE, 'utf8'));
+for (const o of out.filter((x) => x.fame)) {
+  const cap = capitals[o.id];
+  if (!cap) { console.warn('no capital position:', o.id); continue; }
+  const [x, y] = proj([cap.lon, cap.lat]);
+  o.cp = [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
+}
 // Voyage route (data/route.json): ports plus sea waypoints, densified and projected.
 // legs[i] is the path from port i to port i+1 as a list of [x, y] points; a null entry marks a jump
 // where the route leaves one edge of the map and re-enters on the other (crossing the date line).

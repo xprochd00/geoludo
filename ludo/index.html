@@ -86,7 +86,7 @@
         </div>
         <ul id="preset-summary" class="preset-summary"></ul>
         <div id="custom-rules" class="custom-rules" hidden>
-          <label class="toggle"><input type="checkbox" id="opt-choose"><span class="sw"></span><span><b>Pick your challenge:</b> choose the question level after rolling and move roll + level (otherwise the dice sets the level)</span></label>
+          <label class="toggle"><input type="checkbox" id="opt-choose"><span class="sw"></span><span><b>Pick your challenge:</b> choose the question level, then roll, and move roll + level (otherwise the dice sets the level)</span></label>
           <label class="toggle"><input type="checkbox" id="opt-board"><span class="sw"></span><span>Pieces start on the board (otherwise a <b>6</b> brings them out)</span></label>
           <label class="toggle"><input type="checkbox" id="opt-steal"><span class="sw"></span><span><b>Steals &amp; hints:</b> a wrong answer can be stolen by the next player; tokens buy hints</span></label>
           <label class="toggle"><input type="checkbox" id="opt-rescue"><span class="sw"></span><span><b>Rescue questions</b> when a piece is about to be captured</span></label>
@@ -110,7 +110,7 @@
         <summary>How to play</summary>
         <ul>
           <li><b>Goal:</b> race your pieces around the board and into the centre. Every move is earned by clicking the right country on the world map.</li>
-          <li><b>Pick your challenge</b> (Quick): after rolling, choose a question level from 1 (very easy) to 6 (expert). Answer correctly to move <b>roll + level</b> squares. Hard questions get you there faster. In Classic, the number rolled is the level and you move that many squares.</li>
+          <li><b>Pick your challenge</b> (Quick): first choose a question level from 1 (very easy) to 6 (expert), then roll. Answer correctly to move <b>roll + level</b> squares. Hard questions get you there faster. In Classic, the number rolled is the level and you move that many squares.</li>
           <li><b>Steals &amp; hints:</b> if you answer wrong, the next player can steal the question. A correct steal earns a 🧭 compass token, and so does an expert answer. Spend a token during a question to highlight the right region of the map.</li>
           <li>⚔️ <b>Captures:</b> land on a rival piece to send it back. Its owner first gets a <b>rescue question</b>: the further the piece has travelled, the harder the question. 🛡️ Shield squares are safe.</li>
           <li>Classic: a piece leaves home only on a <b>6</b> (no question needed), with 3 attempts when nothing is on the board. A 6 earns another roll.</li>
@@ -215,6 +215,8 @@
         <div class="panel dice-panel">
           <div class="dice-scene" id="dice-scene" title="Roll the dice">
             <div class="dice" id="dice">
+              <!-- a smaller solid cube inside fills the corners left open by the rounded faces -->
+              <div class="dcore c1"></div><div class="dcore c2"></div><div class="dcore c3"></div><div class="dcore c4"></div><div class="dcore c5"></div><div class="dcore c6"></div>
               <div class="df f1"><i></i></div>
               <div class="df f2"><i></i><i></i></div>
               <div class="df f3"><i></i><i></i><i></i></div>
