@@ -50,6 +50,26 @@
     }
   },
   {
+    "id": "G053",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country is often described as being shaped like a boot?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "G054",
+    "difficulty": 1,
+    "category": "geography",
+    "question": "Which country covers an entire continent by itself?",
+    "answer": {
+      "iso2": "AU",
+      "name": "Australia"
+    }
+  },
+  {
     "id": "Q208",
     "difficulty": 1,
     "category": "geography",
@@ -158,6 +178,86 @@
     "answer": {
       "iso2": "ZA",
       "name": "South Africa"
+    }
+  },
+  {
+    "id": "G055",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country contains the largest share of the Amazon rainforest?",
+    "answer": {
+      "iso2": "BR",
+      "name": "Brazil"
+    }
+  },
+  {
+    "id": "G056",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the Black Forest, a wooded mountain range?",
+    "answer": {
+      "iso2": "DE",
+      "name": "Germany"
+    }
+  },
+  {
+    "id": "G057",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country has the largest number of native Spanish speakers in the world?",
+    "answer": {
+      "iso2": "MX",
+      "name": "Mexico"
+    }
+  },
+  {
+    "id": "G058",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country has the longest coastline in the world?",
+    "answer": {
+      "iso2": "CA",
+      "name": "Canada"
+    }
+  },
+  {
+    "id": "G059",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the Nile Delta, where the river meets the Mediterranean?",
+    "answer": {
+      "iso2": "EG",
+      "name": "Egypt"
+    }
+  },
+  {
+    "id": "G060",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is Istanbul, a city spanning Europe and Asia?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "G061",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "Which country is nicknamed the 'Land of a Thousand Lakes'?",
+    "answer": {
+      "iso2": "FI",
+      "name": "Finland"
+    }
+  },
+  {
+    "id": "G062",
+    "difficulty": 2,
+    "category": "geography",
+    "question": "In which country is the Burj Khalifa, the world's tallest building?",
+    "answer": {
+      "iso2": "AE",
+      "name": "United Arab Emirates"
     }
   },
   {
@@ -271,6 +371,136 @@
     }
   },
   {
+    "id": "G063",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is Aoraki / Mount Cook, the highest mountain in the country?",
+    "answer": {
+      "iso2": "NZ",
+      "name": "New Zealand"
+    }
+  },
+  {
+    "id": "G064",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country has about a quarter of its land below sea level?",
+    "answer": {
+      "iso2": "NL",
+      "name": "Netherlands"
+    }
+  },
+  {
+    "id": "G065",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country are the Eiger and Jungfrau peaks?",
+    "answer": {
+      "iso2": "CH",
+      "name": "Switzerland"
+    }
+  },
+  {
+    "id": "G066",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country is the longest from north to south in the world?",
+    "answer": {
+      "iso2": "CL",
+      "name": "Chile"
+    }
+  },
+  {
+    "id": "G067",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which African country lies directly across the Strait of Gibraltar from Spain?",
+    "answer": {
+      "iso2": "MA",
+      "name": "Morocco"
+    }
+  },
+  {
+    "id": "G068",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country contains the westernmost point of mainland Europe?",
+    "answer": {
+      "iso2": "PT",
+      "name": "Portugal"
+    }
+  },
+  {
+    "id": "G069",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Greenland, the world's largest island, is an autonomous territory of which country?",
+    "answer": {
+      "iso2": "DK",
+      "name": "Denmark"
+    }
+  },
+  {
+    "id": "G070",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which city-state lies just off the southern tip of the Malay Peninsula?",
+    "answer": {
+      "iso2": "SG",
+      "name": "Singapore"
+    }
+  },
+  {
+    "id": "G071",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which island country is home to lemurs that live nowhere else in the wild?",
+    "answer": {
+      "iso2": "MG",
+      "name": "Madagascar"
+    }
+  },
+  {
+    "id": "G072",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country contains the largest island in the Caribbean?",
+    "answer": {
+      "iso2": "CU",
+      "name": "Cuba"
+    }
+  },
+  {
+    "id": "G073",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "Which country has the only non-rectangular national flag in the world?",
+    "answer": {
+      "iso2": "NP",
+      "name": "Nepal"
+    }
+  },
+  {
+    "id": "G074",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country does the Yangtze, Asia's longest river, flow?",
+    "answer": {
+      "iso2": "CN",
+      "name": "China"
+    }
+  },
+  {
+    "id": "G075",
+    "difficulty": 3,
+    "category": "geography",
+    "question": "In which country is the Maasai Mara reserve, famous for the wildebeest migration?",
+    "answer": {
+      "iso2": "KE",
+      "name": "Kenya"
+    }
+  },
+  {
     "id": "G018",
     "difficulty": 4,
     "category": "geography",
@@ -371,6 +601,146 @@
     }
   },
   {
+    "id": "G076",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which is the only South American country with coasts on both the Pacific and the Caribbean?",
+    "answer": {
+      "iso2": "CO",
+      "name": "Colombia"
+    }
+  },
+  {
+    "id": "G077",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which is the least densely populated sovereign country in the world?",
+    "answer": {
+      "iso2": "MN",
+      "name": "Mongolia"
+    }
+  },
+  {
+    "id": "G078",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is the Perito Moreno Glacier?",
+    "answer": {
+      "iso2": "AR",
+      "name": "Argentina"
+    }
+  },
+  {
+    "id": "G079",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country do the Tigris and the Euphrates rise?",
+    "answer": {
+      "iso2": "TR",
+      "name": "Turkey"
+    }
+  },
+  {
+    "id": "G080",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country does the Amazon River have its most distant source?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
+    "id": "G081",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country does most of the Thar Desert lie?",
+    "answer": {
+      "iso2": "IN",
+      "name": "India"
+    }
+  },
+  {
+    "id": "G082",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Lake Balaton, the largest lake in Central Europe?",
+    "answer": {
+      "iso2": "HU",
+      "name": "Hungary"
+    }
+  },
+  {
+    "id": "G083",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country are the Meteora monasteries, perched on rock pillars?",
+    "answer": {
+      "iso2": "GR",
+      "name": "Greece"
+    }
+  },
+  {
+    "id": "G084",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country are the Chocolate Hills of Bohol?",
+    "answer": {
+      "iso2": "PH",
+      "name": "Philippines"
+    }
+  },
+  {
+    "id": "G085",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which Himalayan kingdom measures its progress by 'Gross National Happiness'?",
+    "answer": {
+      "iso2": "BT",
+      "name": "Bhutan"
+    }
+  },
+  {
+    "id": "G086",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country is Virunga, Africa's oldest national park and a home of mountain gorillas?",
+    "answer": {
+      "iso2": "CD",
+      "name": "DR Congo"
+    }
+  },
+  {
+    "id": "G087",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country are the Canary Islands?",
+    "answer": {
+      "iso2": "ES",
+      "name": "Spain"
+    }
+  },
+  {
+    "id": "G088",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "In which country are the Dolomites, a mountain range of pale rock?",
+    "answer": {
+      "iso2": "IT",
+      "name": "Italy"
+    }
+  },
+  {
+    "id": "G089",
+    "difficulty": 4,
+    "category": "geography",
+    "question": "Which is the only landlocked country in Southeast Asia?",
+    "answer": {
+      "iso2": "LA",
+      "name": "Laos"
+    }
+  },
+  {
     "id": "G025",
     "difficulty": 5,
     "category": "geography",
@@ -451,6 +821,86 @@
     }
   },
   {
+    "id": "G090",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country does most of the Rub' al Khali, or Empty Quarter, desert lie?",
+    "answer": {
+      "iso2": "SA",
+      "name": "Saudi Arabia"
+    }
+  },
+  {
+    "id": "G091",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "Which Central Asian country is doubly landlocked?",
+    "answer": {
+      "iso2": "UZ",
+      "name": "Uzbekistan"
+    }
+  },
+  {
+    "id": "G092",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Sigiriya, the ancient rock fortress known as Lion Rock?",
+    "answer": {
+      "iso2": "LK",
+      "name": "Sri Lanka"
+    }
+  },
+  {
+    "id": "G093",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country does the largest part of the Sundarbans mangrove forest lie?",
+    "answer": {
+      "iso2": "BD",
+      "name": "Bangladesh"
+    }
+  },
+  {
+    "id": "G094",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Lake Toba, a vast lake in a volcanic crater?",
+    "answer": {
+      "iso2": "ID",
+      "name": "Indonesia"
+    }
+  },
+  {
+    "id": "G095",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Gerlachovský štít, the highest peak of the Carpathians?",
+    "answer": {
+      "iso2": "SK",
+      "name": "Slovakia"
+    }
+  },
+  {
+    "id": "G096",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Mount Musala, the highest peak in the Balkans?",
+    "answer": {
+      "iso2": "BG",
+      "name": "Bulgaria"
+    }
+  },
+  {
+    "id": "G097",
+    "difficulty": 5,
+    "category": "geography",
+    "question": "In which country is Colca Canyon, one of the deepest canyons in the world?",
+    "answer": {
+      "iso2": "PE",
+      "name": "Peru"
+    }
+  },
+  {
     "id": "G031",
     "difficulty": 6,
     "category": "geography",
@@ -508,6 +958,46 @@
     "answer": {
       "iso2": "AF",
       "name": "Afghanistan"
+    }
+  },
+  {
+    "id": "G098",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is the Richat Structure, a huge circular formation called the 'Eye of the Sahara'?",
+    "answer": {
+      "iso2": "MR",
+      "name": "Mauritania"
+    }
+  },
+  {
+    "id": "G099",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is Lake Natron, whose alkaline waters can calcify small animals?",
+    "answer": {
+      "iso2": "TZ",
+      "name": "Tanzania"
+    }
+  },
+  {
+    "id": "G100",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country is Erta Ale, a volcano with a long-lasting lava lake in the Afar desert?",
+    "answer": {
+      "iso2": "ET",
+      "name": "Ethiopia"
+    }
+  },
+  {
+    "id": "G101",
+    "difficulty": 6,
+    "category": "geography",
+    "question": "In which country are the Tassili n'Ajjer sandstone plateaus, famous for prehistoric rock art?",
+    "answer": {
+      "iso2": "DZ",
+      "name": "Algeria"
     }
   }
 ]

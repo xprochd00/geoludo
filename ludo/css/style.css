@@ -820,3 +820,8 @@ kbd {
 }
 .cat-btn .geo-type:hover, .cat-btn .geo-type:focus-visible { background: rgba(255,255,255,.2); outline: none; }
 .cat-btn.active .geo-type { border-color: var(--accent); }
+
+/* Phones: the centred column may shrink to the screen (a long one-line text, e.g. the
+ * "Game in progress" summary, otherwise widens it past the screen edge). */
+#setup.active, #lobby.active { grid-template-columns: minmax(0, 1fr); }
+.setup-card, .v-card { max-width: 100%; min-width: 0; }
