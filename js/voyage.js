@@ -80,7 +80,7 @@
   };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const uid = () => 'p' + Math.random().toString(36).slice(2, 9);
-  const byId = (id) => W.countries.find((c) => c.id === id) || ((window.REGIONS && window.REGIONS.regions) || []).find((c) => c.id === id); // countries, then states & provinces
+  const byId = (id) => WorldMap.byId.get(id); // countries, states & provinces, physical features (or what a click picked)
   const portName = (i) => ROUTE.ports[Math.min(i, N)].name;
 
   /* ======================================================================
@@ -139,7 +139,7 @@
       const time = long ? Q_TIME_LONG : Q_TIME;
       S.q = {
         level, levelLabel: LEVELS[level].label, tag: secret.tag, type: secret.type, kind: secret.kind,
-        prompt: secret.prompt, flag: secret.flag || null, time, started: Date.now(), auto: !!auto, hint: null,
+        prompt: secret.prompt, flag: secret.flag || null, physType: secret.physType || null, time, started: Date.now(), auto: !!auto, hint: null,
       };
       S.phase = 'question';
       guesses = {};
@@ -174,7 +174,11 @@
         const c = secret.country;
         const acc = Math.min(0.98, botAcc(skillOf(p), S.q.level) + (S.q.hint ? 0.15 : 0));
         let id = c.id;
-        if (Math.random() > acc) { // a plausible mistake: a country of the same region
+        const miss = Math.random() > acc;
+        if (miss && secret.physType) { // the physical map: a nearby feature of the same kind
+          const near = WorldMap.physNear(c.id).slice(0, 5);
+          if (near.length) id = near[Math.floor(Math.random() * near.length)].id;
+        } else if (miss) { // a plausible mistake: a country of the same region
           const pool = c.parent ? window.REGIONS.regions.filter((x) => x.fame && x.id !== c.id && x.parent === c.parent)
             : W.countries.filter((x) => x.fame && x.id !== c.id && x.region === c.region);
           const all = pool.length ? pool : W.countries.filter((x) => x.fame && x.id !== c.id);
@@ -702,7 +706,7 @@
       setPanelSub(`Correct = sail ${q.level} port${q.level === 1 ? '' : 's'} to ${esc(portName(Math.min(N, p.pos + q.level)))}`);
       document.body.classList.add('answering');
       WorldMap.reset(true);
-      if (mine) WorldMap.prepare((id) => { WorldMap.lock(); view.send({ t: 'answer', id }); });
+      if (mine) WorldMap.prepare((id) => { WorldMap.lock(); view.send({ t: 'answer', id }); }, q);
       else if (view.me && meP(s)) {
         WorldMap.prepare((id) => {
           if (view.guessed) return;
@@ -711,7 +715,7 @@
           WorldMap.markPicked(id); // neutral marker until the reveal
           view.send({ t: 'guess', id });
           $('q-note').innerHTML = `Your guess: <b>${esc(byId(id).name)}</b>. Wait for the reveal…`;
-        });
+        }, q);
       } else { WorldMap.clear(); WorldMap.lock(); }
       runTimer(q);
       syncHint(s, false);
@@ -840,17 +844,20 @@
   const SETUP_KEY = 'voyage.setup.v1';
   const SAVE_KEY = 'voyage.save.v1';
   const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '', geoType: 'all' }, store.get(SETUP_KEY) || {});
-  if (!Quiz.GEO_TYPES[setup.geoType]) setup.geoType = 'all';
   if (!Quiz.SCOPES.some((x) => x.value === setup.scope)) setup.scope = 'world';
-  const gameCats = () => setup.cats.slice();
+  if (!Quiz.typesFor(setup.scope)[setup.geoType]) setup.geoType = 'all';
+  // the physical map asks physical geography only (the other categories step aside)
+  const gameCats = () => (setup.scope === 'phys' ? ['geo'] : setup.cats.slice());
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, setup.scope);
     if (v == null || v === setup.scope) return;
     setup.scope = v;
+    if (!Quiz.typesFor(v)[setup.geoType]) setup.geoType = 'all';
     syncSetup();
   });
   /** "Geography (Flags)" when the geography questions are limited to one type. */
-  const catLabel = (c, geoType) => (c === 'geo' && geoType && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : CAT_LABEL[c]);
+  const catLabel = (c, geoType, scope) => (scope === 'phys' ? 'Physical geography' + (geoType && geoType !== 'all' ? ` (${Quiz.PHYS_TYPES[geoType]})` : '')
+    : c === 'geo' && geoType && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : CAT_LABEL[c]);
   if (!Array.isArray(setup.types) || setup.types.length < MAX_PLAYERS) setup.types = ['human', 'explorer', 'human', 'human', 'human', 'human'];
   const typeText = (t) => `${t === 'human' ? '🙂 Human' : `🤖 ${BOTS[t].label}`} ▾`;
   const BOT_NOTES = { rookie: 'Bot · makes mistakes', explorer: 'Bot · a fair match', genius: 'Bot · hard to beat' };
@@ -869,7 +876,15 @@
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
     $('scope-btn').textContent = `${Quiz.SCOPES.find((x) => x.value === setup.scope).label} ▾`;
     if (setup.scope === 'na') $('cat-hint').textContent += ' About the US states and Canadian provinces · route: From Sea to Sea, Montreal → Vancouver.';
-    $('geo-type').textContent = `${Quiz.GEO_TYPES[setup.geoType]} ▾`;
+    const phys = setup.scope === 'phys';
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => {
+      b.disabled = phys && b.dataset.cat !== 'geo';
+      if (phys) b.classList.toggle('active', b.dataset.cat === 'geo');
+    });
+    $('cat-all').disabled = phys;
+    document.querySelector('#cat-chips .cat-btn[data-cat="geo"] b').textContent = phys ? 'Physical' : 'Geography';
+    if (phys) $('cat-hint').textContent = `${catLabel('geo', setup.geoType, 'phys')}: mountains, lowlands, rivers, lakes, seas, bays, peninsulas and islands on a blind map without borders. Not mixed with other categories.`;
+    $('geo-type').textContent = `${Quiz.typesFor(setup.scope)[setup.geoType]} ▾`;
     document.querySelectorAll('.format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
     // an invitation link always shows the join form
     $('hotseat-section').hidden = !!joinCode || setup.format !== 'hotseat';
@@ -914,11 +929,11 @@
   async function chooseGeoType(e) {
     e.preventDefault();
     e.stopPropagation(); // not a click on the Geography tile
-    const items = Object.entries(Quiz.GEO_TYPES).map(([value, label]) => ({ value, label }));
+    const items = Object.entries(Quiz.typesFor(setup.scope)).map(([value, label]) => ({ value, label }));
     const v = await Dialog.menu($('geo-type'), items, setup.geoType);
     if (v == null) return;
     setup.geoType = v;
-    catPick.on('geo');
+    if (setup.scope !== 'phys') catPick.on('geo');
     syncSetup();
   }
   $('geo-type').addEventListener('click', chooseGeoType);
@@ -1006,7 +1021,7 @@
         hostLobbyUpdate();
       }));
     }
-    $('lobby-cats').textContent = `Questions: ${cats.map((c) => catLabel(c, geoType)).join(' + ')} · Map: ${(Quiz.SCOPES.find((x) => x.value === (scope || 'world')) || Quiz.SCOPES[0]).label}`;
+    $('lobby-cats').textContent = `Questions: ${(scope === 'phys' ? ['geo'] : cats).map((c) => catLabel(c, geoType, scope)).join(' + ')} · Map: ${(Quiz.SCOPES.find((x) => x.value === (scope || 'world')) || Quiz.SCOPES[0]).label}`;
     $('lobby-start-btn').hidden = !isHost;
     $('lobby-start-btn').disabled = players.length < 2;
     $('lobby-start-btn').textContent = players.length < 2 ? 'Waiting for players…' : `Start the voyage with ${players.length} ⛵`;

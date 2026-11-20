@@ -40,7 +40,7 @@
   const emptyPools = () => ({ 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] });
 
   /* ---------- Pools ---------- */
-  const POOLS = { geo: emptyPools(), history: emptyPools(), sports: emptyPools(), culture: emptyPools() };
+  const POOLS = { geo: emptyPools(), history: emptyPools(), sports: emptyPools(), culture: emptyPools(), phys: emptyPools() };
   const add = (cat, lvl, q) => { if (lvl >= 1 && lvl <= 6) POOLS[cat][lvl].push(q); };
   const clamp = (lvl) => Math.min(6, Math.max(1, lvl));
 
@@ -76,15 +76,22 @@
       add(cat, h.lvl, { type: cat === 'geo' ? 'geoq' : cat, c: rById.get(h.a), h, key: textKey(h.q), na: 1 });
     }
   }
+  /* Physical geography (data/physical.js): its own pool, asked only on the blind physical map (scope 'phys'),
+   * never mixed with the other questions (countries and physical features would clash on the map). */
+  const PH = window.PHYSICAL;
+  if (PH) for (const f of PH.features) add('phys', f.lvl, { type: f.type, c: f, key: 'p:' + f.id, phys: 1 });
+
   // 'world' (countries) · 'world+na' (countries + states & provinces) · 'na' (states & provinces only)
+  // · 'phys' (physical geography on the blind map)
   let scope = 'world';
-  const inScope = (q) => (q.na ? scope !== 'world' : scope !== 'na');
-  function setScope(s) { scope = ['world', 'world+na', 'na'].includes(s) && RG ? s : 'world'; }
+  const inScope = (q) => (scope === 'phys' ? !!q.phys : !q.phys && (q.na ? scope !== 'world' : scope !== 'na'));
+  function setScope(s) { scope = s === 'phys' && PH ? s : ['world', 'world+na', 'na'].includes(s) && RG ? s : 'world'; }
   /** The map / question scopes a game can offer (shown in a menu on each setup screen). */
   const SCOPES = [
     { value: 'world', label: '🌍 World', note: 'All countries' },
     { value: 'world+na', label: '🌎 World + US states & Canada', note: 'Countries, with the USA and Canada split into states and provinces' },
     { value: 'na', label: '🇺🇸 US states & Canadian provinces', note: 'Only those, on a map of North America' },
+    ...(PH ? [{ value: 'phys', label: '⛰️ Physical geography', note: 'Mountains, rivers, seas, islands … on a blind map without borders' }] : []),
   ];
 
   // Text questions: [category, question type, data]
@@ -150,16 +157,20 @@
 
   /** cats: the categories combined in Mixed mode (default: all three). */
   function next(level, mode, cats = CATEGORIES, geoType = 'all') {
-    const cat = mode === 'mixed' ? pickCategory(level, cats) : (POOLS[mode] ? mode : 'geo');
+    // the physical map asks physical geography only, whatever the categories (geoType: the kind of feature)
+    const cat = scope === 'phys' ? 'phys' : mode === 'mixed' ? pickCategory(level, cats) : (POOLS[mode] && mode !== 'phys' ? mode : 'geo');
     catCount[cat]++;
     return describe(draw(geoPool(cat, level, geoType)), level, cat);
   }
 
   /* Geography question types a game can be limited to (one, or all). */
   const GEO_TYPES = { all: 'All types', name: 'Countries', flag: 'Flags', capital: 'Capitals', city: 'Cities', geoq: 'Landmarks & facts' };
+  /* Kinds of physical feature, likewise (on the physical map, the Geography tile's menu offers these). */
+  const PHYS_TYPES = { all: 'All features', range: 'Mountain ranges', lowland: 'Lowlands', river: 'Rivers', lake: 'Lakes', sea: 'Seas & oceans', bay: 'Bays & gulfs', peninsula: 'Peninsulas', island: 'Islands' };
+  const typesFor = (sc) => (sc === 'phys' ? PHYS_TYPES : GEO_TYPES);
   /** The pool to draw from; for one geography type, its questions at this level (or the nearest level that has some). */
   function geoPool(cat, level, geoType) {
-    const typed = cat === 'geo' && geoType && geoType !== 'all' && GEO_TYPES[geoType];
+    const typed = (cat === 'geo' || cat === 'phys') && geoType && geoType !== 'all' && typesFor(cat === 'phys' ? 'phys' : 'world')[geoType];
     const ok = (q) => inScope(q) && (!typed || q.type === geoType);
     for (let d = 0; d < 6; d++) {
       for (const l of [level - d, level + d]) {
@@ -174,6 +185,7 @@
   function describe(pick, level, cat) {
     const c = pick.c;
     const q = { level, levelLabel: LEVELS[level].label, country: c, type: pick.type, category: cat, key: pick.key };
+    if (pick.phys) return describePhys(q, c);
     if (c.parent) return describeRegion(q, pick, c);
     switch (pick.type) {
       case 'name':
@@ -221,6 +233,23 @@
     return q;
   }
 
+  // "Find this island" or "… archipelago", "… gulf" or "… bay": by the name
+  const GROUP = /Islands|Isles|Archipelago|Antilles|Maldives|Seychelles|Svalbard|Bahamas|Azores|Philippines|Comoros|Lofoten|Cyclades|Zemlya|Franz Josef Land/;
+  const PHYS_TEXT = {
+    range: ['Find this mountain range', 'Mountains'], lowland: ['Find this lowland', 'Lowland'], river: ['Find this river', 'River'],
+    lake: ['Find this lake', 'Lake'], sea: ['Find this sea', 'Sea'], bay: ['Find this bay', 'Bay & gulf'],
+    peninsula: ['Find this peninsula', 'Peninsula'], island: ['Find this island', 'Island'],
+  };
+  function describePhys(q, f) {
+    let [kind, tag] = PHYS_TEXT[f.type];
+    if (f.type === 'sea' && /Ocean/.test(f.name)) { kind = 'Find this ocean'; tag = 'Ocean'; }
+    if (f.type === 'bay' && /Gulf/.test(f.name)) kind = 'Find this gulf';
+    if (f.type === 'bay' && !/Gulf|Bay|Bight/.test(f.name)) kind = 'Find this bay or estuary';
+    if (f.type === 'island' && GROUP.test(f.name)) { kind = 'Find this archipelago'; tag = 'Islands'; }
+    Object.assign(q, { kind, prompt: f.name, tag, physType: f.type });
+    return q;
+  }
+
   /** A new game: reset the category balance, but keep the record of asked questions. */
   function newGame() {
     recent = [];
@@ -238,5 +267,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { SCOPES, setScope, inScope: (q) => inScope(q), get scope() { return scope; }, GEO_TYPES, setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { SCOPES, setScope, inScope: (q) => inScope(q), get scope() { return scope; }, GEO_TYPES, PHYS_TYPES, typesFor, setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();

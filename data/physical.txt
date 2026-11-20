@@ -1,0 +1,598 @@
+# Physical geography features for the blind map (built into data/physical.js by tools/build-data.js).
+# One feature per line:   level | type | name shown | source names [| options]
+#   level   1 (everybody knows it) … 6 (expert)
+#   type    range · lowland · river · lake · sea · bay · peninsula · island
+#   source  names in Natural Earth, separated by ";" (several pieces are merged into one feature).
+#           Ranges, lowlands, peninsulas, islands: ne_10m_geography_regions_polys (NAME_EN / NAME)
+#           Seas, oceans, bays, gulfs: ne_10m_geography_marine_polys · rivers: ne_50m_rivers_lake_centerlines
+#           lakes: ne_50m_lakes · "country:XXX" = the main part of a country's outline (Jutland, Anatolia …)
+#   options in=<id>,<id>  part of a bigger feature (a click on the Adriatic also counts for the Mediterranean)
+#           box=lon0,lat0,lon1,lat1  only source pieces inside this box (names used twice, e.g. Sierra Nevada)
+#           region=<NE REGION>  only source pieces of that region · maxlat=<deg> / minlon=<deg>  clip a country outline
+#           id=<id>  the feature's id (default: from the name)
+
+# ---------- Mountain ranges ----------
+1 | range | Himalayas | Himalayas
+1 | range | Alps | Alps
+1 | range | Andes | Andes; Cordillera Occidental; Cordillera Oriental; Cordillera Real; Cordillera Blanca
+1 | range | Rocky Mountains | Rocky Mountains
+2 | range | Ural Mountains | Ural Mountains
+2 | range | Pyrenees | Pyrenees
+2 | range | Carpathian Mountains | Carpathian Mountains; Southern Carpathians
+2 | range | Appalachian Mountains | Appalachian Mountains
+2 | range | Atlas Mountains | Atlas Mountains; High Atlas; Saharan Atlas; Anti-Atlas; Tell Atlas; Moyen Atlas
+2 | range | Caucasus Mountains | Caucasus Mountains; Lesser Caucasus
+2 | range | Scandinavian Mountains | Scandinavian Mountains
+3 | range | Great Dividing Range | Great Dividing Range
+3 | range | Hindu Kush | Hindu Kush
+3 | range | Tian Shan | Tian Shan
+3 | range | Karakoram | Karakoram
+3 | range | Dinaric Alps | Dinaric Alps
+3 | range | Balkan Mountains | Balkan Mountains
+3 | range | Tatra Mountains | Tatra Mountains | in=carpathian-mountains
+3 | range | Sierra Nevada (California) | Sierra Nevada | box=-125,30,-110,45 | id=sierra-nevada-us
+3 | range | Ethiopian Highlands | Ethiopian Highlands
+3 | range | Drakensberg | Drakensberg
+3 | range | Zagros Mountains | Zagros Mountains
+3 | range | Altai Mountains | Altai Mountains
+3 | range | Southern Alps (New Zealand) | Southern Alps/Kā Tiritiri o te Moana
+3 | range | Sudetes | Sudetes
+3 | range | Ore Mountains | Ore Mountains
+4 | range | Southern Carpathians | Southern Carpathians | in=carpathian-mountains
+4 | range | Pamir Mountains | Pamir mountains
+4 | range | Kunlun Mountains | Kunlun Mountains
+4 | range | Elburz Mountains | Elburz Mountains
+4 | range | Taurus Mountains | Taurus mountains
+4 | range | Pontic Mountains | Pontic Mountains
+4 | range | Cascade Range | Cascade Range
+4 | range | Brooks Range | Brooks Range
+4 | range | Alaska Range | Alaska Range
+4 | range | Coast Mountains | Coast Mountains
+4 | range | Sierra Madre Occidental | Sierra Madre Occidental
+4 | range | Sierra Madre Oriental | Sierra Madre Oriental
+4 | range | Western Ghats | Western Ghats
+4 | range | Eastern Ghats | Eastern Ghats
+4 | range | Jura Mountains | Jura Mountains
+4 | range | Vosges | Vosges Mountains
+4 | range | Harz | Harz
+4 | range | Ardennes | Ardennes
+4 | range | Bohemian Forest | Böhmerwald
+4 | range | Cantabrian Mountains | Cantabrian Mountains
+4 | range | Sierra Morena | Sierra Morena
+4 | range | Sierra Nevada (Spain) | Sierra Nevada | box=-10,35,0,40 | id=sierra-nevada-es
+4 | range | Pindus | Pindus
+4 | range | Transantarctic Mountains | Transantarctic Mountains
+4 | range | Tibesti Mountains | Tibesti Mountains
+4 | range | Ahaggar Mountains | Ahag
+4 | range | Blue Ridge Mountains | Blue Ridge Mountains | in=appalachian-mountains
+4 | range | Australian Alps | Australian Alps | in=great-dividing-range
+5 | range | Verkhoyansk Range | Verkhoyansk Range
+5 | range | Annamite Range | Annamite Range
+5 | range | Eastern Sayan | Eastern Sayan Mountains
+5 | range | Stanovoy Range | Stanovoy Range
+5 | range | Greater Khingan | Greater Khingan
+5 | range | Sikhote-Alin | Sikhote-Alin
+5 | range | Qinling Mountains | Qinling
+5 | range | Hejaz Mountains | Hejaz Mountains
+5 | range | Asir Mountains | Asir Mountains
+5 | range | Kopet Dag | Kopet Dag
+5 | range | Sulaiman Mountains | Sulaiman Mountains
+5 | range | Aravalli Range | Aravalli Range
+5 | range | Vindhya Range | Vindhya Range
+5 | range | Mount Lebanon | Mount Lebanon Range
+5 | range | Hajar Mountains | Al Hajar Mountains
+5 | range | Rif | Rif
+5 | range | Mackenzie Mountains | Mackenzie Mountains
+5 | range | Adirondack Mountains | Adirondack Mountains
+5 | range | Sierra Madre del Sur | Sierra Madre del Sur
+5 | range | Serra do Mar | Serra do Mar
+5 | range | Flinders Ranges | Flinders Ranges
+5 | range | MacDonnell Ranges | MacDonnell Ranges
+5 | range | Rwenzori Mountains | Rwenzori Mountains
+5 | range | Cambrian Mountains | Cambrian Mountains
+6 | range | Chersky Range | Chersky Range
+6 | range | Kolyma Mountains | Kolyma mountains
+6 | range | Koryak Mountains | Koryak Mountains
+6 | range | Yablonoi Mountains | Yablonoi Mountains
+6 | range | Dzhugdzhur Mountains | Dzhugdzhur Mountains
+6 | range | Khangai Mountains | Khangai Mountains
+6 | range | Khentii Mountains | Khentii Mountains
+6 | range | Satpura Range | Satpura Range
+6 | range | Torngat Mountains | Torngat Mountains
+6 | range | Ouachita Mountains | Ouachita Mountains
+6 | range | Owen Stanley Range | Owen Stanley Range
+6 | range | Barisan Mountains | Barisan Mountains
+6 | range | Guinea Highlands | Guinea Highlands
+
+# ---------- Lowlands, plains & basins ----------
+1 | lowland | Amazon Basin | Amazon basin
+2 | lowland | Great Plains | Great Plains
+2 | lowland | North European Plain | North European Plain
+2 | lowland | West Siberian Plain | West Siberian Plain
+2 | lowland | Pampas | Pampas
+2 | lowland | Great Hungarian Plain | Great Hungarian Plain
+2 | lowland | Indo-Gangetic Plain | Indo-Gangetic Plain
+2 | lowland | Congo Basin | Congo basin
+3 | lowland | North China Plain | North China Plain
+3 | lowland | Caspian Depression | Caspian Depression
+3 | lowland | Turan Depression | Turan Depression
+3 | lowland | Llanos | Llanos
+3 | lowland | Gran Chaco | Gran Chaco; Chaco Boreal; Chaco Austral
+3 | lowland | Pontic–Caspian Steppe | Pontic-Caspian steppe
+3 | lowland | Kazakh Steppe | Kazakh Steppe
+3 | lowland | Nile Delta | Nile Delta
+3 | lowland | Sahel | Sahel
+3 | lowland | Serengeti | Serengeti
+3 | lowland | Nullarbor Plain | Nullabor Plain
+4 | lowland | Manchurian Plain | Manchurian Plain
+4 | lowland | Atlantic Coastal Plain | Atlantic coastal plain
+4 | lowland | Central Lowlands (USA) | Central Lowlands
+4 | lowland | North Siberian Lowland | North Siberian Lowland
+4 | lowland | Danube Delta | Danube Delta
+4 | lowland | Ganges Delta | Ganges Delta
+4 | lowland | Mekong Delta | Mekong Delta
+4 | lowland | Mississippi Delta | Mississippi River Delta
+4 | lowland | Pantanal | Pantanal
+4 | lowland | Great Basin | Great Basin
+4 | lowland | Tarim Basin | Tarim Basin
+4 | lowland | Murray–Darling Basin | Murray–Darling basin
+5 | lowland | Sichuan Basin | Sichuan Basin
+5 | lowland | Great Artesian Basin | Great Artesian Basin
+5 | lowland | Junggar Basin | Junggar Basin
+5 | lowland | Volga Delta | Volga Delta
+5 | lowland | Kolyma Lowland | Kolyma Lowland
+5 | lowland | Llano Estacado | Llano Estacado
+5 | lowland | Central Valley (California) | Central Valley
+5 | lowland | Fergana Valley | Fergana Valley
+6 | lowland | Qaidam Basin | Qaidam Basin
+6 | lowland | Irrawaddy Delta | Irrawaddy Delta
+6 | lowland | Indus Delta | Indus River Delta
+6 | lowland | Lena Delta | Lena Delta
+6 | lowland | Hasa Plain | Hasa Plain
+6 | lowland | Darling Downs | Darling Downs
+
+# ---------- Rivers ----------
+1 | river | Nile | Nile; Rosetta Branch; Damietta Branch; White Nile; Mountain Nile; Albert Nile; Victoria Nile
+1 | river | Amazon | Amazonas
+1 | river | Mississippi | Mississippi
+1 | river | Danube | Danube; Borcea; Bratul Chillia; Bratul Sulina; Bratul Sfintu Gheorghe
+1 | river | Yangtze | Yangtze; Tongtian; Tuotuo
+2 | river | Volga | Volga
+2 | river | Rhine | Rhein; Rhine; Waal; Nederrijn; Lek
+2 | river | Ganges | Ganges
+2 | river | Congo | Congo; Lualaba
+2 | river | Mekong | Mekong; Za
+2 | river | Missouri | Missouri
+2 | river | Yellow River | Huang; Yellow
+2 | river | Niger | Niger
+2 | river | Indus | Indus
+2 | river | Thames | Thames
+2 | river | Seine | Seine
+3 | river | Elbe | Elbe
+3 | river | Vistula | Vistula
+3 | river | Po | Po
+3 | river | Dnieper | Dnepre; Dnieper
+3 | river | Tigris | Tigris; Dicle
+3 | river | Euphrates | Euphrates; Al Furat; Firat
+3 | river | Zambezi | Zambezi
+3 | river | Ob | Ob
+3 | river | Yenisei | Yenisey; Verkhniy Yenisey
+3 | river | Lena | Lena
+3 | river | Amur | Amur
+3 | river | St. Lawrence | St. Lawrence
+3 | river | Colorado (USA) | Colorado | box=-118,30,-104,42 | id=colorado-us
+3 | river | Rio Grande | Rio Grande
+3 | river | Paraná | Paraná
+3 | river | Orinoco | Orinoco
+3 | river | Mackenzie | Mackenzie
+3 | river | Yukon | Yukon
+3 | river | Murray | Murray
+3 | river | Brahmaputra | Brahmaputra; Dihang; Damqogkanbab
+3 | river | Blue Nile | Blue Nile; Abay | in=nile
+3 | river | Loire | Loire
+3 | river | Rhône | Rhône
+4 | river | Oder | Oder
+4 | river | Tagus | Tajo; Tagus
+4 | river | Don | Don
+4 | river | Ural | Ural | box=48,45,62,56 | id=ural-river
+4 | river | Irtysh | Ertis; Irtysh
+4 | river | Syr Darya | Syr Darya
+4 | river | Amu Darya | Amu  Darya
+4 | river | Irrawaddy | Ayeyarwady
+4 | river | Columbia | Columbia
+4 | river | Ohio | Ohio
+4 | river | Hudson | Hudson
+4 | river | Orange | Orange
+4 | river | Limpopo | Limpopo
+4 | river | Jordan | Jordan
+4 | river | Tisza | Tisa; Tisza | in=danube
+4 | river | Senegal | Sénégal; Bafing
+4 | river | Okavango | Okavango; Cubango
+4 | river | Garonne | Garonne
+4 | river | Douro | Duero
+4 | river | Ebro | Ebro
+4 | river | Dniester | Dniester
+5 | river | Salween | Salween; Nu
+5 | river | Darling | Darling; Barwon | in=murray
+5 | river | Madeira | Madeira; Mamoré | in=amazon | id=madeira-river
+5 | river | São Francisco | São  Francisco
+5 | river | Magdalena | Magdalena
+5 | river | Uruguay | Uruguay
+5 | river | Fraser | Fraser
+5 | river | Tennessee | Tennessee | in=ohio
+5 | river | Arkansas | Arkansas | in=mississippi
+5 | river | Snake | Snake | in=columbia
+5 | river | Drava | Drava | in=danube
+5 | river | Neva | Neva
+5 | river | Northern Dvina | Severnaya Dvina
+5 | river | Pechora | Pechora
+5 | river | Kama | Kama | in=volga
+5 | river | Angara | Angara | in=yenisei
+5 | river | Kolyma | Kolyma
+5 | river | Godavari | Godävari
+5 | river | Xi River | Xi
+5 | river | Shatt al-Arab | Shatt al Arab
+6 | river | Narmada | Narmada
+6 | river | Krishna | Krishna
+6 | river | Tocantins | Tocantins
+6 | river | Xingu | Xingu | in=amazon
+6 | river | Ucayali | Ucayali | in=amazon
+6 | river | Purus | Purús | in=amazon
+6 | river | Benue | Benue; Bénoué | in=niger
+6 | river | Kasai | Kasai | in=congo
+6 | river | Ubangi | Ubangi | in=congo
+6 | river | Volta | Volta; Black Volta; White Volta
+6 | river | Nelson | Nelson
+6 | river | Saskatchewan | Saskatchewan; North Saskatchewan; South Saskatchewan
+6 | river | Peace | Peace | in=mackenzie
+6 | river | Vilyuy | Vilyuy | in=lena
+6 | river | Selenga | Selenge (Selenga)
+6 | river | Western Dvina | Zapadnaya Dvina
+
+# ---------- Lakes ----------
+1 | lake | Lake Baikal | Lake Baikal
+1 | lake | Lake Victoria | Lake Victoria
+2 | lake | Lake Superior | Lake Superior
+2 | lake | Lake Michigan | Lake Michigan
+2 | lake | Lake Tanganyika | Lake Tanganyika
+2 | lake | Lake Titicaca | Titicaca
+2 | lake | Dead Sea | Dead Sea
+3 | lake | Lake Huron | Lake Huron
+3 | lake | Lake Erie | Lake Erie
+3 | lake | Lake Ontario | Lake Ontario
+3 | lake | Lake Malawi | Lake Malawi
+3 | lake | Lake Ladoga | Lake Ladoga
+3 | lake | Lake Geneva | Lake Geneva
+3 | lake | Lake Constance | Lake Constance
+3 | lake | Lake Balaton | Lake Balaton
+3 | lake | Lake Chad | Lake Chad
+3 | lake | Great Salt Lake | Great Salt Lake
+3 | lake | Aral Sea | North Aral Sea; South Aral Sea; Barsakelmes
+4 | lake | Lake Onega | Lake Onega
+4 | lake | Great Bear Lake | Great Bear Lake
+4 | lake | Great Slave Lake | Great Slave Lake
+4 | lake | Lake Winnipeg | Lake Winnipeg
+4 | lake | Lake Balkhash | Lake Balkhash
+4 | lake | Issyk-Kul | Issyk-Kul
+4 | lake | Lake Van | Lake Van
+4 | lake | Vänern | Vänern
+4 | lake | Lake Nicaragua | Nicaragua
+4 | lake | Lake Turkana | Lake Turkana
+4 | lake | Lake Nasser | Lake Nasser
+4 | lake | Sea of Galilee | Sea of Galilee
+4 | lake | Lake Peipus | Lake Peipus; Pihkva
+5 | lake | Lake Urmia | Lake Urmia
+5 | lake | Vättern | Vättern
+5 | lake | Lake Tana | Lake Tana
+5 | lake | Lake Kivu | Lake Kivu
+5 | lake | Lake Albert | Lake Albert
+5 | lake | Lake Volta | Lake Volta
+5 | lake | Lake Kariba | Lake Kariba
+5 | lake | Tonlé Sap | Tonlé Sap
+5 | lake | Qinghai Lake | Qinghai
+5 | lake | Lake Taupo | Lake Taupo
+5 | lake | Lake Okeechobee | Lake Okeechobee
+5 | lake | Lough Neagh | Lough Neagh
+5 | lake | Saimaa | Saimaa
+5 | lake | Mälaren | Mälaren
+5 | lake | IJsselmeer | IJsselmeer
+5 | lake | Lake Eyre | Lake Eyre North; Lake Eyre South
+6 | lake | Lake Khövsgöl | Khövsgöl Nuur
+6 | lake | Lake Sevan | Lake Sevan
+6 | lake | Lake Tahoe | Lake Tahoe
+6 | lake | Lake Champlain | Lake Champlain
+6 | lake | Poyang Lake | Poyang
+6 | lake | Lake Mweru | Mweru
+6 | lake | Lake Edward | Lake Edward
+6 | lake | Lake Inari | Inari
+6 | lake | Päijänne | Päijänne
+6 | lake | Lake Athabasca | Lake Athabasca
+6 | lake | Lake of the Woods | Lake of the Woods
+6 | lake | Lake Chapala | Chapala
+6 | lake | Lake Argentino | Lago Argentino
+
+# ---------- Seas & oceans ----------
+1 | sea | Atlantic Ocean | Atlantic Ocean
+1 | sea | Pacific Ocean | Pacific Ocean
+1 | sea | Indian Ocean | Indian Ocean
+1 | sea | Arctic Ocean | Arctic Ocean
+1 | sea | Mediterranean Sea | Mediterranean Sea
+1 | sea | Black Sea | Black Sea
+1 | sea | Caribbean Sea | Caribbean Sea
+1 | sea | Red Sea | Red Sea
+1 | sea | North Sea | North Sea
+1 | sea | Baltic Sea | Baltic Sea
+1 | sea | Caspian Sea | Caspian Sea
+2 | sea | Southern Ocean | Southern Ocean
+2 | sea | Arabian Sea | Arabian Sea
+2 | sea | South China Sea | South China Sea
+2 | sea | Adriatic Sea | Adriatic Sea | in=mediterranean-sea
+2 | sea | Aegean Sea | Aegean Sea | in=mediterranean-sea
+2 | sea | Sea of Japan | Sea of Japan
+2 | sea | Bering Sea | Bering Sea
+3 | sea | Barents Sea | Barents Sea
+3 | sea | Norwegian Sea | Norwegian Sea
+3 | sea | Tyrrhenian Sea | Tyrrhenian Sea | in=mediterranean-sea
+3 | sea | Ionian Sea | Ionian Sea | in=mediterranean-sea
+3 | sea | Irish Sea | Irish Sea
+3 | sea | Coral Sea | Coral Sea
+3 | sea | Tasman Sea | Tasman Sea
+3 | sea | Yellow Sea | Yellow Sea
+3 | sea | East China Sea | East China Sea
+3 | sea | Sea of Okhotsk | Sea of Okhotsk
+3 | sea | Sea of Azov | Sea of Azov
+3 | sea | Sea of Marmara | Sea of Marmara
+3 | sea | Ligurian Sea | Ligurian Sea | in=mediterranean-sea
+4 | sea | Philippine Sea | Philippine Sea
+4 | sea | Labrador Sea | Labrador Sea
+4 | sea | Greenland Sea | Greenland Sea
+4 | sea | Kara Sea | Kara Sea
+4 | sea | Laptev Sea | Laptev Sea
+4 | sea | East Siberian Sea | East Siberian Sea
+4 | sea | Chukchi Sea | Chukchi Sea
+4 | sea | Beaufort Sea | Beaufort Sea
+4 | sea | White Sea | White Sea
+4 | sea | Java Sea | Java Sea
+4 | sea | Andaman Sea | Andaman Sea
+4 | sea | Timor Sea | Timor Sea
+4 | sea | Arafura Sea | Arafura Sea
+4 | sea | Sargasso Sea | Sargasso Sea
+4 | sea | Balearic Sea | Balearic Sea | in=mediterranean-sea
+4 | sea | Sea of Crete | Sea of Crete | in=mediterranean-sea
+4 | sea | Kattegat | Kattegat | in=baltic-sea
+4 | sea | Skagerrak | Skagerrak | in=north-sea
+5 | sea | Celebes Sea | Celebes Sea
+5 | sea | Sulu Sea | Sulu Sea
+5 | sea | Banda Sea | Banda Sea
+5 | sea | Weddell Sea | Weddell Sea
+5 | sea | Ross Sea | Ross Sea
+5 | sea | Alboran Sea | Alboran Sea | in=mediterranean-sea
+5 | sea | Laccadive Sea | Laccadive Sea
+5 | sea | Solomon Sea | Solomon Sea
+5 | sea | Bohai Sea | Bohai Sea
+5 | sea | Wadden Sea | Wadden Sea
+6 | sea | Scotia Sea | Scotia Sea
+6 | sea | Bellingshausen Sea | Bellingshausen Sea
+6 | sea | Amundsen Sea | Amundsen Sea
+6 | sea | Molucca Sea | Molucca Sea
+6 | sea | Bismarck Sea | Bismarck Sea
+6 | sea | Flores Sea | Flores Sea
+6 | sea | Lincoln Sea | Lincoln Sea
+6 | sea | Seto Inland Sea | Seto Inland Sea
+6 | sea | Sea of the Hebrides | Sea of the Hebrides
+
+# ---------- Bays & gulfs ----------
+1 | bay | Gulf of Mexico | Gulf of Mexico
+1 | bay | Bay of Bengal | Bay of Bengal
+1 | bay | Persian Gulf | Persian Gulf
+2 | bay | Hudson Bay | Hudson Bay
+2 | bay | Bay of Biscay | Bay of Biscay
+2 | bay | Gulf of Guinea | Gulf of Guinea
+2 | bay | Gulf of Finland | Gulf of Finland | in=baltic-sea
+2 | bay | Gulf of Bothnia | Gulf of Bothnia | in=baltic-sea
+3 | bay | Gulf of Aden | Gulf of Aden
+3 | bay | Gulf of Thailand | Gulf of Thailand | in=south-china-sea
+3 | bay | Gulf of Alaska | Gulf of Alaska
+3 | bay | Gulf of California | Gulf of California
+3 | bay | Baffin Bay | Baffin Bay
+3 | bay | Gulf of Riga | Gulf of Riga | in=baltic-sea
+3 | bay | Gulf of Oman | Gulf of Oman
+3 | bay | Río de la Plata | Río de la Plata
+3 | bay | Gulf of Aqaba | Gulf of Aqaba | in=red-sea
+3 | bay | Gulf of Suez | Gulf of Suez | in=red-sea
+4 | bay | Great Australian Bight | Great Australian Bight
+4 | bay | Gulf of Carpentaria | Gulf of Carpentaria
+4 | bay | Gulf of St. Lawrence | Gulf of Saint Lawrence
+4 | bay | Gulf of Lion | Gulf of Lion | in=mediterranean-sea
+4 | bay | Gulf of Sidra | Gulf of Sidra | in=mediterranean-sea
+4 | bay | Chesapeake Bay | Chesapeake Bay
+4 | bay | Gulf of Tonkin | Gulf of Tonkin | in=south-china-sea
+4 | bay | Bay of Fundy | Bay of Fundy
+4 | bay | Gulf of Gabès | Gulf of Gabès | in=mediterranean-sea
+4 | bay | San Francisco Bay | San Francisco Bay
+5 | bay | Bay of Campeche | Bay of Campeche | in=gulf-of-mexico
+5 | bay | Gulf of Honduras | Gulf of Honduras | in=caribbean-sea
+5 | bay | Gulf of Maine | Gulf of Maine
+5 | bay | James Bay | James Bay | in=hudson-bay
+5 | bay | Gulf of Panama | Gulf of Panama
+5 | bay | Bight of Benin | Bight of Benin | in=gulf-of-guinea
+5 | bay | Bight of Biafra | Bight of Biafra | in=gulf-of-guinea
+5 | bay | Gulf of Ob | Gulf of Ob | in=kara-sea
+5 | bay | Shark Bay | Shark Bay
+5 | bay | Delaware Bay | Delaware Bay
+5 | bay | Gulf of Khambhat | Gulf of Khambhat | in=arabian-sea
+5 | bay | Gulf of Kutch | Gulf of Kutch | in=arabian-sea
+5 | bay | Gulf of Papua | Gulf of Papua | in=coral-sea
+5 | bay | Gulf of Martaban | Gulf of Martaban | in=andaman-sea
+6 | bay | Ungava Bay | Ungava Bay
+6 | bay | Bristol Bay | Bristol Bay | in=bering-sea
+6 | bay | Cook Inlet | Tikahtnu Inlet | in=gulf-of-alaska
+6 | bay | San Jorge Gulf | San Jorge Gulf
+6 | bay | San Matías Gulf | San Matías Gulf
+6 | bay | Gulf of Mannar | Gulf of Mannar
+6 | bay | Shelikhov Gulf | Shelikhov Gulf | in=sea-of-okhotsk
+6 | bay | Bay of Plenty | Bay of Plenty
+6 | bay | Gulf of Guayaquil | Gulf of Guayaquil
+6 | bay | Gulf of Tehuantepec | Gulf of Tehuantepec
+6 | bay | Joseph Bonaparte Gulf | Joseph Bonaparte Gulf | in=timor-sea
+6 | bay | Gulf of Anadyr | Gulf of Anadyr | in=bering-sea
+6 | bay | Foxe Basin | Foxe Basin
+6 | bay | Disko Bay | Disko Bay | in=baffin-bay
+
+# ---------- Peninsulas ----------
+1 | peninsula | Scandinavian Peninsula | Scandinavia
+1 | peninsula | Arabian Peninsula | Arabian Peninsula
+1 | peninsula | Iberian Peninsula | Iberian Peninsula
+1 | peninsula | Apennine Peninsula (Italy) | country:ITA | maxlat=44.2 | id=apennine-peninsula
+2 | peninsula | Balkan Peninsula | Balkans
+2 | peninsula | Jutland | country:DNK
+2 | peninsula | Crimea | Crimean Peninsula
+2 | peninsula | Kamchatka | Kamchatka Peninsula
+2 | peninsula | Korean Peninsula | Korean Peninsula
+2 | peninsula | Florida | Florida
+2 | peninsula | Baja California | Baja California Peninsula
+2 | peninsula | Anatolia | country:TUR | minlon=26.5
+2 | peninsula | Indian Subcontinent | Indian subcontinent
+3 | peninsula | Yucatán Peninsula | Yucatan Peninsula
+3 | peninsula | Malay Peninsula | Malay Peninsula
+3 | peninsula | Indochina | Mainland Southeast Asia
+3 | peninsula | Kola Peninsula | Kola
+3 | peninsula | Horn of Africa | horn of Africa
+3 | peninsula | Peloponnese | Peloponnese
+3 | peninsula | Antarctic Peninsula | Antarctic Peninsula
+4 | peninsula | Taymyr Peninsula | Taymyr Peninsula
+4 | peninsula | Yamal Peninsula | Yamal Peninsula
+4 | peninsula | Alaska Peninsula | Alaska Peninsula
+4 | peninsula | Labrador Peninsula | Labrador
+4 | peninsula | Cape York Peninsula | Cape York Peninsula
+4 | peninsula | Kenai Peninsula | Kenai Peninsula
+5 | peninsula | Arnhem Land | Arnhem Land
+5 | peninsula | Chukchi Peninsula | Chukchi Peninsula
+5 | peninsula | Shandong Peninsula | Shandong Peninsula
+5 | peninsula | Liaodong Peninsula | Liaodong Peninsula
+5 | peninsula | Gaspé Peninsula | Gaspé Peninsula
+5 | peninsula | Ungava Peninsula | Ungava Peninsula | in=labrador-peninsula
+5 | peninsula | Seward Peninsula | Seward Peninsula
+5 | peninsula | Guajira Peninsula | Guajira Peninsula
+5 | peninsula | Kathiawar | Kathiawar | in=indian-subcontinent
+6 | peninsula | Valdés Peninsula | Valdes Peninsula
+6 | peninsula | Kanin Peninsula | Kanin Peninsula
+6 | peninsula | Absheron Peninsula | Absheron peninsula
+6 | peninsula | Musandam Peninsula | Musandam Peninsula | in=arabian-peninsula
+6 | peninsula | Boothia Peninsula | Boothia Peninsula
+6 | peninsula | Gyda Peninsula | Gyda Peninsula
+6 | peninsula | Noto Peninsula | Noto Peninsula
+6 | peninsula | Azuero Peninsula | Azuero Peninsula
+6 | peninsula | Coromandel Peninsula | Coromandel Peninsula
+
+# ---------- Islands & archipelagos ----------
+1 | island | Greenland | Greenland
+1 | island | Great Britain | Great Britain | in=british-isles
+1 | island | Iceland | Iceland
+1 | island | Madagascar | Madagascar
+2 | island | Ireland | Ireland | in=british-isles
+2 | island | Sicily | Sicily
+2 | island | Sardinia | Sardinia
+2 | island | Corsica | Corsica
+2 | island | Crete | Crete
+2 | island | Cyprus | Cyprus
+2 | island | Cuba | Cuba | in=greater-antilles
+2 | island | Sri Lanka | Sri Lanka
+2 | island | Taiwan | Taiwan
+2 | island | Tasmania | Mainland Tasmania
+2 | island | Borneo | Borneo | in=malay-archipelago
+2 | island | New Guinea | New Guinea
+2 | island | Hawaiian Islands | Hawaiian Islands; Hawaii
+2 | island | Canary Islands | Canary Islands
+2 | island | British Isles | British Isles
+3 | island | Sumatra | Sumatra | in=malay-archipelago
+3 | island | Java | Java | in=malay-archipelago
+3 | island | Honshu | Honshu
+3 | island | Hispaniola | Hispaniola | in=greater-antilles
+3 | island | Jamaica | Jamaica | in=greater-antilles
+3 | island | Puerto Rico | Puerto Rico | in=greater-antilles
+3 | island | Newfoundland | Newfoundland
+3 | island | Baffin Island | Baffin Island | in=canadian-arctic-archipelago
+3 | island | Tierra del Fuego | Tierra del Fuego
+3 | island | North Island (New Zealand) | North Island
+3 | island | South Island (New Zealand) | South Island
+3 | island | Bali | Bali | in=malay-archipelago
+3 | island | Mallorca | Mallorca | in=balearic-islands
+3 | island | Malta | Malta
+3 | island | Balearic Islands | Balearic Islands
+3 | island | Galápagos Islands | Galapagos Islands; Isabela Island; Santa Cruz Island
+3 | island | Falkland Islands | Falkland Islands
+3 | island | Svalbard | Svalbard
+3 | island | Philippines | Philippines
+4 | island | Hokkaido | Hokkaidō
+4 | island | Sakhalin | Sakhalin
+4 | island | Hainan | Hainan Island
+4 | island | Luzon | Luzon | in=philippines
+4 | island | Mindanao | Mindanao | in=philippines
+4 | island | Sulawesi | Sulawesi | in=malay-archipelago
+4 | island | Vancouver Island | Vancouver Island
+4 | island | Novaya Zemlya | Novaya Zemlya
+4 | island | Gotland | Gotland
+4 | island | Tenerife | Tenerife | in=canary-islands
+4 | island | Zanzibar | Zanzibar Archipelago
+4 | island | Azores | Azores
+4 | island | Faroe Islands | Faroe Islands
+4 | island | Aleutian Islands | Aleutian Islands
+4 | island | Kuril Islands | Kuril Islands
+4 | island | Bahamas | Bahama Islands
+4 | island | Greater Antilles | Greater Antilles
+4 | island | Lesser Antilles | Lesser Antilles
+4 | island | Maldives | Maldive Islands
+4 | island | Cape Verde Islands | Cape Verde
+4 | island | Malay Archipelago | Malay Archipelago
+4 | island | Canadian Arctic Archipelago | Canadian Arctic Archipelago; Queen Elizabeth Islands; Parry Islands
+5 | island | Kyushu | Kyushu
+5 | island | Shikoku | Shikoku
+5 | island | Timor | Timor | in=malay-archipelago
+5 | island | Victoria Island | Victoria Island | in=canadian-arctic-archipelago
+5 | island | Ellesmere Island | Ellesmere Island | in=canadian-arctic-archipelago
+5 | island | Long Island | Long Island
+5 | island | Prince Edward Island | Prince Edward Island
+5 | island | Zealand | Zealand
+5 | island | Rhodes | Rhodes
+5 | island | Madeira | Madeira Island | id=madeira-island
+5 | island | Socotra | Socotra
+5 | island | Réunion | Réunion
+5 | island | Mauritius | Mauritius Island
+5 | island | Trinidad | Trinidad
+5 | island | Palawan | Palawan Island | in=philippines
+5 | island | Chiloé | Chiloé Island
+5 | island | Shetland Islands | Shetland Islands
+5 | island | Orkney Islands | Orkney Islands
+5 | island | Cyclades | Cyclades
+5 | island | Ionian Islands | Ionian Islands
+5 | island | Frisian Islands | Frisian Islands
+5 | island | Lofoten | Lofoten
+5 | island | Seychelles | Seychelles
+5 | island | Andaman Islands | Andaman Islands; North Andaman Island; Middle Andaman; South Andaman Island
+5 | island | Ryukyu Islands | Ryukyu Islands
+5 | island | Solomon Islands | Solomon Islands
+5 | island | Society Islands | Society Islands
+5 | island | Franz Josef Land | Franz Josef Land
+6 | island | Lesbos | Lesbos
+6 | island | Saaremaa | Saaremaa
+6 | island | Gran Canaria | Gran Canaria | in=canary-islands
+6 | island | Bioko | Bioko
+6 | island | Wrangel Island | Wrangel Island
+6 | island | Kodiak Island | Kodiak Island
+6 | island | Southampton Island | Southampton Island
+6 | island | Devon Island | Devon Island | in=canadian-arctic-archipelago
+6 | island | Kangaroo Island | Kangaroo Island
+6 | island | Fraser Island | Fraser Island
+6 | island | Marajó | Marajó
+6 | island | Phuket | Phuket
+6 | island | Cape Breton Island | Cape Breton Island
+6 | island | Anticosti Island | Anticosti Island
+6 | island | Outer Hebrides | Outer Hebrides
+6 | island | Comoros | Comoros
+6 | island | Nicobar Islands | Nicobar Islands; Great Nicobar Island
+6 | island | Marquesas Islands | Marquesas Islands
+6 | island | Severnaya Zemlya | Severnaya Zemlya
+6 | island | New Siberian Islands | New Siberian Islands
+6 | island | South Georgia | South Georgia
+6 | island | Kerguelen Islands | Kerguelen Islands

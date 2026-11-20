@@ -1,0 +1,34 @@
+/* The blind physical map (WorldMap scope 'phys'): no borders, mountains and lowlands in colour, rivers and lakes
+ * in blue. Seas, bays, peninsulas and islands are found by the coastline and only light up in the answer. */
+#map .phys-land, #map .phys-seas { display: none; }
+#map.phys .phys-land, #map.phys .phys-seas { display: inline; }
+#map .pf { pointer-events: none; }
+
+#map.phys .country, #map.phys .country.np, #map.phys.locked .country:hover {
+  fill: #e7dcae !important; fill-opacity: 1; stroke: #e7dcae; stroke-width: 1.2; pointer-events: none; cursor: inherit;
+}
+#map.phys .dot { display: none; }
+#map.phys .country.dim { opacity: .3; }
+#map.phys .country.hinted { stroke: #e7dcae; filter: none; }
+
+#map .pf-lowland { fill: #a6d08a; stroke: none; }
+#map .pf-range { fill: #b9845a; stroke: none; }
+#map .pf-lake { fill: #2b72bd; stroke: #164a85; stroke-width: .6; }
+#map .pf-river { fill: none; stroke: #2f7fd0; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+#map .pf-sea, #map .pf-bay, #map .pf-peninsula, #map .pf-island { fill: transparent; stroke: none; }
+
+/* answer reveal */
+#map .pf.correct { fill: var(--ok); fill-opacity: .6; stroke: #0b3d2a; stroke-width: 1.4; stroke-opacity: .9; animation: glow-ok 1.2s ease-in-out infinite; }
+#map .pf.wrong { fill: var(--bad); fill-opacity: .55; stroke: #5a0f1f; stroke-width: 1.2; stroke-opacity: .9; }
+#map .pf-river.correct { fill: none; stroke: var(--ok); stroke-width: 5; stroke-opacity: 1; }
+#map .pf-river.wrong { fill: none; stroke: var(--bad); stroke-width: 4; stroke-opacity: 1; }
+#map .pf-sea.correct, #map .pf-bay.correct { fill-opacity: .45; }
+#map .pf.picked { fill: #ffe08a; fill-opacity: .6; }
+#map .pf-river.picked { fill: none; stroke: #ffe08a; stroke-width: 4; }
+#map .misspin { fill: var(--bad); stroke: #fff; pointer-events: none; }
+
+/* small legend in the corner of the map */
+.phys-legend { position: absolute; left: 10px; bottom: 10px; display: none; gap: 10px; flex-wrap: wrap; padding: 5px 10px; border-radius: 10px;
+  background: rgba(10, 20, 45, .72); color: #e8eefc; font-size: 11.5px; pointer-events: none; z-index: 2; }
+.phys-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+.map-wrap:has(#map.phys) .phys-legend { display: flex; }

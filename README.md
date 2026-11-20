@@ -77,6 +77,28 @@ The same question types as for countries: **find it on the map, flag, capital** 
 
 Data: `data/regions.js` is built by `tools/build-data.js` from Natural Earth's admin-1 outlines (`ne_50m_admin_1_states_provinces_lakes.geojson`, placed in `<node_modules>/natural-earth/`), projected exactly like the countries. Flags in `flags/regions/` are public domain (the `region-flags` package), optimised with svgo.
 
+## ⛰️ Physical geography (blind map)
+
+The **Map** menu of Geo Ludo, Geo Voyage and Training has a fourth option, **⛰️ Physical geography**: a blind map without borders or names, with mountain ranges in brown, lowlands in green and rivers and lakes in blue. Seas, bays, peninsulas and islands are found by the coastline. 570 features in eight kinds, each with a level 1–6:
+
+| Kind | Examples |
+|------|----------|
+| Mountain ranges (91) | Alps, Himalayas, Andes · Tatras, Sudetes · Verkhoyansk, Torngat |
+| Lowlands (45) | Amazon Basin, Great Plains, North European Plain · Pampas, Great Hungarian Plain · deltas |
+| Rivers (96) | Nile, Amazon, Danube · Elbe, Vistula · Narmada, Vilyuy |
+| Lakes (60) | Baikal, Victoria · Balaton, Geneva · Khövsgöl, Inari |
+| Seas & oceans (68) | the five oceans, Mediterranean, Black Sea · Adriatic, Azov · Scotia Sea |
+| Bays & gulfs (56) | Gulf of Mexico, Bay of Biscay · Gulf of Riga · Gulf of Anadyr |
+| Peninsulas (44) | Scandinavian, Iberian, Apennine · Crimea, Jutland · Kanin |
+| Islands & archipelagos (110) | Greenland, Great Britain, Madagascar · Svalbard, Canary Islands · Kerguelen |
+
+- Physical geography is **never mixed with the other questions**: on this map the other categories are switched off, and the Geography tile's menu offers the kinds of feature instead (all, or one kind).
+- A tap counts if it is inside the feature, or close to its edge (small islands and lakes), or on a river line. A tap on a part of a bigger feature also counts for it: the Adriatic for the Mediterranean, the Tisza for the Danube, Mallorca for the Balearic Islands. A tap on nothing named is simply wrong.
+- The hint names the part of the world (e.g. "Southern Europe") and dims the rest. Computer players' mistakes are a nearby feature of the same kind.
+- In Training, choose the kinds of feature, the levels and the parts of the world (a feature belongs to the part of its nearest country).
+
+Data: the list is `data/physical.txt` (one line per feature: level, kind, name shown, Natural Earth names; options for parts of bigger features, boxes for names used twice, and clipped country outlines for the Apennine Peninsula, Jutland and Anatolia). `tools/build-physical.js` (run by `tools/build-data.js`) builds `data/physical.js` from Natural Earth's physical layers (`ne_10m_geography_regions_polys`, `ne_10m_geography_marine_polys`, `ne_50m_rivers_lake_centerlines`, `ne_50m_lakes`, GeoJSON from natural-earth-vector, placed in `<node_modules>/natural-earth/`), projected like the countries and simplified.
+
 ## ⏳ Geo Time Travel (`timetravel.html`)
 
 A history race through five eras: **Prehistory → Antiquity → Middle Ages → Early Modern → Modern → today**.
@@ -208,7 +230,8 @@ train.html, js/train.js, css/train.css   🎯 Solo training
 ludo/               🎲 GeoLudo Classic (its own frozen copies of index.html, js/ and css/; online rooms in ludo/js/online.js)
 css/style.css       shared base styles (cards, buttons, map, question card)
 js/map.js           world map: rendering, pan/zoom/pinch, picking (larger tap areas for tiny nations), answer reveal, overlay layer
-js/dialog.js        in-game confirm/alert dialogs (copy in ludo/js/)
+js/dialog.js        in-game confirm/alert dialogs (copy in ludo/js/); map.js and quiz.js are shared with Geo Ludo
+css/physical.css    the blind physical map
 js/quiz.js          question pools and selection (6 levels, categories, no repeats)
 js/fx.js            sound (WebAudio), confetti
 data/world.js       generated: projected country outlines, capitals, cities, fame levels, the voyage route
@@ -221,7 +244,8 @@ data/cities.json    non-capital cities with tiers 1-6 (edit this)
 data/capitals.json  capital positions (lat/lon per country), shown as a pin after capital questions
 data/history.js, culture.js, sports.js, geo-extra.js   generated from the question files
 flags/*.svg         country flags (from flag-icons)
-tools/build-data.js     regenerates data/world.js (including the route) and flags/
+data/physical.txt   physical features for the blind map (edit this) → data/physical.js
+tools/build-data.js     regenerates data/world.js (including the route), data/regions.js, data/physical.js and flags/
 tools/build-questions.js  regenerates the question data files
 ```
 

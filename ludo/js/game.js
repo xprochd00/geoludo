@@ -151,9 +151,10 @@
   const CAT_SHORT = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
   // Categories: pick one, or several to mix them in equal shares (same picker as Voyage).
   let cats = mode === 'mixed' ? mixCats.slice() : [mode];
-  let geoType = Quiz.GEO_TYPES[saved.geoType] ? saved.geoType : 'all'; // one type of geography question, or all
-  // the map: world / world + US states & Canada / only those (geography questions only)
+  // the map: world / world + US states & Canada / only those / the blind physical map (physical geography only)
   let scope = Quiz.SCOPES.some((x) => x.value === saved.scope) ? saved.scope : 'world';
+  // one type of geography question (on the physical map: one kind of feature), or all
+  let geoType = Quiz.typesFor(scope)[saved.geoType] ? saved.geoType : 'all';
   const scopeLabel = (sc) => (Quiz.SCOPES.find((x) => x.value === sc) || Quiz.SCOPES[0]).label;
   const catPick = MultiPick({ order: Quiz.CATEGORIES, get: () => cats, set: (v) => { cats = v; }, onChange: () => { applyCats(); syncMode(); saveSetup(); } });
   function applyCats() {
@@ -161,20 +162,28 @@
     mixCats = cats.length > 1 ? cats.slice() : Quiz.CATEGORIES.slice();
   }
   function syncMode() {
-    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.classList.toggle('active', cats.includes(b.dataset.cat)));
+    const phys = scope === 'phys'; // physical geography stands alone: the other categories step aside
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => {
+      b.disabled = phys && b.dataset.cat !== 'geo';
+      b.classList.toggle('active', phys ? b.dataset.cat === 'geo' : cats.includes(b.dataset.cat));
+    });
+    $('cat-all').disabled = phys;
+    document.querySelector('#cat-chips .cat-btn[data-cat="geo"] b').textContent = phys ? 'Physical' : 'Geography';
     const nm = (c, names) => (c === 'geo' && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : names[c]);
     $('cat-hint').textContent = cats.length > 1
       ? `Mixed: ${cats.map((c) => nm(c, CAT_SHORT)).join(' + ')}, in equal shares.`
       : `${nm(cats[0], CAT_NAMES)} questions only. Pick more to mix them.`;
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
-    $('geo-type').textContent = `${Quiz.GEO_TYPES[geoType]} ▾`;
+    $('geo-type').textContent = `${Quiz.typesFor(scope)[geoType]} ▾`;
     $('scope-btn').textContent = `${scopeLabel(scope)} ▾`;
     if (scope === 'na') $('cat-hint').textContent += ' About the US states and Canadian provinces.';
+    if (phys) $('cat-hint').textContent = `${modeLabelFor('geo', ['geo'], geoType, 'phys')}: mountains, lowlands, rivers, lakes, seas, bays, peninsulas and islands on a blind map without borders. Not mixed with other categories.`;
   }
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, scope);
     if (v == null || v === scope) return;
     scope = v;
+    if (!Quiz.typesFor(scope)[geoType]) geoType = 'all';
     syncMode();
     saveSetup();
   });
@@ -184,11 +193,11 @@
   async function chooseGeoType(e) {
     e.preventDefault();
     e.stopPropagation(); // not a click on the Geography tile
-    const items = Object.entries(Quiz.GEO_TYPES).map(([value, label]) => ({ value, label }));
+    const items = Object.entries(Quiz.typesFor(scope)).map(([value, label]) => ({ value, label }));
     const v = await Dialog.menu($('geo-type'), items, geoType);
     if (v == null) return;
     geoType = v;
-    catPick.on('geo'); // also saves and redraws
+    if (scope !== 'phys') catPick.on('geo'); // also saves and redraws
     syncMode();
     saveSetup();
   }
@@ -228,7 +237,7 @@
     if (sv) {
       const s = sv.state;
       const who = s.players[s.turn];
-      $('resume-info').textContent = `${s.players.map((p) => p.name).join(', ')} · ${modeLabelFor(s.mode, s.cats, s.geoType)} · ${who.name} to play`;
+      $('resume-info').textContent = `${s.players.map((p) => p.name).join(', ')} · ${modeLabelFor(s.mode, s.cats, s.geoType, s.scope)} · ${who.name} to play`;
     }
   }
   $('discard-btn').addEventListener('click', () => { store.del(SAVE_KEY); syncNotes(); });
@@ -245,7 +254,8 @@
     startGame();
   });
 
-  function modeLabelFor(m, cats, gt = 'all') {
+  function modeLabelFor(m, cats, gt = 'all', sc = 'world') {
+    if (sc === 'phys') return 'Physical geography' + (gt && gt !== 'all' && Quiz.PHYS_TYPES[gt] ? ` (${Quiz.PHYS_TYPES[gt]})` : '');
     const one = gt && gt !== 'all' && Quiz.GEO_TYPES[gt];
     const nm = (c) => (c === 'geo' && one ? `Geography (${one})` : CAT_SHORT[c]);
     if (m === 'mixed' && cats.length < Quiz.CATEGORIES.length) return `Mixed: ${cats.map(nm).join(' + ')}`;
@@ -261,7 +271,7 @@
     const rules = preset === 'custom' ? { ...custom } : { ...PRESETS[preset] };
     return {
       opts: { ...rules, timer: $('opt-timer').checked },
-      preset, mode, cats: cats.slice(), geoType, scope,
+      preset, mode: scope === 'phys' ? 'geo' : mode, cats: scope === 'phys' ? ['geo'] : cats.slice(), geoType, scope,
       pieces: [0, 1, 2, 3].map((seat) => (preset === 'custom' ? pieceCounts[seat] : rules.pieces)),
     };
   }
@@ -289,7 +299,7 @@
     };
     launch();
     const rulesLine = opts.choose ? 'Pick your challenge after each roll' : 'The dice sets the question level';
-    log(`🌍 A ${modeLabelFor(state.mode, state.cats, state.geoType).toLowerCase()} race begins! ${rulesLine}.${opts.board ? '' : ' Roll a <b>6</b> to bring a piece onto the board.'}`);
+    log(`🌍 A ${modeLabelFor(state.mode, state.cats, state.geoType, state.scope).toLowerCase()} race begins! ${rulesLine}.${opts.board ? '' : ' Roll a <b>6</b> to bring a piece onto the board.'}`);
     beginTurn();
   }
 
@@ -323,7 +333,7 @@
     prism.classList.add('flat');
     $('result').hidden = true;
     $('level-picker').hidden = true;
-    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats, state.geoType) + (state.scope && state.scope !== 'world' ? (state.scope === 'na' ? ' · US & Canada' : ' · + US & Canada') : '');
+    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats, state.geoType, state.scope) + (state.scope === 'na' ? ' · US & Canada' : state.scope === 'world+na' ? ' · + US & Canada' : '');
     $('zone-legend').hidden = !state.opts.rescue;
     Board.render(state.players);
   }
@@ -772,6 +782,10 @@
   function botGuess(skill, level, excluded, rnd) {
     const q = state.q;
     if (rnd() <= botAcc(skill, level)) return q.country.id;
+    if (q.physType) { // the physical map: a nearby feature of the same kind
+      const pn = WorldMap.physNear(q.country.id).filter((f) => !excluded.some((x) => String(x).split('~')[0] === f.id)).slice(0, 5);
+      if (pn.length) return pn[Math.floor(rnd() * pn.length)].id;
+    }
     const [x, y] = q.country.c;
     const near = (q.country.parent ? window.REGIONS.regions : window.WORLD.countries)
       .filter((c) => c.fame && c.id !== q.country.id && !excluded.includes(c.id))
@@ -831,12 +845,12 @@
     $('result').hidden = true;
     $('pass-btn').hidden = true;
     syncHint();
-    WorldMap.prepare(mapPick);
+    WorldMap.prepare(mapPick, state.q);
     WorldMap.lock();
 
     await showMap();
     if (state.q !== q) return;
-    WorldMap.prepare(mapPick);
+    WorldMap.prepare(mapPick, state.q);
     if (!local(p) || isBot(p)) WorldMap.lock();
     syncHint();
     point('question');
@@ -995,7 +1009,7 @@
       $('pass-btn').hidden = isBot(s) || !local(s);
       res.hidden = false;
       state.hintUsed = false;
-      WorldMap.prepare(mapPick);
+      WorldMap.prepare(mapPick, state.q);
       state.wrongPicks.forEach((id) => WorldMap.markWrong(id));
       if (isBot(s) || !local(s)) WorldMap.lock();
       syncHint();

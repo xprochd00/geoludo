@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/train.css">
+  <link rel="stylesheet" href="css/physical.css">
   <link rel="stylesheet" href="css/nav.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
@@ -59,6 +60,21 @@
           <button type="button" class="chip-btn" data-type="city">Cities</button>
           <button type="button" class="chip-btn" data-type="geoq">Landmarks &amp; facts</button>
         </div>
+      </div>
+      <div id="ptype-row" hidden>
+        <h3>Physical features</h3>
+        <div class="chips small" id="ptype-chips">
+          <button type="button" class="chip-btn all-chip" data-all="ptypes">All</button>
+          <button type="button" class="chip-btn" data-ptype="range">⛰️ Mountain ranges</button>
+          <button type="button" class="chip-btn" data-ptype="lowland">🌾 Lowlands</button>
+          <button type="button" class="chip-btn" data-ptype="river">〰️ Rivers</button>
+          <button type="button" class="chip-btn" data-ptype="lake">💧 Lakes</button>
+          <button type="button" class="chip-btn" data-ptype="sea">🌊 Seas &amp; oceans</button>
+          <button type="button" class="chip-btn" data-ptype="bay">⚓ Bays &amp; gulfs</button>
+          <button type="button" class="chip-btn" data-ptype="peninsula">🏞️ Peninsulas</button>
+          <button type="button" class="chip-btn" data-ptype="island">🏝️ Islands</button>
+        </div>
+        <p class="area-note">A blind map without borders, just for physical geography: it isn't mixed with the other questions. A feature belongs to the part of the world of its nearest country.</p>
       </div>
       <div id="era-row">
         <h3>Time Travel eras</h3>
@@ -190,6 +206,7 @@
   <script src="data/sports.js"></script>
   <script src="data/geo-extra.js"></script>
   <script src="data/regions.js"></script>
+  <script src="data/physical.js"></script>
   <script src="data/timetravel.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/map.js"></script>

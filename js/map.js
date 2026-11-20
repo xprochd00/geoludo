@@ -35,7 +35,9 @@
     </filter>`;
   el('path', { d: W.outline, class: 'sphere', 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1.5 }, svg);
   el('path', { d: W.graticule, class: 'graticule', 'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.7 }, svg);
+  const seaLayer = el('g', { class: 'phys-seas' }, svg); // physical map: seas & bays (seen only when lit up)
   const land = el('g', { filter: 'url(#landshadow)' }, svg);
+  const physLayer = el('g', { class: 'phys-land' }, svg); // physical map: lowlands, ranges, lakes, rivers …
   const dotLayer = el('g', {}, svg);
   // Game overlay (route, ships …): drawn above the countries, never catches clicks.
   const overlay = el('g', { class: 'overlay', 'pointer-events': 'none' }, svg);
@@ -71,11 +73,51 @@
     if (r.small && r.fame) n.dot = el('circle', { cx: r.c[0], cy: r.c[1], r: 2, class: 'dot region-dot', 'data-id': r.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
     nodes.set(r.id, n);
   }
+  /* Physical geography (data/physical.js, when the page loads it): mountain ranges, lowlands, rivers, lakes,
+   * seas, bays, peninsulas and islands, for the blind map (scope 'phys'). Ranges, lowlands, lakes and rivers
+   * are drawn; seas, bays, peninsulas and islands only show when lit up (the coastline is the clue). */
+  const PHYS = (window.PHYSICAL && window.PHYSICAL.features) || [];
+  const flatD = (g, closed) => g.map((a) => {
+    let d = `M${a[0]} ${a[1]}`;
+    for (let i = 2; i < a.length; i += 2) d += `L${a[i]} ${a[i + 1]}`;
+    return closed ? d + 'Z' : d;
+  }).join('');
+  const PHYS_ORDER = ['lowland', 'range', 'peninsula', 'island', 'lake', 'river'];
+  const physGroups = Object.fromEntries(PHYS_ORDER.map((t) => [t, el('g', { class: 'pg-' + t }, physLayer)]));
+  for (const f of PHYS.slice().sort((a, b) => b.area - a.area)) { // big ones first, small ones on top
+    byId.set(f.id, f);
+    const line = f.type === 'river';
+    const parent = f.type === 'sea' || f.type === 'bay' ? seaLayer : physGroups[f.type];
+    const p = el('path', { d: flatD(f.g, !line), class: `pf pf-${f.type}`, 'vector-effect': 'non-scaling-stroke' }, parent);
+    nodes.set(f.id, { path: p, dot: null, phys: 1 });
+  }
+  if (PHYS.length) wrap.insertAdjacentHTML('beforeend', '<div class="phys-legend" aria-hidden="true"><span><i style="background:#b9845a"></i>Mountains</span>'
+    + '<span><i style="background:#a6d08a"></i>Lowlands</span><span><i style="background:#2b72bd"></i>Rivers &amp; lakes</span></div>');
+  // A click on the physical map can fall on several features (an island in a sea, a range on a peninsula):
+  // it is passed on as their ids joined by "~", the most likely meant first; a click on nothing named is "miss@x,y".
+  const MISS = 'miss@';
+  const baseGet = byId.get.bind(byId);
+  byId.get = (k) => {
+    const v = baseGet(k);
+    if (v || typeof k !== 'string') return v;
+    if (k.includes('~')) return baseGet(k.split('~')[0]);
+    if (k.startsWith(MISS)) {
+      const [x, y] = k.slice(MISS.length).split(',').map(Number);
+      return { id: k, name: 'an empty spot', c: [x, y], b: [[x, y], [x, y]], miss: 1 };
+    }
+    return undefined;
+  };
+  const firstId = (id) => (typeof id === 'string' && id.includes('~') ? id.split('~')[0] : id);
+  /** Is feature f (or a feature it is part of, e.g. the Adriatic in the Mediterranean) the answer? */
+  const partOf = (f, answer, depth = 0) => !!f && (f.id === answer || (depth < 4 && (f.in || []).some((p) => partOf(baseGet(p), answer, depth + 1))));
+
   // 'world' (countries only) · 'world+na' (countries, with the USA and Canada split into states and provinces) · 'na' (only those)
+  // · 'phys' (the blind physical map)
   let scope = 'world';
   const PARENTS = ['USA', 'CAN'];
   /** Can this place be an answer in the current scope? */
   function pickable(id) {
+    if (scope === 'phys') return true;
     const c = byId.get(id);
     if (!c || !c.fame) return false;
     if (c.parent) return scope !== 'world';
@@ -83,9 +125,10 @@
     return !(scope !== 'world' && PARENTS.includes(id));
   }
   /** The shapes that stand for a place: the USA / Canada are their states and provinces when those are shown. */
-  const nodesFor = (id) => (scope !== 'world' && PARENTS.includes(id) ? REG.filter((r) => r.parent === id).map((r) => nodes.get(r.id)) : [nodes.get(id)]).filter(Boolean);
+  const nodesFor = (id) => (scope !== 'world' && scope !== 'phys' && PARENTS.includes(id) ? REG.filter((r) => r.parent === id).map((r) => nodes.get(r.id)) : [nodes.get(id)]).filter(Boolean);
   /** Is a click on `clicked` the right answer for `answer`? (A state counts for its country.) */
-  const matches = (clicked, answer) => !!clicked && (clicked === answer || (byId.get(clicked) || {}).parent === answer);
+  const matches = (clicked, answer) => !!clicked && (clicked === answer || (typeof clicked === 'string' && clicked.includes('~')
+    ? clicked.split('~').some((id) => partOf(baseGet(id), answer)) : (baseGet(clicked) || {}).parent === answer || partOf(baseGet(clicked), answer)));
   // Hint areas for states and provinces: the US census regions, and the parts of Canada.
   const AREA = {
     Northeast: 'CT ME MA NH RI VT NJ NY PA', Midwest: 'IL IN MI OH WI IA KS MN MO NE ND SD',
@@ -96,6 +139,10 @@
   /** The places a "show the region" hint lights up for this answer, and the region's name. */
   function hintFor(id) {
     const c = byId.get(id);
+    if (c && c.near) { // a physical feature: the countries of the part of the world it lies in
+      const ids = W.countries.filter((x) => x.fame && x.region === c.region).map((x) => x.id);
+      return { name: c.region, ids: ids.length ? ids : [c.near] };
+    }
     if (c && c.parent) {
       const a = areaOf(c);
       return { name: a ? (a.includes('Canada') ? a : `the ${a} of the USA`) : (c.parent === 'USA' ? 'the USA' : 'Canada'), ids: REG.filter((r) => r.fame && areaOf(r) === a).map((r) => r.id) };
@@ -104,8 +151,9 @@
     return { name: c ? c.region : '', ids: ids.length > 1 ? ids : [id] };
   }
   function setScope(s) {
-    scope = ['world', 'world+na', 'na'].includes(s) && REG.length ? s : 'world';
-    svg.classList.toggle('show-regions', scope !== 'world');
+    scope = s === 'phys' && PHYS.length ? s : ['world', 'world+na', 'na'].includes(s) && REG.length ? s : 'world';
+    svg.classList.toggle('phys', scope === 'phys');
+    svg.classList.toggle('show-regions', scope !== 'world' && scope !== 'phys');
     svg.classList.toggle('na-only', scope === 'na');
     if (scope === 'na') { // North America, without Hawaii far out in the Pacific
       let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -140,7 +188,7 @@
       t.setAttribute('stroke-width', 4 * u);
     });
     fxLayer.querySelectorAll('.ping').forEach((c) => c.setAttribute('stroke-width', 3 * u));
-    fxLayer.querySelectorAll('.citypin').forEach((c) => { c.setAttribute('r', 6 * u); c.setAttribute('stroke-width', 2.5 * u); });
+    fxLayer.querySelectorAll('.citypin, .misspin').forEach((c) => { c.setAttribute('r', 6 * u); c.setAttribute('stroke-width', 2.5 * u); });
     scaleListeners.forEach((fn) => fn(u));
   }
   function setVB(v) { vb = clampVB(v); apply(); }
@@ -258,6 +306,7 @@
 
   let hovered = null;
   function hover(e) {
+    if (scope === 'phys') return;
     const t = document.elementFromPoint(e.clientX, e.clientY);
     const id = t && t.getAttribute && t.getAttribute('data-id');
     const n = id && !locked ? nodes.get(id) : null;
@@ -267,8 +316,55 @@
   }
   svg.addEventListener('pointerleave', () => { if (hovered) hovered.path.classList.remove('hover'); hovered = null; });
 
+  /* ---------- Physical map picking (geometry tests in map units) ---------- */
+  function segDist(px, py, a) {
+    let best = Infinity;
+    for (let i = 2; i < a.length; i += 2) {
+      const x1 = a[i - 2], y1 = a[i - 1], dx = a[i] - x1, dy = a[i + 1] - y1;
+      const l = dx * dx + dy * dy;
+      const t = l ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / l)) : 0;
+      const d = Math.hypot(px - x1 - t * dx, py - y1 - t * dy);
+      if (d < best) best = d;
+    }
+    return best;
+  }
+  function winding(px, py, a) { // non-zero winding number of a closed ring around the point
+    let w = 0;
+    for (let i = 0, n = a.length; i < n; i += 2) {
+      const x1 = a[i], y1 = a[i + 1], j = (i + 2) % n, x2 = a[j], y2 = a[j + 1];
+      if (y1 <= py) { if (y2 > py && (x2 - x1) * (py - y1) - (px - x1) * (y2 - y1) > 0) w++; }
+      else if (y2 <= py && (x2 - x1) * (py - y1) - (px - x1) * (y2 - y1) < 0) w--;
+    }
+    return w;
+  }
+  let expectType = null; // the type of feature the question asks for: preferred when a click falls on several
+  function physPick(x, y, pointerType) {
+    const touch = pointerType && pointerType !== 'mouse';
+    const u = unitsPerPx();
+    const p = toSvg(x, y);
+    const reach = (touch ? 16 : 9) * u;
+    const hits = [];
+    for (const f of PHYS) {
+      if (p.x < f.b[0][0] - reach || p.x > f.b[1][0] + reach || p.y < f.b[0][1] - reach || p.y > f.b[1][1] + reach) continue;
+      let inside = false, d = Infinity;
+      if (f.type === 'river') f.g.forEach((a) => { d = Math.min(d, segDist(p.x, p.y, a)); });
+      else {
+        inside = f.g.reduce((w, a) => w + winding(p.x, p.y, a), 0) !== 0;
+        if (!inside) f.g.forEach((a) => { d = Math.min(d, segDist(p.x, p.y, a.concat(a[0], a[1]))); });
+      }
+      // rivers count within the reach; areas count inside, or near their edge (small islands and lakes)
+      if (inside || d <= reach) hits.push({ f, inside, d });
+    }
+    if (!hits.length) return MISS + `${Math.round(p.x * 10) / 10},${Math.round(p.y * 10) / 10}`;
+    // the most likely meant first: the asked-for type, then rivers & lakes (drawn on top), then the smallest area
+    const rank = (h) => [h.f.type === expectType ? 0 : 1, h.f.type === 'river' || h.f.type === 'lake' ? 0 : 1, h.inside ? 0 : 1, h.inside ? h.f.area : h.d];
+    hits.sort((a, b) => { const ra = rank(a), rb = rank(b); for (let i = 0; i < ra.length; i++) if (ra[i] !== rb[i]) return ra[i] - rb[i]; return 0; });
+    return hits.map((h) => h.f.id).join('~');
+  }
+
   function pick(x, y, pointerType) {
     if (locked) return;
+    if (scope === 'phys') { if (onPick) onPick(physPick(x, y, pointerType)); return; }
     // Tiny nations (Vatican City, San Marino, Liechtenstein, island states …) get an invisible hit
     // area larger than their dot, bigger for fingers than for a mouse. Inside a bigger country the
     // area scales with that country's size on screen, so Italy stays clickable at world zoom.
@@ -325,8 +421,8 @@
   function label(id) {
     const c = byId.get(id);
     const [x, y] = c.c;
-    const t = el('text', { x, y: c.small ? y - 4 * unitsPerPx() * 2.5 : y, class: 'label' }, labelLayer);
-    t.textContent = c.name;
+    const t = el('text', { x, y: c.small ? y - 4 * unitsPerPx() * 2.5 : y, class: 'label', ...(c.miss ? { dy: '-1em' } : {}) }, labelLayer);
+    t.textContent = c.miss ? '✕' : c.name;
     apply();
   }
   function bbox(id) {
@@ -356,12 +452,14 @@
       cn.path.classList.add('correct');
       cn.dot && cn.dot.classList.add('correct');
     });
-    if (!ok && clickedId && nodes.has(clickedId)) {
-      const wn = nodes.get(clickedId);
+    const shown = firstId(clickedId); // a click on several physical features: the one most likely meant
+    if (!ok && shown && nodes.has(shown)) {
+      const wn = nodes.get(shown);
       wn.path.classList.add('wrong');
       wn.dot && wn.dot.classList.add('wrong');
     }
-    const ids = clickedId && !ok && nodes.has(clickedId) ? [correctId, clickedId] : [correctId];
+    const missed = !ok && typeof shown === 'string' && shown.startsWith(MISS);
+    const ids = shown && !ok && (nodes.has(shown) || missed) ? [correctId, shown] : [correctId];
     // ping ring around the correct country
     const c = byId.get(correctId);
     const ring = el('circle', { cx: c.c[0], cy: c.c[1], r: 1, class: 'ping' }, fxLayer);
@@ -375,6 +473,7 @@
     }
     await animateTo(box, 900);
     ids.forEach(label);
+    if (missed) { const m = byId.get(shown); el('circle', { cx: m.c[0], cy: m.c[1], r: 1, class: 'misspin' }, fxLayer); apply(); }
     if (pin) {
       el('circle', { cx: pin.p[0], cy: pin.p[1], r: 1, class: 'citypin' }, fxLayer);
       const t = el('text', { x: pin.p[0], y: pin.p[1], class: 'label citylabel', dy: '-0.9em' }, labelLayer);
@@ -397,7 +496,8 @@
     })(t0);
   }
 
-  function prepare(handler) {
+  function prepare(handler, q) {
+    expectType = q && q.physType || null;
     clearMarks();
     reset(false);
     onPick = handler;
@@ -419,7 +519,7 @@
 
   /** Mark a wrong pick without revealing the answer (the map stays clickable, e.g. for a steal). */
   function markWrong(id) {
-    const n = nodesFor(id)[0];
+    const n = nodesFor(firstId(id))[0];
     if (!n) return;
     n.path.classList.add('wrong');
     n.dot && n.dot.classList.add('wrong');
@@ -427,7 +527,7 @@
 
   /** Neutral highlight of a pick (e.g. a guest's guess before the reveal). */
   function markPicked(id) {
-    const n = nodes.get(id);
+    const n = nodes.get(firstId(id));
     if (!n) return;
     n.path.classList.add('picked');
     n.dot && n.dot.classList.add('picked');
@@ -451,5 +551,9 @@
   /** Clear answer marks (colours, labels) without changing the view. */
   function clear() { clearMarks(); }
 
-  window.WorldMap = { setScope, get scope() { return scope; }, matches, hintFor, prepare, reveal, lock, reset, hint, markWrong, markPicked, centerOf, byId, overlay, onScale, focusPoints, clear, unitsPerPx: () => unitsPerPx() };
+  /** Name of what a click picked (a country, a state, a physical feature … or nothing named). */
+  const nameOf = (id) => { const c = byId.get(id); return c ? c.name : ''; };
+  /** Physical features of the same type, nearest first (for a computer player's plausible mistakes). */
+  const physNear = (id) => { const f = baseGet(id); return f ? PHYS.filter((x) => x.type === f.type && x.id !== id).sort((a, b) => Math.hypot(a.c[0] - f.c[0], a.c[1] - f.c[1]) - Math.hypot(b.c[0] - f.c[0], b.c[1] - f.c[1])) : []; };
+  window.WorldMap = { nameOf, physNear, physPickAt: (x, y, t) => physPick(x, y, t), toSvg: (x, y) => toSvg(x, y), setScope, get scope() { return scope; }, matches, hintFor, prepare, reveal, lock, reset, hint, markWrong, markPicked, centerOf, byId, overlay, onScale, focusPoints, clear, unitsPerPx: () => unitsPerPx() };
 })();

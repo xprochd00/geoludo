@@ -89,7 +89,7 @@
   /* ---------- lobby ---------- */
   const rulesLine = (cfg) => {
     const len = cfg.preset === 'quick' ? 'Quick' : cfg.preset === 'classic' ? 'Classic' : 'Custom rules';
-    return `${G.modeLabelFor(cfg.mode, cfg.cats, cfg.geoType)}${cfg.scope && cfg.scope !== 'world' ? ` · ${cfg.scope === 'na' ? 'US states & Canada only' : 'world + US states & Canada'}` : ''} · ${len}${cfg.opts.timer ? '' : ' · no timer'}`;
+    return `${G.modeLabelFor(cfg.mode, cfg.cats, cfg.geoType, cfg.scope)}${cfg.scope === 'na' ? ' · US states & Canada only' : cfg.scope === 'world+na' ? ' · world + US states & Canada' : ''} · ${len}${cfg.opts.timer ? '' : ' · no timer'}`;
   };
   function renderLobby() {
     show('lobby');
