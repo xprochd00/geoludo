@@ -214,3 +214,5 @@ body.answering .v-panel { display: none; }
 .add-bot { width: 100%; margin: -4px 0 12px; }
 .add-bot[hidden] { display: none; }
 @media (max-width: 420px) { .name-row small { display: none; } }
+.lv-risk { font-size: 9.5px; opacity: .75; font-weight: 600; }
+.v-levels button:hover .lv-risk { opacity: 1; }

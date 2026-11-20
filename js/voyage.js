@@ -38,6 +38,28 @@
   // row to find another (max 3). Spend one during your question to see the answer's region.
   const TOKENS_START = 1, TOKENS_MAX = 3, STREAK_BONUS = 3;
   const TREASURE = new Set(Array.from({ length: N }, (_, i) => i).filter((i) => i > 0 && i % 5 === 3));
+  /* Hazards: after a correct answer, the port you reach may hold one: blown back 1-2 ports, or the next
+   * turn lost. Easy challenges are risky, hard ones safe, so a bold choice also means safer sailing. */
+  const HAZARD_CHANCE = [0, 0.35, 0.28, 0.21, 0.14, 0.08, 0.03]; // by the level answered (1-6)
+  const HAZARD_KINDS = {
+    storm: { icon: '⛈️', name: 'Storm', back: [1, 2], text: (port) => `A storm off ${port} blows the ship back` },
+    cyclone: { icon: '🌀', name: 'Cyclone', back: [1, 2], text: (port) => `A cyclone near ${port} drives the ship back` },
+    monsoon: { icon: '🌧️', name: 'Monsoon', back: [1, 2], text: (port) => `Monsoon winds at ${port} push the ship back` },
+    ice: { icon: '🧊', name: 'Icebergs', back: [2, 2], text: (port) => `Icebergs near ${port}! The ship turns back` },
+    reef: { icon: '🪸', name: 'Reef', back: [1, 1], text: (port) => `The ship scrapes a reef near ${port} and limps back` },
+    fog: { icon: '🌫️', name: 'Fog', back: [1, 1], text: (port) => `Thick fog at ${port}: the ship loses its way and drifts back` },
+    doldrums: { icon: '🪫', name: 'Doldrums', skip: 1, text: (port) => `Becalmed in the doldrums off ${port}: no wind for a turn` },
+    pirates: { icon: '🏴‍☠️', name: 'Pirates', skip: 1, text: (port) => `Pirates near ${port}! Repairs keep the ship in port for a turn` },
+    canal: { icon: '🚧', name: 'Canal jam', skip: 1, text: (port) => `The canal at ${port} is jammed: the ship waits a turn` },
+  };
+  const PORT_HAZARD = {
+    'Las Palmas': 'fog', Dakar: 'doldrums', Praia: 'doldrums', Salvador: 'storm', 'Rio de Janeiro': 'storm', Montevideo: 'fog',
+    Ushuaia: 'ice', 'Valparaíso': 'storm', Lima: 'fog', 'Galápagos': 'doldrums', Tahiti: 'reef', Apia: 'cyclone', Suva: 'reef',
+    Auckland: 'storm', Sydney: 'storm', Darwin: 'cyclone', Bali: 'reef', Singapore: 'pirates', Malacca: 'pirates', Colombo: 'monsoon',
+    'Malé': 'reef', Mumbai: 'monsoon', Muscat: 'storm', Djibouti: 'pirates', Jeddah: 'reef', 'Port Said': 'canal', Athens: 'storm',
+    Valletta: 'storm', Barcelona: 'storm',
+  };
+  const hazardAt = (i) => HAZARD_KINDS[PORT_HAZARD[ROUTE.ports[i].name]] ? PORT_HAZARD[ROUTE.ports[i].name] : ['storm', 'reef', 'doldrums'][i % 3];
   const CAT_LABEL = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
 
   const store = {
@@ -59,13 +81,13 @@
       phase: 'pick', cats: cfg.cats, geoType: cfg.geoType || 'all', n: N,
       players: cfg.players.map((p, i) => ({
         id: p.id, name: p.name, color: COLORS[i % COLORS.length], ship: SHIP_NAMES[i % SHIP_NAMES.length],
-        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0, bot: BOTS[p.bot] ? p.bot : null, auto: false,
+        pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0, skip: 0, hazards: 0, bot: BOTS[p.bot] ? p.bot : null, auto: false,
       })),
       turn: 0, round: 1, finalRound: false, finishers: [],
       q: null, res: null, ranking: null, seq: 0, log: [],
     };
     if (cfg.resume) Object.assign(S, cfg.resume, { phase: 'pick', q: null, res: null, gid: S.gid });
-    S.players.forEach((p) => { if (p.tokens == null) Object.assign(p, { tokens: TOKENS_START, found: 0, hints: 0 }); });
+    S.players.forEach((p) => { if (p.tokens == null) Object.assign(p, { tokens: TOKENS_START, found: 0, hints: 0 }); if (p.skip == null) Object.assign(p, { skip: 0, hazards: 0 }); });
     let secret = null; // the current question including its answer (never sent to guests)
     let guesses = {};
     let timer = null;
@@ -79,9 +101,17 @@
 
     function startPick() {
       clearTimer();
-      S.phase = 'pick'; S.q = null; S.res = null;
+      S.phase = 'pick'; S.q = null; S.res = null; S.skipped = null;
       secret = null; guesses = {};
       const p = active();
+      if (p.skip > 0) { // a hazard costs this turn
+        p.skip--;
+        S.skipped = { pid: p.id, text: p.skipWhy || 'The ship stays in port this turn.' };
+        log(`⚓ ${p.name} stays in port this turn.`);
+        timer = setTimeout(advance, 2600);
+        publish();
+        return;
+      }
       if (isBotP(p)) timer = setTimeout(() => botPick(p), BOT_THINK);
       else if (S.online && p.connected) timer = setTimeout(() => pick(p.id, 3, true), PICK_TIMEOUT * 1000);
       // (an offline player waits for their bot takeover, see setConnected)
@@ -90,7 +120,7 @@
 
     function pick(pid, level, auto) {
       const p = active();
-      if (S.phase !== 'pick' || pid !== p.id || !(level >= 1 && level <= 6)) return;
+      if (S.phase !== 'pick' || S.skipped || pid !== p.id || !(level >= 1 && level <= 6)) return;
       clearTimer();
       secret = Quiz.next(level, mode(), S.cats, S.geoType || 'all');
       const long = ['history', 'sports', 'culture', 'geoq'].includes(secret.type);
@@ -114,7 +144,7 @@
       let best = 3, bv = -1;
       for (let l = 1; l <= 6; l++) {
         const to = Math.min(N, p.pos + l);
-        let v = botAcc(skillOf(p), l) * (Math.min(N - p.pos, l) + (TREASURE.has(to) && p.tokens < TOKENS_MAX ? 1.2 : 0));
+        let v = botAcc(skillOf(p), l) * (Math.min(N - p.pos, l) + (TREASURE.has(to) && p.tokens < TOKENS_MAX ? 1.2 : 0) - (to < N ? HAZARD_CHANCE[l] * 1.4 : 0));
         if (S.finalRound && p.dist + l <= leader) v *= 0.2; // last chance: only a big jump helps
         v *= 0.85 + Math.random() * 0.3;
         if (v > bv) { bv = v; best = l; }
@@ -184,23 +214,43 @@
       if (ok && p.streak > 0 && p.streak % STREAK_BONUS === 0) gains.push('streak');
       const gained = Math.min(gains.length, TOKENS_MAX - p.tokens);
       p.tokens += gained; p.found += gained;
+      // a hazard at the port reached (never at the finish)
+      let hazard = null;
+      if (ok && to < N && Math.random() < HAZARD_CHANCE[S.q.level]) {
+        const kind = hazardAt(to);
+        const h = HAZARD_KINDS[kind];
+        hazard = { kind, icon: h.icon, name: h.name, text: h.text(portName(to)), back: 0, skip: 0, at: to };
+        if (h.back) {
+          const back = h.back[0] + Math.floor(Math.random() * (h.back[1] - h.back[0] + 1));
+          hazard.at = Math.max(0, to - back);
+          hazard.back = to - hazard.at;
+          p.pos = hazard.at;
+          p.dist -= hazard.back;
+        } else {
+          hazard.skip = 1;
+          p.skip = 1;
+          p.skipWhy = `${h.icon} ${h.text(portName(to))}.`;
+        }
+        p.hazards++;
+      }
       const knew = S.players.filter((o) => o !== p && guesses[o.id] === c.id);
       knew.forEach((o) => { o.knew++; });
       const clicked = countryId ? byId(countryId) : null;
       S.res = {
         pid: p.id, ok, level: S.q.level, from, to, clicked: countryId, clickedName: clicked ? clicked.name : null,
         answer: c.id, answerName: c.name, fact: factFor(secret), pin: secret.pin ? { p: secret.pin, name: secret.city } : null,
-        knew: knew.map((o) => o.name), timeout: countryId === null, gains: gained ? gains : [], gained, hinted: !!S.q.hint,
+        knew: knew.map((o) => o.name), timeout: countryId === null, gains: gained ? gains : [], gained, hinted: !!S.q.hint, hazard,
       };
       log(ok ? `✓ ${p.name} sailed ${to - from} port${to - from === 1 ? '' : 's'} to ${portName(to)} (${LEVELS[S.q.level].label})`
         : `✗ ${p.name} missed: ${c.name}`);
+      if (hazard) log(`${hazard.icon} ${p.name}: ${hazard.text}${hazard.back ? ` (${hazard.back} port${hazard.back > 1 ? 's' : ''} to ${portName(hazard.at)})` : ''}.`);
       if (gained) log(`🧭 ${p.name} found a compass token${gains.includes('treasure') ? ` in ${portName(to)}` : ` (${p.streak} in a row)`}.`);
       if (to >= N && !S.finishers.includes(p.id)) {
         S.finishers.push(p.id);
         if (!S.finalRound) { S.finalRound = true; log(`⚓ ${p.name} is home! Last round.`); }
       }
       S.phase = 'result';
-      if (S.online || isBotP(p)) timer = setTimeout(() => next(null, true), AUTO_NEXT + (to - from) * LEG_MS);
+      if (S.online || isBotP(p)) timer = setTimeout(() => next(null, true), AUTO_NEXT + (to - from + (hazard ? 3 + hazard.back : 0)) * LEG_MS);
       publish();
     }
 
@@ -421,13 +471,33 @@
     await WorldMap.focusPoints([ROUTE.ports[res.from].p, ROUTE.ports[res.to].p, ...pts], 700, 70);
     const legs = res.to - res.from;
     for (let i = res.from; i < res.to; i++) {
-      const leg = ROUTE.legs[i];
-      const segs = [];
-      leg.forEach((pt) => { if (pt) segs.push(pt); });
-      const dur = LEG_MS * FX.pace.factor;
+      await runLeg(res.pid, ROUTE.legs[i]);
+      Sound.step();
+      if (i + 1 === res.to || legs <= 3) setPanelSub(`⚓ ${portName(i + 1)}`);
+    }
+    if (res.hazard && res.hazard.back) return; // stays where it arrived until driftBack() moves it back
+    view.animating = null;
+    layoutShips(state);
+  }
+
+  /** A hazard pushes the ship back along the route, from port `from` to port `to` (to < from). */
+  async function driftBack(state, pid, from, to) {
+    if (!ships.get(pid) || to >= from) return;
+    view.animating = pid;
+    for (let i = from - 1; i >= to; i--) {
+      await runLeg(pid, ROUTE.legs[i].slice().reverse(), 1.4);
+      if (i === to) setPanelSub(`⚓ back in ${esc(portName(to))}`);
+    }
+    view.animating = null;
+    layoutShips(state);
+  }
+
+  /** Animate one ship along one leg of the route (a list of points; null = the date-line jump). */
+  function runLeg(pid, leg, slower = 1) {
+      const dur = LEG_MS * slower * FX.pace.factor;
       const t0 = performance.now();
       // walk along the leg's points, skipping the jump across the date line
-      await new Promise((resolve) => {
+      return new Promise((resolve) => {
         const cum = [0];
         for (let k = 1; k < leg.length; k++) {
           const p0 = leg[k - 1], p1 = leg[k];
@@ -442,15 +512,10 @@
           while (k < cum.length - 1 && cum[k] < target) k++;
           const p0 = leg[k - 1] || leg[k], p1 = leg[k] || leg[k - 1];
           const f = cum[k] > cum[k - 1] ? (target - cum[k - 1]) / (cum[k] - cum[k - 1]) : 1;
-          placeShip(res.pid, [p0[0] + (p1[0] - p0[0]) * f, p0[1] + (p1[1] - p0[1]) * f]);
+          placeShip(pid, [p0[0] + (p1[0] - p0[0]) * f, p0[1] + (p1[1] - p0[1]) * f]);
           if (t < 1) requestAnimationFrame(frame); else resolve();
         })(t0);
       });
-      Sound.step();
-      if (i + 1 === res.to || legs <= 3) setPanelSub(`⚓ ${portName(i + 1)}`);
-    }
-    view.animating = null;
-    layoutShips(state);
   }
 
   /* ======================================================================
@@ -474,7 +539,7 @@
       return `<div class="vp${i === s.turn && s.phase !== 'over' ? ' active' : ''}${p.connected ? '' : ' off'}" style="--pc:${p.color}" title="${esc(p.name)}: port ${p.pos}/${N}, ${p.correct}/${p.asked} correct">
         <span class="vp-name">${p.bot || p.auto ? '🤖 ' : ''}${esc(p.name)}${isMe ? ' (you)' : ''}</span>
         <span class="vp-bar"><i style="width:${pct}%"></i></span>
-        <span class="vp-num">${p.pos}/${N} · 🧭${p.tokens}${p.streak >= 3 ? ` · 🔥${p.streak}` : ''}</span></div>`;
+        <span class="vp-num">${p.pos}/${N} · 🧭${p.tokens}${p.skip ? ' · ⚓' : ''}${p.streak >= 3 ? ` · 🔥${p.streak}` : ''}</span></div>`;
     }).join('');
   }
 
@@ -484,7 +549,8 @@
     box.innerHTML = [1, 2, 3, 4, 5, 6].map((l) => {
       const to = Math.min(N, p.pos + l);
       const gem = TREASURE.has(to) && p.tokens < TOKENS_MAX ? '<i class="lv-gem" title="Treasure port: find a compass token">🧭</i>' : '';
-      return `<button type="button" data-l="${l}" style="--c:var(--l${l})">${gem}<b>${l}</b><span>${LEVELS[l].label}</span><em>${to >= N ? '🏁 Finish' : `→ ${esc(portName(to))}`}</em></button>`;
+      const risk = to >= N ? '' : `<small class="lv-risk" title="Chance of a hazard at that port after a correct answer">⚠️ ${Math.round(HAZARD_CHANCE[l] * 100)}%</small>`;
+      return `<button type="button" data-l="${l}" style="--c:var(--l${l})">${gem}<b>${l}</b><span>${LEVELS[l].label}</span><em>${to >= N ? '🏁 Finish' : `→ ${esc(portName(to))}`}</em>${risk}</button>`;
     }).join('');
     box.querySelectorAll('button').forEach((b) => {
       const l = +b.dataset.l;
@@ -544,6 +610,14 @@
       document.body.classList.remove('answering');
       if (!view.animating) layoutShips(s);
       const fresh = !prev || prev.gid !== s.gid || prev.phase !== 'pick' || prev.turn !== s.turn;
+      if (s.skipped && s.skipped.pid === p.id) {
+        $('panel-title').textContent = `⚓ ${p.name} stays in port`;
+        setPanelSub(`${esc(s.skipped.text)} The turn passes.`);
+        $('levels').hidden = true;
+        showTarget(null);
+        Sound.tone(220, 0.25, 'sawtooth', 0.06);
+        return;
+      }
       const botTag = isBotP(p) ? '🤖 ' : '';
       $('panel-title').textContent = !mine ? `${botTag}${p.name}'s turn` : view.hotseat ? `${p.name}, your turn` : 'Your turn!';
       setPanelSub(mine ? 'Choose your challenge — a correct answer sails you that many ports.'
@@ -680,9 +754,26 @@
       if (view.state && view.state.seq === s.seq) {
         $('quiz-card').hidden = true; // keep the route visible while the ship sails
         await sailShip(s, r);
+        if (r.hazard && view.state && view.state.seq === s.seq) await showHazard(s, r, p);
+        else if (r.hazard) { view.animating = null; if (view.state) layoutShips(view.state); } // moved on meanwhile
       }
     }
     if (!nextBtn.hidden && view.state && view.state.seq === s.seq) nextBtn.focus({ preventScroll: true });
+  }
+
+  async function showHazard(s, r, p) {
+    const h = r.hazard;
+    const who = view.hotseat ? p.name : (p.id === view.me ? 'You' : p.name);
+    $('result').classList.add('bad');
+    $('result-icon').textContent = h.icon;
+    $('result-title').textContent = `${h.name}! ${who}${h.back ? ` ${who === 'You' ? 'are' : 'is'} blown back ${h.back} port${h.back > 1 ? 's' : ''}` : ` ${who === 'You' ? 'lose' : 'loses'} the next turn`}`;
+    $('result-sub').innerHTML = `${esc(h.text)}.${h.back ? ` Back to <b>${esc(portName(h.at))}</b>.` : ''} <span class="muted">Harder challenges mean safer seas.</span>`;
+    $('panel-title').textContent = `${h.icon} ${h.name} at ${portName(r.to)}`;
+    Sound.wrong();
+    $('quiz-card').hidden = true;
+    showTarget(null);
+    await sleep(900);
+    if (h.back && view.state && view.state.seq === s.seq) await driftBack(s, r.pid, r.to, h.at);
   }
 
   function showFinish(s) {
