@@ -168,11 +168,8 @@
       : `${nm(cats[0], CAT_NAMES)} questions only. Pick more to mix them.`;
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
     $('geo-type').textContent = `${Quiz.GEO_TYPES[geoType]} ▾`;
-    const na = scope === 'na';
     $('scope-btn').textContent = `${scopeLabel(scope)} ▾`;
-    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => { b.disabled = na && b.dataset.cat !== 'geo'; if (na) b.classList.toggle('active', b.dataset.cat === 'geo'); });
-    $('cat-all').disabled = na;
-    if (na) $('cat-hint').textContent = `Geography of the US states and Canadian provinces${geoType !== 'all' ? ` (${Quiz.GEO_TYPES[geoType].toLowerCase()})` : ''}, on a map of North America.`;
+    if (scope === 'na') $('cat-hint').textContent += ' About the US states and Canadian provinces.';
   }
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, scope);
@@ -264,7 +261,7 @@
     const rules = preset === 'custom' ? { ...custom } : { ...PRESETS[preset] };
     return {
       opts: { ...rules, timer: $('opt-timer').checked },
-      preset, mode: scope === 'na' ? 'geo' : mode, cats: scope === 'na' ? ['geo'] : cats.slice(), geoType, scope,
+      preset, mode, cats: cats.slice(), geoType, scope,
       pieces: [0, 1, 2, 3].map((seat) => (preset === 'custom' ? pieceCounts[seat] : rules.pieces)),
     };
   }

@@ -66,10 +66,12 @@ Every game's setup (Geo Ludo, Geo Voyage, Training) has a **Map** menu with thre
 | Map | What is asked | The map |
 |-----|---------------|---------|
 | 🌍 **World** | countries, as before | the world |
-| 🌎 **World + US states & Canada** | countries **and** the 50 US states, 10 Canadian provinces and 3 territories | the USA and Canada split into states and provinces; a tapped state counts for its country in a country question |
-| 🇺🇸 **US states & Canadian provinces** | only those (geography questions) | North America; other countries are greyed out |
+| 🌎 **World + US states & Canada** | countries **and** the 50 US states, 10 Canadian provinces and 3 territories, in every chosen category | the USA and Canada split into states and provinces; a tapped state counts for its country in a country question |
+| 🇺🇸 **US states & Canadian provinces** | only those, in the categories you choose (Geography, History, Sports, Culture) | North America; other countries are greyed out |
 
-The same question types as for countries: **find it on the map, flag, capital** (with a 📍 pin after the answer), **cities** (`data/na-cities.json`, 50) and **landmarks & facts** (`data/na-questions.json`, 50). Difficulty comes from a fame level per state/province (`data/na-regions.json`): finding it = fame, its flag = fame + 2 (state flags are hard), its capital = fame + 1, adjusted for famous capitals (−1) and traps like Sacramento or Albany (+1). The "show region" hint names a US census region (Northeast, Midwest, South, West) or a part of Canada (Western, Central, Atlantic, Northern).
+The same question types as for countries: **find it on the map, flag, capital** (with a 📍 pin after the answer), **cities** (`data/na-cities.json`, 50) and **landmarks & facts** (`data/na-questions.json`, 50). Difficulty comes from a fame level per state/province (`data/na-regions.json`): finding it = fame, its flag = fame + 2 (state flags are hard), its capital = fame + 1, adjusted for famous capitals (−1) and traps like Sacramento or Albany (+1).
+
+**History, Sports and Culture** have 100 questions each about the US states and Canadian provinces (`data/na-history.json`, `data/na-sports.json`, `data/na-culture.json`, levels 1–6), tagged e.g. "US · History" or "Canada · Sport". The **World** map never asks them; the other two maps mix them into the chosen categories. Questions about states and provinces always say *state* or *province*, never *country*. The "show region" hint names a US census region (Northeast, Midwest, South, West) or a part of Canada (Western, Central, Atlantic, Northern).
 
 **Geo Voyage** with "US states & Canadian provinces" sails its own route, **From Sea to Sea** (`data/route-na.json`, 25 legs): Montreal → Quebec City → Halifax → Saint John → Portland → Boston → New York → … → Miami → Key West → the Gulf of Mexico → (Panama Canal) → San Diego → Los Angeles → San Francisco → … → Seattle → Victoria → **Vancouver**, with hurricanes in the Gulf, fog on the Pacific coast and ice in the St. Lawrence. The other two maps keep the round-the-world route from Lisbon.
 
@@ -91,7 +93,7 @@ A history race through five eras: **Prehistory → Antiquity → Middle Ages →
 
 A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
-- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). **⏳ Time Travel** is a category too: Geo Time Travel's 450 history questions, chosen by era (prehistory … modern) instead of by level. Each row has an **All** chip; tapping it again keeps only the option you chose last.
+- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). **⏳ Time Travel** is a category too: Geo Time Travel's 450 history questions, chosen by era (prehistory … modern) instead of by level, so the level chips are hidden when Time Travel is the only category. Time Travel isn't offered on the US states & Canadian provinces map. Each row has an **All** chip; tapping it again keeps only the option you chose last.
 - **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
 - New questions come first. **Missed questions come back** a few questions later (never straight away) until you get them right twice in a row; then they count as *mastered*. Every 6th question revisits a mastered one (the one practised longest ago), and questions from the last few turns are avoided, so a fully mastered set keeps rotating.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.

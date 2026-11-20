@@ -50,6 +50,8 @@
   if (!Quiz.SCOPES.some((x) => x.value === settings.scope)) settings.scope = 'world';
   // US states & Canadian provinces only: geography questions about them, so the other categories and parts of the world step aside
   const naOnly = () => settings.scope === 'na';
+  const NA_CATS = CATS.filter((c) => c !== 'timetravel');
+  const catsKey = (k) => (k === 'cats' && naOnly() ? 'naCats' : k);
   const inScope = (e) => (e.pick.na ? settings.scope !== 'world' : settings.scope !== 'na');
   settings.areas = (settings.areas || []).filter((a) => AREAS.includes(a));
   if (!settings.areas.length) settings.areas = AREAS.slice();
@@ -84,7 +86,7 @@
 
   function filtered() {
     const allAreas = settings.areas.length === AREAS.length || naOnly();
-    return ALL.filter((e) => inScope(e) && (naOnly() ? e.cat === 'geo' : settings.cats.includes(e.cat))
+    return ALL.filter((e) => inScope(e) && settings.cats.includes(e.cat) && !(naOnly() && e.cat === 'timetravel')
       && (e.cat === 'timetravel' ? settings.eras.includes(e.pick.era) : settings.levels.includes(e.lvl))
       && (e.cat !== 'geo' || settings.types.includes(e.pick.type))
       && (allAreas || settings.areas.includes(areaOf(e.pick.c))));
@@ -98,17 +100,18 @@
     document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.classList.toggle('active', settings.areas.includes(b.dataset.area)));
     const sc = Quiz.SCOPES.find((x) => x.value === settings.scope);
     $('scope-btn').textContent = `${sc.label} ▾`;
-    document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => { b.disabled = naOnly() && b.dataset.cat !== 'geo'; });
-    if (naOnly()) document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.classList.toggle('active', b.dataset.cat === 'geo'));
+    // Time Travel is about countries of the world: not on the map of the US states & Canadian provinces
+    const tt = document.querySelector('#cat-chips [data-cat="timetravel"]');
+    tt.disabled = naOnly();
+    if (naOnly()) tt.classList.remove('active');
     document.querySelector('#type-chips [data-type="name"]').textContent = naOnly() ? 'States & provinces' : 'Countries';
     $('area-row').hidden = naOnly(); // parts of the world don't apply to the US states & Canadian provinces
     $('era-row').hidden = naOnly() || !settings.cats.includes('timetravel');
-    $('type-row').hidden = !naOnly() && !settings.cats.includes('geo');
+    // levels grade every category but Time Travel (graded by era instead)
+    $('level-row').hidden = !settings.cats.some((c) => c !== 'timetravel');
     document.querySelectorAll('#era-chips .chip-btn[data-era]').forEach((b) => b.classList.toggle('active', settings.eras.includes(+b.dataset.era)));
     document.querySelectorAll('.all-chip').forEach((b) => {
-      // only Geography applies to the US states & Canadian provinces: the categories' "All" is then off and unavailable
-      const on = !!picks && picks[b.dataset.all].isAll() && !(naOnly() && b.dataset.all === 'cats');
-      b.disabled = naOnly() && b.dataset.all === 'cats';
+      const on = !!picks && picks[catsKey(b.dataset.all)].isAll();
       b.classList.toggle('active', on);
       b.setAttribute('aria-pressed', on);
     });
@@ -133,17 +136,22 @@
     levels: MultiPick({ order: [1, 2, 3, 4, 5, 6], get: () => settings.levels, set: (v) => { settings.levels = v; }, onChange: syncChips }),
     areas: MultiPick({ order: AREAS, get: () => settings.areas, set: (v) => { settings.areas = v; }, onChange: syncChips }),
     eras: MultiPick({ order: [0, 1, 2, 3, 4], get: () => settings.eras, set: (v) => { settings.eras = v; }, onChange: syncChips }),
+    // on the map of the US states & Canadian provinces, "All" covers the four categories that have questions there
+    // (Time Travel keeps whatever it was, for when the map is switched back)
+    naCats: MultiPick({ order: NA_CATS, get: () => settings.cats.filter((c) => c !== 'timetravel'),
+      set: (v) => { settings.cats = CATS.filter((c) => v.includes(c) || (c === 'timetravel' && settings.cats.includes(c))); }, onChange: syncChips }),
   };
-  document.querySelectorAll('#cat-chips .chip-btn[data-cat]').forEach((b) => b.addEventListener('click', () => picks.cats.toggle(b.dataset.cat)));
+  document.querySelectorAll('#cat-chips .chip-btn[data-cat]').forEach((b) => b.addEventListener('click', () => picks[catsKey('cats')].toggle(b.dataset.cat)));
   document.querySelectorAll('#type-chips .chip-btn[data-type]').forEach((b) => b.addEventListener('click', () => picks.types.toggle(b.dataset.type)));
   document.querySelectorAll('#level-chips .chip-btn[data-l]').forEach((b) => b.addEventListener('click', () => picks.levels.toggle(+b.dataset.l)));
   document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.addEventListener('click', () => picks.areas.toggle(b.dataset.area)));
   document.querySelectorAll('#era-chips .chip-btn[data-era]').forEach((b) => b.addEventListener('click', () => picks.eras.toggle(+b.dataset.era)));
-  document.querySelectorAll('.all-chip').forEach((b) => b.addEventListener('click', () => picks[b.dataset.all].all()));
+  document.querySelectorAll('.all-chip').forEach((b) => b.addEventListener('click', () => picks[catsKey(b.dataset.all)].all()));
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, settings.scope);
     if (v == null || v === settings.scope) return;
     settings.scope = v;
+    if (naOnly() && !settings.cats.some((c) => c !== 'timetravel')) settings.cats = ['geo'].concat(settings.cats); // Time Travel alone has nothing there
     syncChips();
   });
   $('opt-timer').addEventListener('change', () => { settings.timer = $('opt-timer').checked; syncChips(); });
@@ -283,7 +291,7 @@
     $('q-status').textContent = !r ? '✨ New' : isMistake(r) ? '🔁 Missed before' : mastered(r) ? '⭐ Mastered' : '📖 Practising';
     $('q-kind').textContent = q.kind.replace('Click', 'Tap');
     const prompt = $('q-prompt');
-    prompt.textContent = q.type === 'flag' ? 'Tap its country' : q.prompt;
+    prompt.textContent = q.prompt.replace(/^Click/, 'Tap');
     prompt.classList.toggle('long', q.prompt.length > 48);
     const flag = $('q-flag');
     if (q.flag) { flag.hidden = false; flag.src = q.flag; } else { flag.hidden = true; flag.removeAttribute('src'); }

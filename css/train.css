@@ -100,4 +100,4 @@ body.train.playing { overflow: hidden; }
 .area-note { margin: 8px 0 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
 .chip-btn.all-chip { font-weight: 800; }
 .t-head-gap { flex: none; width: 42px; } /* keeps the title centred opposite the sound button */
-#era-row[hidden], #area-row[hidden], #type-row[hidden] { display: none; }
+#era-row[hidden], #area-row[hidden], #type-row[hidden], #level-row[hidden] { display: none; }

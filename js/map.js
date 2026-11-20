@@ -164,7 +164,7 @@
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     return new Promise((res) => {
       const step = (now) => {
-        const t = Math.min(1, (now - t0) / ms);
+        const t = ms > 0 ? Math.min(1, (now - t0) / ms) : 1;
         const e = ease(t);
         vb = {
           x: from.x + (to.x - from.x) * e, y: from.y + (to.y - from.y) * e,

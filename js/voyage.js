@@ -80,7 +80,7 @@
   };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const uid = () => 'p' + Math.random().toString(36).slice(2, 9);
-  const byId = (id) => W.countries.find((c) => c.id === id);
+  const byId = (id) => W.countries.find((c) => c.id === id) || ((window.REGIONS && window.REGIONS.regions) || []).find((c) => c.id === id); // countries, then states & provinces
   const portName = (i) => ROUTE.ports[Math.min(i, N)].name;
 
   /* ======================================================================
@@ -693,7 +693,7 @@
       who.textContent = mine && !view.hotseat ? 'Your question' : p.name;
       $('q-kind').textContent = q.kind.replace('Click', 'Tap');
       const prompt = $('q-prompt');
-      prompt.textContent = q.type === 'flag' ? 'Tap its country' : q.prompt;
+      prompt.textContent = q.prompt.replace(/^Click/, 'Tap');
       prompt.classList.toggle('long', q.prompt.length > 48);
       const flag = $('q-flag');
       if (q.flag) { flag.hidden = false; flag.src = q.flag; } else { flag.hidden = true; flag.removeAttribute('src'); }
@@ -842,8 +842,7 @@
   const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '', geoType: 'all' }, store.get(SETUP_KEY) || {});
   if (!Quiz.GEO_TYPES[setup.geoType]) setup.geoType = 'all';
   if (!Quiz.SCOPES.some((x) => x.value === setup.scope)) setup.scope = 'world';
-  // US states & Canadian provinces only: geography questions about them (other categories step aside)
-  const gameCats = () => (setup.scope === 'na' ? ['geo'] : setup.cats.slice());
+  const gameCats = () => setup.cats.slice();
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, setup.scope);
     if (v == null || v === setup.scope) return;
@@ -868,11 +867,8 @@
       ? `Mixed: ${setup.cats.map((c) => catLabel(c, setup.geoType)).join(' + ')}, in equal shares.`
       : `${catLabel(setup.cats[0], setup.geoType)} questions only. Pick more to mix them.`;
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
-    const na = setup.scope === 'na';
     $('scope-btn').textContent = `${Quiz.SCOPES.find((x) => x.value === setup.scope).label} ▾`;
-    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => { b.disabled = na && b.dataset.cat !== 'geo'; if (na) b.classList.toggle('active', b.dataset.cat === 'geo'); });
-    $('cat-all').disabled = na;
-    if (na) $('cat-hint').textContent = `Geography of the US states and Canadian provinces${setup.geoType !== 'all' ? ` (${Quiz.GEO_TYPES[setup.geoType].toLowerCase()})` : ''}, on a map of North America · route: From Sea to Sea, Montreal → Vancouver.`;
+    if (setup.scope === 'na') $('cat-hint').textContent += ' About the US states and Canadian provinces · route: From Sea to Sea, Montreal → Vancouver.';
     $('geo-type').textContent = `${Quiz.GEO_TYPES[setup.geoType]} ▾`;
     document.querySelectorAll('.format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
     // an invitation link always shows the join form

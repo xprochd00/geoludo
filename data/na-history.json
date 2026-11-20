@@ -1,0 +1,1102 @@
+[
+  {
+    "id": "RH001",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which US state did the United States buy from Russia in 1867?",
+    "answer": {
+      "code": "US-AK",
+      "name": "Alaska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH002",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which US state did the 1849 Gold Rush take place?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH003",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which US state is the Statue of Liberty?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH004",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which US state did the Boston Tea Party take place in 1773?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH005",
+    "difficulty": 1,
+    "category": "history",
+    "question": "From which US state was Apollo 11 launched to the Moon in 1969, at Cape Canaveral?",
+    "answer": {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH006",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which US state is nicknamed the 'Land of Lincoln'?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH007",
+    "difficulty": 1,
+    "category": "history",
+    "question": "In which US state was the Battle of Gettysburg fought in 1863?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH008",
+    "difficulty": 1,
+    "category": "history",
+    "question": "Which was the last state to join the United States, in August 1959?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH009",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did the Salem witch trials take place in 1692?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH010",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state was 'Custer's Last Stand' at the Little Bighorn fought in 1876?",
+    "answer": {
+      "code": "US-MT",
+      "name": "Montana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH011",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which Canadian province did the 1864 conference that led to Confederation meet, at Charlottetown?",
+    "answer": {
+      "code": "CA-PE",
+      "name": "Prince Edward Island",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH012",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state was President John F. Kennedy assassinated in 1963?",
+    "answer": {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH013",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did the 1965 civil rights marches from Selma take place?",
+    "answer": {
+      "code": "US-AL",
+      "name": "Alabama",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH014",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state was the first atomic bomb tested, at the Trinity site in 1945?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH015",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state was Abraham Lincoln born, in a log cabin in 1809?",
+    "answer": {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH016",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state is Fort Sumter, where the Civil War began in 1861?",
+    "answer": {
+      "code": "US-SC",
+      "name": "South Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH017",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which Canadian province was the Battle of the Plains of Abraham fought in 1759?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH018",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did the Pony Express begin its mail route, at St. Joseph in 1860?",
+    "answer": {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH019",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did Brigham Young lead Mormon pioneers to settle in 1847?",
+    "answer": {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH020",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state was the Battle of Saratoga, a turning point of the Revolution, fought in 1777?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH021",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did Hurricane Katrina flood New Orleans in 2005?",
+    "answer": {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH022",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which US state did the Gunfight at the O.K. Corral take place, in Tombstone in 1881?",
+    "answer": {
+      "code": "US-AZ",
+      "name": "Arizona",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH023",
+    "difficulty": 2,
+    "category": "history",
+    "question": "Which was the last province to join Canada, in 1949?",
+    "answer": {
+      "code": "CA-NL",
+      "name": "Newfoundland and Labrador",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH024",
+    "difficulty": 2,
+    "category": "history",
+    "question": "In which Canadian province did a ship explosion devastate Halifax in 1917?",
+    "answer": {
+      "code": "CA-NS",
+      "name": "Nova Scotia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH025",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the British surrender at Yorktown in 1781?",
+    "answer": {
+      "code": "US-VA",
+      "name": "Virginia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH026",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was the Battle of Antietam, the bloodiest single day of the Civil War?",
+    "answer": {
+      "code": "US-MD",
+      "name": "Maryland",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH027",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did General Sherman burn Atlanta in 1864?",
+    "answer": {
+      "code": "US-GA",
+      "name": "Georgia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH028",
+    "difficulty": 3,
+    "category": "history",
+    "question": "To which present-day US state were the Cherokee forced to move along the Trail of Tears?",
+    "answer": {
+      "code": "US-OK",
+      "name": "Oklahoma",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH029",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the Wounded Knee Massacre take place in 1890?",
+    "answer": {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH030",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was the first transcontinental railroad completed, at Promontory Summit in 1869?",
+    "answer": {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH031",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was the Erie Canal, completed in 1825, built?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH032",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the Whiskey Rebellion of 1794 break out?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH033",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did Thomas Edison have his Menlo Park laboratory?",
+    "answer": {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH034",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did Henry Ford start mass-producing the Model T?",
+    "answer": {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH035",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which Canadian province did Louis Riel lead the Red River Rebellion of 1869–70?",
+    "answer": {
+      "code": "CA-MB",
+      "name": "Manitoba",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH036",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which Canadian province is the Fortress of Louisbourg, captured from the French in 1758?",
+    "answer": {
+      "code": "CA-NS",
+      "name": "Nova Scotia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH037",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which Canadian province was the 'last spike' of the Canadian Pacific Railway driven in 1885?",
+    "answer": {
+      "code": "CA-BC",
+      "name": "British Columbia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH038",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did National Guard troops shoot students at Kent State University in 1970?",
+    "answer": {
+      "code": "US-OH",
+      "name": "Ohio",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH039",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state is St. Augustine, the oldest continuously inhabited European city in the US (1565)?",
+    "answer": {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH040",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was Barack Obama born?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH041",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state is Oak Ridge, a secret city of the Manhattan Project?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH042",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which Canadian province did the North-West Rebellion end at the Battle of Batoche in 1885?",
+    "answer": {
+      "code": "CA-SK",
+      "name": "Saskatchewan",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH043",
+    "difficulty": 3,
+    "category": "history",
+    "question": "Which US territory, later a state, was the first to give women the vote, in 1869?",
+    "answer": {
+      "code": "US-WY",
+      "name": "Wyoming",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH044",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the Exxon Valdez oil spill happen in 1989?",
+    "answer": {
+      "code": "US-AK",
+      "name": "Alaska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH045",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was Manzanar, a camp where Japanese Americans were interned in World War II?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH046",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the Great Fire of 1871 destroy much of Chicago?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH047",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state did the 1957 school desegregation crisis at Little Rock take place?",
+    "answer": {
+      "code": "US-AR",
+      "name": "Arkansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH048",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was the Battle of Bunker Hill fought in 1775?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH049",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which Canadian province did the October Crisis of 1970 take place?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH050",
+    "difficulty": 3,
+    "category": "history",
+    "question": "In which US state was the 'Lost Colony' of Roanoke founded in 1585?",
+    "answer": {
+      "code": "US-NC",
+      "name": "North Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH051",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was the Battle of Tippecanoe fought in 1811?",
+    "answer": {
+      "code": "US-IN",
+      "name": "Indiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH052",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did the Sand Creek Massacre take place in 1864?",
+    "answer": {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH053",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was the Dakota War of 1862 fought?",
+    "answer": {
+      "code": "US-MN",
+      "name": "Minnesota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH054",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state is Vicksburg, besieged by General Grant in 1863?",
+    "answer": {
+      "code": "US-MS",
+      "name": "Mississippi",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH055",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state is Santa Fe, founded by the Spanish around 1610?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH056",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was the first women's rights convention held, at Seneca Falls in 1848?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH057",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which present-day US state is Harpers Ferry, raided by John Brown in 1859?",
+    "answer": {
+      "code": "US-WV",
+      "name": "West Virginia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH058",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which US state was an independent republic from 1836 to 1845?",
+    "answer": {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH059",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which US state was an independent kingdom until its monarchy was overthrown in 1893?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH060",
+    "difficulty": 4,
+    "category": "history",
+    "question": "Which was the first state to secede from the Union, in December 1860?",
+    "answer": {
+      "code": "US-SC",
+      "name": "South Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH061",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which Canadian province was the Battle of Queenston Heights fought in the War of 1812?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH062",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which Canadian province did an oil strike at Leduc in 1947 start a boom?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH063",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which Canadian territory were the wrecks of Franklin's lost ships Erebus and Terror found?",
+    "answer": {
+      "code": "CA-NU",
+      "name": "Nunavut",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH064",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did Pocahontas live?",
+    "answer": {
+      "code": "US-VA",
+      "name": "Virginia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH065",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did the Hindenburg airship burst into flames in 1937, at Lakehurst?",
+    "answer": {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH066",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was the aviator Amelia Earhart born?",
+    "answer": {
+      "code": "US-KS",
+      "name": "Kansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH067",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did the 1925 Scopes 'Monkey Trial' over teaching evolution take place?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH068",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was Neil Armstrong born?",
+    "answer": {
+      "code": "US-OH",
+      "name": "Ohio",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH069",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was President Bill Clinton born, in the town of Hope?",
+    "answer": {
+      "code": "US-AR",
+      "name": "Arkansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH070",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did Mount St. Helens erupt in 1980?",
+    "answer": {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH071",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was the Mormon founder Joseph Smith killed in 1844?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH072",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state was Harriet Tubman born into slavery?",
+    "answer": {
+      "code": "US-MD",
+      "name": "Maryland",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH073",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did President Harry Truman live, in Independence?",
+    "answer": {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH074",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which Canadian province was the ship Komagata Maru turned away from Vancouver in 1914?",
+    "answer": {
+      "code": "CA-BC",
+      "name": "British Columbia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH075",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state is Fort Knox, which guards much of the US gold reserve?",
+    "answer": {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH076",
+    "difficulty": 4,
+    "category": "history",
+    "question": "In which US state did Joseph Smith claim to find the golden plates of the Book of Mormon?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH077",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did Theodore Roosevelt run cattle ranches in the Badlands?",
+    "answer": {
+      "code": "US-ND",
+      "name": "North Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH078",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state was Wild Bill Hickok shot dead in Deadwood in 1876?",
+    "answer": {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH079",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did the Ludlow Massacre of striking miners take place in 1914?",
+    "answer": {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH080",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did Shays' Rebellion break out in 1786?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH081",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state was the Civil War rebellion of the 'Free State of Jones'?",
+    "answer": {
+      "code": "US-MS",
+      "name": "Mississippi",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH082",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which US state was an independent republic from 1777 until joining the Union in 1791?",
+    "answer": {
+      "code": "US-VT",
+      "name": "Vermont",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH083",
+    "difficulty": 5,
+    "category": "history",
+    "question": "Which US state was separated from Massachusetts in 1820?",
+    "answer": {
+      "code": "US-ME",
+      "name": "Maine",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH084",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state was the naval Battle of Mobile Bay fought in 1864?",
+    "answer": {
+      "code": "US-AL",
+      "name": "Alabama",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH085",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which Canadian province did the Cypress Hills Massacre of 1873 take place?",
+    "answer": {
+      "code": "CA-SK",
+      "name": "Saskatchewan",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH086",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which Canadian province did the Frank Slide of 1903 bury part of a mining town?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH087",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did the Johnstown Flood kill more than 2,200 people in 1889?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH088",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did the Tulsa race massacre take place in 1921?",
+    "answer": {
+      "code": "US-OK",
+      "name": "Oklahoma",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH089",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did Lewis and Clark spend the winter of 1805–06 at Fort Clatsop?",
+    "answer": {
+      "code": "US-OR",
+      "name": "Oregon",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH090",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state was the Donner Party trapped by snow in 1846–47?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH091",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which US state did Butch Cassidy's gang hide out at Hole-in-the-Wall?",
+    "answer": {
+      "code": "US-WY",
+      "name": "Wyoming",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH092",
+    "difficulty": 5,
+    "category": "history",
+    "question": "In which Canadian province did Loyalists found Saint John in 1783?",
+    "answer": {
+      "code": "CA-NB",
+      "name": "New Brunswick",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH093",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which present-day US state was the short-lived Republic of West Florida declared in 1810?",
+    "answer": {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH094",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which present-day US state was the breakaway 'State of Franklin' (1784–1788)?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH095",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which US state did the 1859 'Pig War' standoff with Britain take place on San Juan Island?",
+    "answer": {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH096",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which US state did Lewis and Clark spend the winter of 1804–05 at Fort Mandan?",
+    "answer": {
+      "code": "US-ND",
+      "name": "North Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH097",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which Canadian province was the Battle of Ridgeway against Irish Fenian raiders fought in 1866?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RH098",
+    "difficulty": 6,
+    "category": "history",
+    "question": "Which US state lost the 'Toledo War' border dispute of 1835–36 but gained its Upper Peninsula?",
+    "answer": {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH099",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which US state did the Nez Perce War begin in 1877?",
+    "answer": {
+      "code": "US-ID",
+      "name": "Idaho",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RH100",
+    "difficulty": 6,
+    "category": "history",
+    "question": "In which US state was the 1944 Bretton Woods conference that shaped the postwar economy held?",
+    "answer": {
+      "code": "US-NH",
+      "name": "New Hampshire",
+      "country": "US"
+    }
+  }
+]

@@ -68,7 +68,11 @@
       if (givesAway(city.name, r)) { skippedCities.push(city.name); continue; }
       add('geo', city.tier, { type: 'city', c: r, city, key: 'y:' + city.id, na: 1 });
     }
-    for (const h of RG.questions) add('geo', h.lvl, { type: 'geoq', c: rById.get(h.a), h, key: textKey(h.q), na: 1 });
+    // landmarks & facts (geography) and the state/province history, culture and sports questions
+    for (const h of RG.questions) {
+      const cat = POOLS[h.cat] ? h.cat : 'geo';
+      add(cat, h.lvl, { type: cat === 'geo' ? 'geoq' : cat, c: rById.get(h.a), h, key: textKey(h.q), na: 1 });
+    }
   }
   // 'world' (countries) · 'world+na' (countries + states & provinces) · 'na' (states & provinces only)
   let scope = 'world';
@@ -78,7 +82,7 @@
   const SCOPES = [
     { value: 'world', label: '🌍 World', note: 'All countries' },
     { value: 'world+na', label: '🌎 World + US states & Canada', note: 'Countries, with the USA and Canada split into states and provinces' },
-    { value: 'na', label: '🇺🇸 US states & Canadian provinces', note: 'Only those, on a map of North America (geography questions)' },
+    { value: 'na', label: '🇺🇸 US states & Canadian provinces', note: 'Only those, on a map of North America' },
   ];
 
   // Text questions: [category, question type, data]
@@ -175,16 +179,16 @@
         q.kind = 'Which country does this flag belong to?'; q.prompt = 'Click its country'; q.flag = `flags/${c.flag}.svg`; q.tag = 'Flag'; break;
       case 'history':
         q.tag = pick.h.cat === 'geopolitics' ? 'Geopolitics' : 'History';
-        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'sports':
         q.tag = 'Sport';
-        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'culture':
         q.tag = pick.h.sub ? titleCase(pick.h.sub) : 'Culture';
-        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'geoq':
         q.tag = 'Geography';
-        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
     }
     return q;
   }
@@ -198,7 +202,10 @@
       case 'capital': q.kind = 'Which state or province has this capital?'; q.prompt = c.capital; q.tag += ' · capital'; if (c.cp) { q.pin = c.cp; q.city = c.capital; } break;
       case 'city': q.kind = 'In which state or province is this city?'; q.prompt = pick.city.name; q.city = pick.city.name; q.pin = pick.city.p; q.tag += ' · city'; break;
       case 'flag': q.kind = 'Which state or province has this flag?'; q.prompt = 'Click it on the map'; q.flag = `flags/${c.flag}.svg`; q.tag += ' · flag'; break;
-      default: q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+      default:
+        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h;
+        if (pick.type !== 'geoq') q.tag = `${c.parent === 'USA' ? 'US' : 'Canada'} · ${{ history: 'History', sports: 'Sport', culture: 'Culture' }[pick.type] || ''}`;
+        break;
     }
     return q;
   }

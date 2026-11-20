@@ -1,0 +1,1102 @@
+[
+  {
+    "id": "RC001",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is Disneyland, the first Disney park (1955)?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC002",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is Broadway, the famous theatre district?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC003",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is Graceland, Elvis Presley's home?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC004",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is the Universal Orlando theme park?",
+    "answer": {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC005",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is Seattle's Space Needle?",
+    "answer": {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC006",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "Which US state is considered the birthplace of jazz, in New Orleans?",
+    "answer": {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC007",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is the Willis (Sears) Tower in Chicago?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC008",
+    "difficulty": 1,
+    "category": "culture",
+    "question": "In which US state is Waikiki Beach?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC009",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state was the Motown record label founded, in Detroit?",
+    "answer": {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC010",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the TV series 'Breaking Bad' set?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC011",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the TV series 'The Sopranos' set?",
+    "answer": {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC012",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state did the Woodstock festival take place in 1969?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC013",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the Coachella music festival held?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC014",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the Sundance Film Festival held?",
+    "answer": {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC015",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is Hannibal, Mark Twain's boyhood town on the Mississippi?",
+    "answer": {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC016",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which Canadian province is the Calgary Stampede rodeo held?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC017",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which Canadian province is the Montreal International Jazz Festival held?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC018",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which Canadian province is the Toronto International Film Festival held?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC019",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is Beale Street in Memphis, a home of the blues?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC020",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state do many Amish live in Lancaster County?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC021",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the ski town of Aspen?",
+    "answer": {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC022",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is Key West, where Ernest Hemingway lived?",
+    "answer": {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC023",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the South by Southwest (SXSW) festival held, in Austin?",
+    "answer": {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC024",
+    "difficulty": 2,
+    "category": "culture",
+    "question": "In which US state is the Mall of America, the largest shopping mall in the US?",
+    "answer": {
+      "code": "US-MN",
+      "name": "Minnesota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC025",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is the Burning Man festival held in the Black Rock Desert?",
+    "answer": {
+      "code": "US-NV",
+      "name": "Nevada",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC026",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state was the musician Prince born and based?",
+    "answer": {
+      "code": "US-MN",
+      "name": "Minnesota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC027",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Frank Lloyd Wright's house Fallingwater?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC028",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is 'Gone with the Wind' set?",
+    "answer": {
+      "code": "US-GA",
+      "name": "Georgia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC029",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Harper Lee's novel 'To Kill a Mockingbird' set?",
+    "answer": {
+      "code": "US-AL",
+      "name": "Alabama",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC030",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is 'The Great Gatsby', on Long Island, set?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC031",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is the Stanley Hotel, which inspired Stephen King's 'The Shining'?",
+    "answer": {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC032",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state was Elvis Presley born, in Tupelo?",
+    "answer": {
+      "code": "US-MS",
+      "name": "Mississippi",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC033",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is the film 'Field of Dreams' set?",
+    "answer": {
+      "code": "US-IA",
+      "name": "Iowa",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC034",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is the ranch of the TV series 'Yellowstone'?",
+    "answer": {
+      "code": "US-MT",
+      "name": "Montana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC035",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state was the film 'Jaws' shot, on Martha's Vineyard?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC036",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Mark Twain's house in Hartford?",
+    "answer": {
+      "code": "US-CT",
+      "name": "Connecticut",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC037",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state does Stephen King live and set many of his novels?",
+    "answer": {
+      "code": "US-ME",
+      "name": "Maine",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC038",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is most bourbon whiskey made?",
+    "answer": {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC039",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Tabasco sauce made, on Avery Island?",
+    "answer": {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC040",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state does Dorothy live in 'The Wizard of Oz'?",
+    "answer": {
+      "code": "US-KS",
+      "name": "Kansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC041",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Harley-Davidson based, in Milwaukee?",
+    "answer": {
+      "code": "US-WI",
+      "name": "Wisconsin",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC042",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is De Smet, a town in the 'Little House on the Prairie' books?",
+    "answer": {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC043",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state did the painter Georgia O'Keeffe live and paint desert landscapes?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC044",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which Canadian province is Cirque du Soleil based?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC045",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which Canadian province is the Stratford Festival of Shakespeare's plays?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC046",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which Canadian province is Cape Breton Island, known for its Celtic fiddle music?",
+    "answer": {
+      "code": "CA-NS",
+      "name": "Nova Scotia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC047",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which Canadian province is Haida Gwaii, famous for its totem poles?",
+    "answer": {
+      "code": "CA-BC",
+      "name": "British Columbia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC048",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which Canadian territory is Kinngait (Cape Dorset), a centre of Inuit printmaking?",
+    "answer": {
+      "code": "CA-NU",
+      "name": "Nunavut",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC049",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state was Nike founded?",
+    "answer": {
+      "code": "US-OR",
+      "name": "Oregon",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC050",
+    "difficulty": 3,
+    "category": "culture",
+    "question": "In which US state is Frank Lloyd Wright's winter home Taliesin West?",
+    "answer": {
+      "code": "US-AZ",
+      "name": "Arizona",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC051",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state did the poet Emily Dickinson live, in Amherst?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC052",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is William Faulkner's fictional Yoknapatawpha County set?",
+    "answer": {
+      "code": "US-MS",
+      "name": "Mississippi",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC053",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "From which US state does the Joad family set off in 'The Grapes of Wrath'?",
+    "answer": {
+      "code": "US-OK",
+      "name": "Oklahoma",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC054",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state was Ernest Hemingway born, in Oak Park?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC055",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is David Lynch's 'Twin Peaks' set?",
+    "answer": {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC056",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is the film 'Napoleon Dynamite' set?",
+    "answer": {
+      "code": "US-ID",
+      "name": "Idaho",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC057",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is the Crazy Horse Memorial, carved into a mountain?",
+    "answer": {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC058",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is the Biltmore Estate, the largest private house in the US?",
+    "answer": {
+      "code": "US-NC",
+      "name": "North Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC059",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state was the novelist Toni Morrison born?",
+    "answer": {
+      "code": "US-OH",
+      "name": "Ohio",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC060",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state was Kurt Vonnegut born, in Indianapolis?",
+    "answer": {
+      "code": "US-IN",
+      "name": "Indiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC061",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state did Edgar Allan Poe die, in Baltimore?",
+    "answer": {
+      "code": "US-MD",
+      "name": "Maryland",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC062",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is Branson, a town full of country music theatres?",
+    "answer": {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC063",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is Roswell, famous for its UFO legend?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC064",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "Which US state is known as the home of bluegrass music?",
+    "answer": {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC065",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state was Johnny Cash born?",
+    "answer": {
+      "code": "US-AR",
+      "name": "Arkansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC066",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state was the country singer Hank Williams born?",
+    "answer": {
+      "code": "US-AL",
+      "name": "Alabama",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC067",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is Mystic Seaport, a large maritime museum?",
+    "answer": {
+      "code": "US-CT",
+      "name": "Connecticut",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC068",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is Newport, famous for its Gilded Age mansions and folk festival?",
+    "answer": {
+      "code": "US-RI",
+      "name": "Rhode Island",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC069",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is Asbury Park, the shore town linked to Bruce Springsteen?",
+    "answer": {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC070",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is the TV series 'Northern Exposure' set?",
+    "answer": {
+      "code": "US-AK",
+      "name": "Alaska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC071",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which Canadian province does Vegreville have a giant Ukrainian Easter egg?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC072",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which Canadian province was poutine invented?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC073",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which Canadian province did Joni Mitchell grow up, in Saskatoon?",
+    "answer": {
+      "code": "CA-SK",
+      "name": "Saskatchewan",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC074",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which Canadian province is Lunenburg, home port of the schooner Bluenose?",
+    "answer": {
+      "code": "CA-NS",
+      "name": "Nova Scotia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC075",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which Canadian province did Shania Twain grow up, in Timmins?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC076",
+    "difficulty": 4,
+    "category": "culture",
+    "question": "In which US state is the Polynesian Cultural Center?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC077",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is Willa Cather's 'My Ántonia' set?",
+    "answer": {
+      "code": "US-NE",
+      "name": "Nebraska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC078",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is Marfa, a desert town known for minimalist art?",
+    "answer": {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC079",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is Robert Smithson's land artwork 'Spiral Jetty'?",
+    "answer": {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC080",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is the Bread Loaf Writers' Conference held?",
+    "answer": {
+      "code": "US-VT",
+      "name": "Vermont",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC081",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state do the Gullah people keep their culture alive on the Sea Islands?",
+    "answer": {
+      "code": "US-SC",
+      "name": "South Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC082",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is the farm in Derry where Robert Frost lived and wrote?",
+    "answer": {
+      "code": "US-NH",
+      "name": "New Hampshire",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC083",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state did the 'Mothman' legend begin, in Point Pleasant?",
+    "answer": {
+      "code": "US-WV",
+      "name": "West Virginia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC084",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is the Cheyenne Frontier Days rodeo held?",
+    "answer": {
+      "code": "US-WY",
+      "name": "Wyoming",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC085",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is Winterthur, the du Pont family's museum estate?",
+    "answer": {
+      "code": "US-DE",
+      "name": "Delaware",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC086",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is Mount Airy, the model for TV's Mayberry?",
+    "answer": {
+      "code": "US-NC",
+      "name": "North Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC087",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which Canadian province is the Acadian festival of Caraquet held?",
+    "answer": {
+      "code": "CA-NB",
+      "name": "New Brunswick",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC088",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which Canadian territory can you drink the 'Sourtoe Cocktail' in Dawson City?",
+    "answer": {
+      "code": "CA-YT",
+      "name": "Yukon",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC089",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which Canadian province is Gimli, the centre of a large Icelandic community?",
+    "answer": {
+      "code": "CA-MB",
+      "name": "Manitoba",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC090",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which Canadian territory is the Snowking Winter Festival held in Yellowknife?",
+    "answer": {
+      "code": "CA-NT",
+      "name": "Northwest Territories",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC091",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "In which US state is the house shown in Grant Wood's painting 'American Gothic'?",
+    "answer": {
+      "code": "US-IA",
+      "name": "Iowa",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC092",
+    "difficulty": 5,
+    "category": "culture",
+    "question": "Which Canadian province welcomes visitors with a 'screech-in' of rum and kissing a cod?",
+    "answer": {
+      "code": "CA-NL",
+      "name": "Newfoundland and Labrador",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC093",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is the House on the Rock, a famously strange attraction?",
+    "answer": {
+      "code": "US-WI",
+      "name": "Wisconsin",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC094",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is Carhenge, a replica of Stonehenge made of old cars?",
+    "answer": {
+      "code": "US-NE",
+      "name": "Nebraska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC095",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is Lucy the Elephant, a six-storey building?",
+    "answer": {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC096",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is Frankenmuth, known as 'Little Bavaria'?",
+    "answer": {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC097",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which Canadian province does the town of Vulcan celebrate 'Star Trek'?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "RC098",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is Lindsborg, known as 'Little Sweden'?",
+    "answer": {
+      "code": "US-KS",
+      "name": "Kansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC099",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is Boise's Basque Block, a centre of Basque culture?",
+    "answer": {
+      "code": "US-ID",
+      "name": "Idaho",
+      "country": "US"
+    }
+  },
+  {
+    "id": "RC100",
+    "difficulty": 6,
+    "category": "culture",
+    "question": "In which US state is the Enchanted Highway, lined with giant metal sculptures?",
+    "answer": {
+      "code": "US-ND",
+      "name": "North Dakota",
+      "country": "US"
+    }
+  }
+]
