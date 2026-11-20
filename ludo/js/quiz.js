@@ -53,6 +53,34 @@
     if (givesAway(city.name, c)) { skippedCities.push(city.name); continue; }
     add('geo', city.tier, { type: 'city', c, city, key: 'y:' + city.id });
   }
+  /* US states, Canadian provinces & territories (data/regions.js, when the page loads it): the same kinds
+   * of geography question, marked na: they are asked only when the game's scope includes them (setScope). */
+  const RG = window.REGIONS;
+  if (RG) {
+    const rById = new Map(RG.regions.map((r) => [r.id, r]));
+    for (const r of RG.regions.filter((x) => x.fame)) {
+      add('geo', r.fame, { type: 'name', c: r, key: 'n:' + r.id, na: 1 });
+      add('geo', clamp(r.fame + 2), { type: 'flag', c: r, key: 'f:' + r.id, na: 1 }); // state flags are hard to tell apart
+      if (!givesAway(r.capital, r)) add('geo', clamp(r.fame + 1 + (r.capAdj || 0)), { type: 'capital', c: r, key: 'c:' + r.id, na: 1 });
+    }
+    for (const city of RG.cities) {
+      const r = rById.get(city.region);
+      if (givesAway(city.name, r)) { skippedCities.push(city.name); continue; }
+      add('geo', city.tier, { type: 'city', c: r, city, key: 'y:' + city.id, na: 1 });
+    }
+    for (const h of RG.questions) add('geo', h.lvl, { type: 'geoq', c: rById.get(h.a), h, key: textKey(h.q), na: 1 });
+  }
+  // 'world' (countries) · 'world+na' (countries + states & provinces) · 'na' (states & provinces only)
+  let scope = 'world';
+  const inScope = (q) => (q.na ? scope !== 'world' : scope !== 'na');
+  function setScope(s) { scope = ['world', 'world+na', 'na'].includes(s) && RG ? s : 'world'; }
+  /** The map / question scopes a game can offer (shown in a menu on each setup screen). */
+  const SCOPES = [
+    { value: 'world', label: '🌍 World', note: 'All countries' },
+    { value: 'world+na', label: '🌎 World + US states & Canada', note: 'Countries, with the USA and Canada split into states and provinces' },
+    { value: 'na', label: '🇺🇸 US states & Canadian provinces', note: 'Only those, on a map of North America (geography questions)' },
+  ];
+
   // Text questions: [category, question type, data]
   for (const [cat, type, list] of [
     ['history', 'history', window.HISTORY_QUESTIONS],
@@ -125,20 +153,22 @@
   const GEO_TYPES = { all: 'All types', name: 'Countries', flag: 'Flags', capital: 'Capitals', city: 'Cities', geoq: 'Landmarks & facts' };
   /** The pool to draw from; for one geography type, its questions at this level (or the nearest level that has some). */
   function geoPool(cat, level, geoType) {
-    if (cat !== 'geo' || !geoType || geoType === 'all' || !GEO_TYPES[geoType]) return POOLS[cat][level];
+    const typed = cat === 'geo' && geoType && geoType !== 'all' && GEO_TYPES[geoType];
+    const ok = (q) => inScope(q) && (!typed || q.type === geoType);
     for (let d = 0; d < 6; d++) {
       for (const l of [level - d, level + d]) {
-        const pool = l >= 1 && l <= 6 ? POOLS.geo[l].filter((q) => q.type === geoType) : [];
+        const pool = l >= 1 && l <= 6 ? POOLS[cat][l].filter(ok) : [];
         if (pool.length) return pool;
       }
     }
-    return POOLS.geo[level];
+    return POOLS[cat][level];
   }
 
   /** Turn a pool entry into a question object for the UI (also used by the training page). */
   function describe(pick, level, cat) {
     const c = pick.c;
     const q = { level, levelLabel: LEVELS[level].label, country: c, type: pick.type, category: cat, key: pick.key };
+    if (c.parent) return describeRegion(q, pick, c);
     switch (pick.type) {
       case 'name':
         q.kind = 'Find this country on the map'; q.prompt = c.name; q.tag = 'Country'; break;
@@ -168,6 +198,20 @@
     return q;
   }
 
+  /** A question about a US state or a Canadian province / territory. */
+  function describeRegion(q, pick, c) {
+    const what = c.parent === 'USA' ? 'US state' : c.kind === 'territory' ? 'Canadian territory' : 'Canadian province';
+    q.tag = c.parent === 'USA' ? 'US state' : 'Canada';
+    switch (pick.type) {
+      case 'name': q.kind = `Find this ${what} on the map`; q.prompt = c.name; break;
+      case 'capital': q.kind = 'Which state or province has this capital?'; q.prompt = c.capital; q.tag += ' · capital'; if (c.cp) { q.pin = c.cp; q.city = c.capital; } break;
+      case 'city': q.kind = 'In which state or province is this city?'; q.prompt = pick.city.name; q.city = pick.city.name; q.pin = pick.city.p; q.tag += ' · city'; break;
+      case 'flag': q.kind = 'Which state or province has this flag?'; q.prompt = 'Click it on the map'; q.flag = `../flags/${c.flag}.svg`; q.tag += ' · flag'; break;
+      default: q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+    }
+    return q;
+  }
+
   /** A new game: reset the category balance, but keep the record of asked questions. */
   function newGame() {
     recent = [];
@@ -185,5 +229,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { GEO_TYPES, setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { SCOPES, setScope, inScope: (q) => inScope(q), get scope() { return scope; }, GEO_TYPES, setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();

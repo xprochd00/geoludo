@@ -825,3 +825,17 @@ kbd {
  * "Game in progress" summary, otherwise widens it past the screen edge). */
 #setup.active, #lobby.active { grid-template-columns: minmax(0, 1fr); }
 .setup-card, .v-card { max-width: 100%; min-width: 0; }
+
+/* ================= US states & Canadian provinces (WorldMap.setScope) ================= */
+#map .region, #map .region-dot { display: none; }
+#map.show-regions .region, #map.show-regions .region-dot { display: inline; }
+#map.show-regions .country[data-id="USA"], #map.show-regions .country[data-id="CAN"] { display: none; }
+#map.na-only .country:not(.region) { fill-opacity: .35; pointer-events: none; }
+#map.na-only .dot:not(.region-dot) { display: none; }
+/* the map scope menu button (world / + US states & Canada / only those) */
+.scope-row { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.scope-btn {
+  color: var(--text); font: 600 13.5px var(--font-body); padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--accent); background: rgba(255,209,102,.1); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.scope-btn:hover { background: rgba(255,209,102,.2); }

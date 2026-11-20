@@ -12,6 +12,7 @@
 
   const full = { x: -10, y: -10, w: W.w + 20, h: W.h + 20 };
   let vb = { ...full };
+  let home = full; // the view of reset(): the whole world, or North America (setScope)
   let locked = true;
   let onPick = null;
   let anim = null;
@@ -54,6 +55,64 @@
       n.dot = el('circle', { cx: c.c[0], cy: c.c[1], r: 2, class: 'dot', 'data-id': c.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
     }
     nodes.set(c.id, n);
+  }
+
+  /* US states, Canadian provinces & territories (data/regions.js, when the page loads it). They are drawn
+   * over the USA and Canada and shown only when the game's scope includes them (setScope). */
+  const REG = (window.REGIONS && window.REGIONS.regions) || [];
+  const regionLayer = el('g', { class: 'regions' }, land);
+  for (const r of REG) {
+    byId.set(r.id, r);
+    const p = el('path', {
+      d: r.d, class: 'country region' + (r.fame ? '' : ' np'), fill: r.fame ? LAND[hash(r.id) % LAND.length] : '#c7d0dc', 'data-id': r.id,
+      'vector-effect': 'non-scaling-stroke', 'stroke-width': 0.5,
+    }, regionLayer);
+    const n = { path: p, dot: null };
+    if (r.small && r.fame) n.dot = el('circle', { cx: r.c[0], cy: r.c[1], r: 2, class: 'dot region-dot', 'data-id': r.id, 'vector-effect': 'non-scaling-stroke', 'stroke-width': 1 }, dotLayer);
+    nodes.set(r.id, n);
+  }
+  // 'world' (countries only) · 'world+na' (countries, with the USA and Canada split into states and provinces) · 'na' (only those)
+  let scope = 'world';
+  const PARENTS = ['USA', 'CAN'];
+  /** Can this place be an answer in the current scope? */
+  function pickable(id) {
+    const c = byId.get(id);
+    if (!c || !c.fame) return false;
+    if (c.parent) return scope !== 'world';
+    if (scope === 'na') return false;
+    return !(scope !== 'world' && PARENTS.includes(id));
+  }
+  /** The shapes that stand for a place: the USA / Canada are their states and provinces when those are shown. */
+  const nodesFor = (id) => (scope !== 'world' && PARENTS.includes(id) ? REG.filter((r) => r.parent === id).map((r) => nodes.get(r.id)) : [nodes.get(id)]).filter(Boolean);
+  /** Is a click on `clicked` the right answer for `answer`? (A state counts for its country.) */
+  const matches = (clicked, answer) => !!clicked && (clicked === answer || (byId.get(clicked) || {}).parent === answer);
+  // Hint areas for states and provinces: the US census regions, and the parts of Canada.
+  const AREA = {
+    Northeast: 'CT ME MA NH RI VT NJ NY PA', Midwest: 'IL IN MI OH WI IA KS MN MO NE ND SD',
+    South: 'DE FL GA MD NC SC VA WV AL KY MS TN AR LA OK TX', West: 'AZ CO ID MT NV NM UT WY AK CA HI OR WA',
+    'Western Canada': 'BC AB SK MB', 'Central Canada': 'ON QC', 'Atlantic Canada': 'NB NS PE NL', 'Northern Canada': 'YT NT NU',
+  };
+  const areaOf = (r) => Object.keys(AREA).find((k) => AREA[k].split(' ').includes(r.id.slice(3)) && (k.includes('Canada') === (r.parent === 'CAN')));
+  /** The places a "show the region" hint lights up for this answer, and the region's name. */
+  function hintFor(id) {
+    const c = byId.get(id);
+    if (c && c.parent) {
+      const a = areaOf(c);
+      return { name: a ? (a.includes('Canada') ? a : `the ${a} of the USA`) : (c.parent === 'USA' ? 'the USA' : 'Canada'), ids: REG.filter((r) => r.fame && areaOf(r) === a).map((r) => r.id) };
+    }
+    const ids = W.countries.filter((x) => x.fame && c && x.region === c.region).map((x) => x.id);
+    return { name: c ? c.region : '', ids: ids.length > 1 ? ids : [id] };
+  }
+  function setScope(s) {
+    scope = ['world', 'world+na', 'na'].includes(s) && REG.length ? s : 'world';
+    svg.classList.toggle('show-regions', scope !== 'world');
+    svg.classList.toggle('na-only', scope === 'na');
+    if (scope === 'na') { // North America, without Hawaii far out in the Pacific
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      REG.filter((r) => r.fame && r.id !== 'US-HI').forEach((r) => { const [[a, b], [c, d]] = r.mb || r.b; x0 = Math.min(x0, a); y0 = Math.min(y0, b); x1 = Math.max(x1, c); y1 = Math.max(y1, d); });
+      home = { x: x0 - 10, y: y0 - 6, w: x1 - x0 + 20, h: y1 - y0 + 12 };
+    } else home = full;
+    reset(false);
   }
 
   /* ---------- View box handling ---------- */
@@ -119,8 +178,8 @@
   }
 
   function reset(animated = false) {
-    const target = fitAspect(full);
-    if (animated) return animateTo(full, 600);
+    const target = fitAspect(home);
+    if (animated) return animateTo(home, 600);
     cancelAnimationFrame(anim);
     vb = target; apply();
   }
@@ -231,7 +290,7 @@
       const p = toSvg(x, y);
       let best = null, bd = reach * u;
       nodes.forEach((n, nid) => {
-        if (!n.dot || nid === underId) return;
+        if (!n.dot || nid === underId || !pickable(nid)) return;
         const c = byId.get(nid).c;
         const d = Math.hypot(c[0] - p.x, c[1] - p.y);
         if (d < bd) { bd = d; best = nid; }
@@ -240,7 +299,7 @@
     }
     // Only countries in the game's database (name + flag + capital) can be picked; the ocean and
     // territories such as Greenland or New Caledonia are ignored.
-    if (!id || !(byId.get(id) || {}).fame) return;
+    if (!id || !pickable(id)) return;
     if (onPick) onPick(id);
   }
 
@@ -292,10 +351,11 @@
   async function reveal(correctId, clickedId, pin) {
     locked = true;
     svg.classList.add('locked');
-    const ok = correctId === clickedId;
-    const cn = nodes.get(correctId);
-    cn.path.classList.add('correct');
-    cn.dot && cn.dot.classList.add('correct');
+    const ok = matches(clickedId, correctId);
+    nodesFor(correctId).forEach((cn) => {
+      cn.path.classList.add('correct');
+      cn.dot && cn.dot.classList.add('correct');
+    });
     if (!ok && clickedId && nodes.has(clickedId)) {
       const wn = nodes.get(clickedId);
       wn.path.classList.add('wrong');
@@ -348,7 +408,7 @@
 
   /** Hint: dim every country outside the given set and zoom to it. */
   async function hint(ids) {
-    const set = new Set(ids);
+    const set = new Set(ids.flatMap((id) => (scope !== 'world' && PARENTS.includes(id) ? REG.filter((r) => r.parent === id).map((r) => r.id) : [id])));
     nodes.forEach((n, id) => {
       const inside = set.has(id);
       n.path.classList.toggle('dim', !inside);
@@ -359,7 +419,7 @@
 
   /** Mark a wrong pick without revealing the answer (the map stays clickable, e.g. for a steal). */
   function markWrong(id) {
-    const n = nodes.get(id);
+    const n = nodesFor(id)[0];
     if (!n) return;
     n.path.classList.add('wrong');
     n.dot && n.dot.classList.add('wrong');
@@ -391,5 +451,5 @@
   /** Clear answer marks (colours, labels) without changing the view. */
   function clear() { clearMarks(); }
 
-  window.WorldMap = { prepare, reveal, lock, reset, hint, markWrong, markPicked, centerOf, byId, overlay, onScale, focusPoints, clear, unitsPerPx: () => unitsPerPx() };
+  window.WorldMap = { setScope, get scope() { return scope; }, matches, hintFor, prepare, reveal, lock, reset, hint, markWrong, markPicked, centerOf, byId, overlay, onScale, focusPoints, clear, unitsPerPx: () => unitsPerPx() };
 })();

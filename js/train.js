@@ -41,7 +41,11 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
   let prog = load(STORE, { n: 0, items: {} });
-  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], areas: AREAS.slice(), timer: false, sound: true }, load(SETTINGS, {}));
+  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], areas: AREAS.slice(), scope: 'world', timer: false, sound: true }, load(SETTINGS, {}));
+  if (!Quiz.SCOPES.some((x) => x.value === settings.scope)) settings.scope = 'world';
+  // US states & Canadian provinces only: geography questions about them, so the other categories and parts of the world step aside
+  const naOnly = () => settings.scope === 'na';
+  const inScope = (e) => (e.pick.na ? settings.scope !== 'world' : settings.scope !== 'na');
   settings.areas = (settings.areas || []).filter((a) => AREAS.includes(a));
   if (!settings.areas.length) settings.areas = AREAS.slice();
   Sound.enabled = settings.sound;
@@ -78,8 +82,8 @@
   const isMistake = (r) => !!r && r.w > 0 && !mastered(r);
 
   function filtered() {
-    const allAreas = settings.areas.length === AREAS.length;
-    return ALL.filter((e) => settings.cats.includes(e.cat) && settings.levels.includes(e.lvl)
+    const allAreas = settings.areas.length === AREAS.length || naOnly();
+    return ALL.filter((e) => inScope(e) && (naOnly() || settings.cats.includes(e.cat)) && settings.levels.includes(e.lvl)
       && (e.cat !== 'geo' || settings.types.includes(e.pick.type))
       && (allAreas || settings.areas.includes(areaOf(e.pick.c))));
   }
@@ -90,6 +94,13 @@
     document.querySelectorAll('#type-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.types.includes(b.dataset.type)));
     document.querySelectorAll('#level-chips .chip-btn').forEach((b) => b.classList.toggle('active', settings.levels.includes(+b.dataset.l)));
     document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.classList.toggle('active', settings.areas.includes(b.dataset.area)));
+    const sc = Quiz.SCOPES.find((x) => x.value === settings.scope);
+    $('scope-btn').textContent = `${sc.label} ▾`;
+    document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => { b.disabled = naOnly() && b.dataset.cat !== 'geo'; });
+    if (naOnly()) document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.classList.toggle('active', b.dataset.cat === 'geo'));
+    $('area-chips').closest('.t-card').querySelectorAll('#area-chips, #area-chips + .area-note').forEach((x) => { x.hidden = naOnly(); });
+    const ah = $('area-chips').previousElementSibling;
+    if (ah && ah.tagName === 'H3') ah.hidden = naOnly();
     document.querySelectorAll('.all-chip').forEach((b) => {
       const on = !!picks && picks[b.dataset.all].isAll();
       b.classList.toggle('active', on);
@@ -121,6 +132,12 @@
   document.querySelectorAll('#level-chips .chip-btn[data-l]').forEach((b) => b.addEventListener('click', () => picks.levels.toggle(+b.dataset.l)));
   document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.addEventListener('click', () => picks.areas.toggle(b.dataset.area)));
   document.querySelectorAll('.all-chip').forEach((b) => b.addEventListener('click', () => picks[b.dataset.all].all()));
+  $('scope-btn').addEventListener('click', async () => {
+    const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, settings.scope);
+    if (v == null || v === settings.scope) return;
+    settings.scope = v;
+    syncChips();
+  });
   $('opt-timer').addEventListener('change', () => { settings.timer = $('opt-timer').checked; syncChips(); });
   $('sound-btn').addEventListener('click', () => { settings.sound = !settings.sound; Sound.enabled = settings.sound; syncChips(); });
 
@@ -171,6 +188,7 @@
     Sound.ensure();
     const pool = filtered().filter((e) => !mistakesOnly || isMistake(rec(e.key)));
     if (!pool.length) return;
+    WorldMap.setScope(settings.scope);
     session = { pool, mistakesOnly, ok: 0, bad: 0, streak: 0, best: 0, answered: 0, newMastered: 0, missed: [], last: null, lastCountry: null };
     $('t-mode').textContent = mistakesOnly ? '🔁 Mistakes' : `${pool.length} questions`;
     show('play');
@@ -205,7 +223,10 @@
       const other = ALL.filter((e) => chosen.has(e.key) && rec(e.key) && !isMistake(rec(e.key)) && !avoid(e));
       return other.length ? oldest(other) : rand(left);
     }
-    const masteredOnes = pool.filter((e) => mastered(rec(e.key)) && !avoid(e));
+    // review: mastered questions from earlier sessions first (not one just asked in this one)
+    const seenNow = session.seen || (session.seen = new Set());
+    const masteredAll = pool.filter((e) => mastered(rec(e.key)) && !avoid(e));
+    const masteredOnes = masteredAll.filter((e) => !seenNow.has(e.key)).length ? masteredAll.filter((e) => !seenNow.has(e.key)) : masteredAll;
     // 2. now and then, a mastered question comes back for review
     if (session.picks % REVIEW_EVERY === 0 && masteredOnes.length) return oldest(masteredOnes);
     // 3. never practised
@@ -227,6 +248,7 @@
     session.cur = { e, q, hinted: false, done: false };
     session.last = e.key;
     session.recent = [e.key, ...(session.recent || [])].slice(0, RECENT);
+    (session.seen || (session.seen = new Set())).add(e.key);
     session.lastCountry = q.country.id;
     const r = rec(e.key);
     const diff = $('q-diff');
@@ -245,7 +267,7 @@
     $('idk-btn').disabled = false;
     WorldMap.prepare(answer);
     // practising some parts of the world only: start the map there
-    if (settings.areas.length < AREAS.length) WorldMap.focusPoints(areaPoints(), 450, 40);
+    if (!naOnly() && settings.areas.length < AREAS.length) WorldMap.focusPoints(areaPoints(), 450, 40);
     if (settings.timer) startTimer(['history', 'sports', 'culture', 'geoq'].includes(q.type) ? TIMER_SECS + 15 : TIMER_SECS);
     else $('timer').hidden = true;
     updateScore();
@@ -282,7 +304,7 @@
       case 'capital': return `The capital of <b>${esc(c.name)}</b> is <b>${esc(c.capital)}</b>.`;
       case 'city': return `<b>${esc(q.city)}</b> is in <b>${esc(c.name)}</b>.`;
       case 'flag': return `That's the flag of <b>${esc(c.name)}</b>.`;
-      case 'name': return `<b>${esc(c.name)}</b>${c.noCap ? '' : ` — capital: ${esc(c.capital)}`}. Region: ${esc(c.region)}.`;
+      case 'name': return `<b>${esc(c.name)}</b>${c.noCap ? '' : ` — capital: ${esc(c.capital)}`}.${c.parent ? '' : ` Region: ${esc(c.region)}.`}`;
       default: return `The answer is <b>${esc(c.name)}</b>.`;
     }
   }
@@ -312,7 +334,7 @@
     clearInterval(timerHandle);
     WorldMap.lock();
     const { q, e } = cur;
-    const ok = clickedId === q.country.id;
+    const ok = WorldMap.matches(clickedId, q.country.id); // a state counts for its country
     const { nowMastered } = record(e.key, ok, cur.hinted);
     session.answered++;
     if (ok) { session.ok++; session.streak++; session.best = Math.max(session.best, session.streak); } else { session.bad++; session.streak = 0; }
@@ -351,9 +373,9 @@
     if (!cur || cur.done || cur.hinted) return;
     cur.hinted = true;
     const c = cur.q.country;
-    const region = window.WORLD.countries.filter((x) => x.fame && x.region === c.region).map((x) => x.id);
-    WorldMap.hint(region.length > 1 ? region : [c.id]);
-    $('q-kind').textContent = `🧭 Somewhere in ${c.region}`;
+    const h = WorldMap.hintFor(c.id);
+    WorldMap.hint(h.ids);
+    $('q-kind').textContent = `🧭 Somewhere in ${h.name}`;
     $('hint-btn').disabled = true;
   });
   $('end-btn').addEventListener('click', () => finish(false));
