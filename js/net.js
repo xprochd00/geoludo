@@ -19,7 +19,7 @@
     { key: 'eclipse', url: 'wss://mqtt.eclipseprojects.io:443/mqtt' },
     { key: 'mosquitto', url: 'wss://test.mosquitto.org:8081/' },
   ];
-  const TOPIC = 'geoludo/voyage/v2/';
+  const TOPIC = window.NET_TOPIC || 'geoludo/voyage/v2/'; // a page may set its own channel (Time Travel)
   const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I
   const randomCode = (n = 5) => Array.from({ length: n }, () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join('');
   const params = new URLSearchParams(location.search);

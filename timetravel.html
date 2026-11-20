@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Geo Time Travel — From Prehistory to Today · GeoGames</title>
+  <meta name="description" content="A history race on the world map: travel from prehistory to today by finding where it happened. Three lives, five eras. Play on one device or online with friends.">
+  <meta name="theme-color" content="#0b1230">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/voyage.css">
+  <link rel="stylesheet" href="css/timetravel.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏳</text></svg>">
+</head>
+<body class="voyage timetravel">
+  <div class="sky" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <!-- ============ SETUP ============ -->
+  <section id="setup" class="v-screen active">
+    <div class="v-card setup">
+      <div class="logo">
+        <div class="logo-globe" aria-hidden="true">⏳</div>
+        <h1>Geo<span>Time Travel</span></h1>
+        <p class="tagline">Prehistory → Antiquity → Middle Ages → Early Modern → Modern</p>
+      </div>
+
+      <div id="join-banner" class="join-banner" hidden>
+        <b>You're invited to travel through time!</b>
+        <span>Enter your name and join room <code id="join-code"></code>.</span>
+      </div>
+
+      <div class="v-section" id="length-section">
+        <h2>Journey length</h2>
+        <div class="format-grid three" id="length-grid">
+          <button type="button" class="format-btn" data-need="2"><span>🏃</span><b>Short</b><small>2 per era</small></button>
+          <button type="button" class="format-btn" data-need="3"><span>🧭</span><b>Standard</b><small>3 per era</small></button>
+          <button type="button" class="format-btn" data-need="4"><span>🏔️</span><b>Long</b><small>4 per era</small></button>
+        </div>
+        <p class="hint-line" id="length-hint"></p>
+      </div>
+
+      <div class="v-section" id="format-section">
+        <h2>How do you play?</h2>
+        <div class="format-grid">
+          <button type="button" class="format-btn active" data-format="hotseat"><span>🖥️</span><b>Hot seat</b><small>Take turns on one device</small></button>
+          <button type="button" class="format-btn" data-format="online"><span>🌐</span><b>Online</b><small>Everyone on their own device</small></button>
+        </div>
+      </div>
+
+      <div class="v-section" id="hotseat-section">
+        <h2>Travellers</h2>
+        <div class="stepper">
+          <button type="button" id="minus-btn" aria-label="Fewer players">−</button>
+          <b id="count-num">2</b>
+          <button type="button" id="plus-btn" aria-label="More players">+</button>
+        </div>
+        <div id="name-list" class="name-list"></div>
+        <button id="start-btn" class="btn-primary big">Start the journey ⏳</button>
+      </div>
+
+      <div class="v-section" id="online-section" hidden>
+        <h2>Your name</h2>
+        <input id="my-name" class="name-input" maxlength="16" placeholder="Traveller …" autocomplete="nickname">
+        <button id="create-btn" class="btn-primary big">Create a room</button>
+        <button id="join-btn" class="btn-primary big" hidden>Join the journey</button>
+        <p class="hint-line" id="net-status"></p>
+      </div>
+
+      <div class="v-links">
+        <details>
+          <summary>How to play</summary>
+          <ul>
+            <li>You travel through five eras: <b>Prehistory, Antiquity, the Middle Ages, the Early Modern age and the Modern age</b>, then home to today.</li>
+            <li>On your turn you get a history question from your current era. Answer it by tapping the right country on the map.</li>
+            <li>Each era needs a number of correct answers (2, 3 or 4, as chosen) before you travel on to the next.</li>
+            <li>You start with <b>3 lives</b>. A wrong answer, or running out of time, costs one; arriving in a new era gives one back (up to 5).</li>
+            <li>Lose your last life and the era claims you: a sabre-toothed cat, Spartan warriors, the plague, pirates… You are out.</li>
+            <li>The first traveller to reach today ends the journey; the round is finished so everyone has the same number of turns. Otherwise the one who got furthest wins.</li>
+            <li>Questions are drawn at random and never repeat in a game.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOBBY (online) ============ -->
+  <section id="lobby" class="v-screen">
+    <div class="v-card setup">
+      <h2 class="lobby-title">⏳ Room <code id="room-code"></code></h2>
+      <div class="share-box">
+        <input id="share-link" readonly aria-label="Invitation link">
+        <button type="button" id="copy-btn" class="btn-ghost">Copy</button>
+        <button type="button" id="share-btn" class="btn-ghost" hidden>Share</button>
+      </div>
+      <p class="hint-line">Send this link to your friends. They open it on their own device and join.</p>
+      <h3>Travellers <small id="crew-count"></small></h3>
+      <ul id="crew" class="crew"></ul>
+      <button type="button" id="add-bot-btn" class="btn-ghost add-bot" hidden>🤖 Add a computer traveller</button>
+      <p class="hint-line" id="lobby-rules"></p>
+      <button id="lobby-start-btn" class="btn-primary big">Start the journey ⏳</button>
+      <p class="hint-line" id="lobby-wait" hidden>Waiting for the host to start…</p>
+      <button type="button" id="leave-btn" class="link-btn">Leave room</button>
+    </div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section id="game" class="v-screen">
+    <header class="v-top">
+      <button type="button" id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+      <div class="v-players" id="v-players"></div>
+      <button type="button" id="sound-btn" class="icon-btn" aria-label="Toggle sound">🔊</button>
+    </header>
+
+    <div class="map-wrap v-map" id="map-wrap">
+      <svg id="map" aria-label="World map"></svg>
+      <div class="map-controls">
+        <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+        <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+        <button type="button" data-zoom="reset" aria-label="Reset view">⤢</button>
+      </div>
+
+      <div class="quiz-card v-quiz" id="quiz-card" hidden>
+        <div class="quiz-meta">
+          <span id="q-era" class="chip era-chip"></span>
+          <span id="q-who" class="chip player-chip"></span>
+          <span id="q-lives" class="chip ghost"></span>
+        </div>
+        <div class="quiz-main">
+          <div class="q-text">
+            <div id="q-kind" class="q-kind">Tap the country on the map</div>
+            <div id="q-prompt" class="q-prompt long"></div>
+          </div>
+          <div class="timer" id="timer" hidden>
+            <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="t-bg"/><circle cx="22" cy="22" r="19" class="t-fg" id="timer-ring"/></svg>
+            <span id="timer-num">45</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="v-panel" id="panel">
+        <div class="v-panel-head"><span class="dot" id="panel-dot"></span><b id="panel-title"></b><span id="panel-sub"></span></div>
+        <div class="tt-timeline" id="timeline"></div>
+        <div class="v-result" id="result" hidden>
+          <div class="result-icon" id="result-icon">✓</div>
+          <div class="result-text"><div class="result-title" id="result-title"></div><div class="result-sub" id="result-sub"></div></div>
+        </div>
+        <button type="button" id="next-btn" class="btn-primary" hidden>Next ⏎</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ELIMINATION ============ -->
+  <div id="doom" class="overlay doom" hidden>
+    <div class="doom-card">
+      <div class="doom-threat" id="doom-icon"></div>
+      <h2 id="doom-title"></h2>
+      <p id="doom-text"></p>
+    </div>
+  </div>
+
+  <!-- ============ FINISH ============ -->
+  <div id="finish" class="overlay" hidden>
+    <div class="win-card">
+      <div class="trophy" id="win-icon">🏆</div>
+      <h2 id="win-title"></h2>
+      <p id="win-sub"></p>
+      <ol id="podium" class="win-table"></ol>
+      <div class="win-actions">
+        <button id="again-btn" class="btn-primary">Travel again</button>
+        <button id="home-btn" class="btn-ghost">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MENU ============ -->
+  <div id="menu" class="overlay" hidden>
+    <div class="win-card menu-card">
+      <h2>⏳ Journey paused</h2>
+      <p id="menu-room"></p>
+      <div class="win-actions column">
+        <button id="resume-btn" class="btn-primary">Back to the game</button>
+        <button id="copy2-btn" class="btn-ghost" hidden>Copy invitation link</button>
+        <button id="quit-btn" class="btn-ghost">Leave the journey</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script>window.NET_TOPIC = 'geoludo/timetravel/v1/'; // its own rooms, never mixed with Voyage</script>
+  <script src="data/world.js"></script>
+  <script src="data/timetravel.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/dialog.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/timetravel.js"></script>
+</body>
+</html>

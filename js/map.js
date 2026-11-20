@@ -296,12 +296,12 @@
     const cn = nodes.get(correctId);
     cn.path.classList.add('correct');
     cn.dot && cn.dot.classList.add('correct');
-    if (!ok && clickedId) {
+    if (!ok && clickedId && nodes.has(clickedId)) {
       const wn = nodes.get(clickedId);
       wn.path.classList.add('wrong');
       wn.dot && wn.dot.classList.add('wrong');
     }
-    const ids = clickedId && !ok ? [correctId, clickedId] : [correctId];
+    const ids = clickedId && !ok && nodes.has(clickedId) ? [correctId, clickedId] : [correctId];
     // ping ring around the correct country
     const c = byId.get(correctId);
     const ring = el('circle', { cx: c.c[0], cy: c.c[1], r: 1, class: 'ping' }, fxLayer);

@@ -7,7 +7,7 @@ Geography board and race games: every move is earned by finding the right place 
 | `index.html` | 🌍 **GeoGames home**: a card per game, with a short description and the rules |
 | `ludo/` | 🎲 **Geo Ludo**: the board race (Quick / Classic / Custom), hot seat or online |
 | `voyage.html` | ⛵ **Geo Voyage**: sail around the world in 30 ports, hot seat or online |
-| `timetravel.html` | ⏳ **Geo Time Travel**: from prehistory to today (coming next) |
+| `timetravel.html` | ⏳ **Geo Time Travel**: from prehistory to today, three lives, hot seat or online |
 | `train.html` | 🎯 **Training**: questions and map only, to practise on your own |
 
 Every page has the same top bar (`js/nav.js`, `css/nav.css`): **← Home**, the GeoGames logo (also home), a **Games** menu and a **💬 Feedback** form (bug / wrong information / suggestion / general; it opens a prefilled GitHub issue, or the text can be copied). The bar steps aside while a game is being played, so the map keeps the room on phones. Old Voyage invitation links (`index.html?room=…`) are forwarded to `voyage.html`.
@@ -58,6 +58,18 @@ Under the hood, the host's browser runs the game. All devices exchange messages 
 - Some school or office networks block these relays. Mobile data usually works.
 - Public relays are shared services without guarantees, and anyone who knew the room code could in theory send messages. That's fine for a game among friends.
 - On a portrait phone the world map is small: pinch to zoom, or turn the phone sideways.
+
+## ⏳ Geo Time Travel (`timetravel.html`)
+
+A history race through five eras: **Prehistory → Antiquity → Middle Ages → Early Modern → Modern → today**.
+
+- On your turn you get a question from your current era and answer it by tapping the country on the map (45 s).
+- Each era needs a number of correct answers before you travel on: **Short 2, Standard 3, Long 4**.
+- **Lives:** you start with 3. A wrong answer or a timeout costs one; arriving in a new era gives one back (up to 5).
+- **Eliminated** at 0 lives, by a threat of your era, with a short animated scene: a sabre-toothed cat, mammoths or a volcano; Spartan warriors, the arena's lions or a legion; the Black Death, Vikings or arrows from castle walls; pirates, cannon fire or the Great Fire of London; the Titanic's iceberg, a runaway train or a time machine failure.
+- **Winning:** the first traveller to reach today ends the journey once the round is complete, so everyone has had the same number of turns. Otherwise the one who got furthest wins; a lone survivor who is already ahead of everyone wins at once.
+- Questions come from their own pool, `data/timetravel-questions.json` (450 questions: prehistory 45, antiquity 78, Middle Ages 83, early modern 118, modern 126). They are not graded by difficulty, are drawn at random and never repeat in a game. `node tools/build-timetravel.js` turns the file into `data/timetravel.js` (checks IDs, duplicates and that every answer is a playable country).
+- Hot seat (1–6 players, bots) or online (same rooms as Voyage, on their own channel; a bot plays for a player who goes offline after 20 s).
 
 ## 🎯 Solo training (`train.html`)
 
