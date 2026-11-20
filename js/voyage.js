@@ -11,8 +11,12 @@
   const { sleep, Sound, Confetti } = FX;
   const $ = (id) => document.getElementById(id);
   const W = window.WORLD;
-  const ROUTE = W.route;
-  const N = ROUTE.ports.length - 1; // ports to sail
+  // The route: around the world, or "From Sea to Sea" across North America for the US states & Canadian
+  // provinces map (data/regions.js). Chosen per game (useRoute), so these change with it.
+  const ROUTES = { world: W.route, na: window.REGIONS && window.REGIONS.route };
+  let ROUTE = W.route;
+  let N = ROUTE.ports.length - 1; // ports to sail
+  const isLoop = () => ROUTE.ports[0].name === ROUTE.ports[N].name;
   const LEVELS = Quiz.LEVELS;
   const COLORS = ['#ef476f', '#06c167', '#ffb703', '#3a86ff', '#b15cff', '#00c2d1'];
   const SHIP_NAMES = ['Santa Maria', 'Victoria', 'Endeavour', 'Beagle', 'Golden Hind', 'Calypso'];
@@ -37,12 +41,14 @@
   // Compass tokens: everyone starts with one; land exactly on a treasure port or answer 3 in a
   // row to find another (max 3). Spend one during your question to see the answer's region.
   const TOKENS_START = 1, TOKENS_MAX = 3, STREAK_BONUS = 3;
-  const TREASURE = new Set(Array.from({ length: N }, (_, i) => i).filter((i) => i > 0 && i % 5 === 3));
+  const treasureSet = () => new Set(Array.from({ length: N }, (_, i) => i).filter((i) => i > 0 && i % 5 === 3));
+  let TREASURE = treasureSet();
   /* Hazards: after a correct answer, the port you reach may hold one: blown back 1-2 ports, or the next
    * turn lost. Easy challenges are risky, hard ones safe, so a bold choice also means safer sailing. */
   const HAZARD_CHANCE = [0, 0.35, 0.28, 0.21, 0.14, 0.08, 0.03]; // by the level answered (1-6)
   const HAZARD_KINDS = {
     storm: { icon: '⛈️', name: 'Storm', back: [1, 2], text: (port) => `A storm off ${port} blows the ship back` },
+    hurricane: { icon: '🌀', name: 'Hurricane', back: [1, 2], text: (port) => `A hurricane near ${port} drives the ship back` },
     cyclone: { icon: '🌀', name: 'Cyclone', back: [1, 2], text: (port) => `A cyclone near ${port} drives the ship back` },
     monsoon: { icon: '🌧️', name: 'Monsoon', back: [1, 2], text: (port) => `Monsoon winds at ${port} push the ship back` },
     ice: { icon: '🧊', name: 'Icebergs', back: [2, 2], text: (port) => `Icebergs near ${port}! The ship turns back` },
@@ -58,6 +64,11 @@
     Auckland: 'storm', Sydney: 'storm', Darwin: 'cyclone', Bali: 'reef', Singapore: 'pirates', Malacca: 'pirates', Colombo: 'monsoon',
     'Malé': 'reef', Mumbai: 'monsoon', Muscat: 'storm', Djibouti: 'pirates', Jeddah: 'reef', 'Port Said': 'canal', Athens: 'storm',
     Valletta: 'storm', Barcelona: 'storm',
+    // From Sea to Sea (North America)
+    'Quebec City': 'ice', Halifax: 'fog', 'Saint John': 'fog', Portland: 'fog', Boston: 'storm', 'New York': 'storm', Norfolk: 'storm',
+    Charleston: 'hurricane', Savannah: 'hurricane', Jacksonville: 'hurricane', Miami: 'hurricane', 'Key West': 'reef', Tampa: 'hurricane',
+    Mobile: 'hurricane', 'New Orleans': 'hurricane', Houston: 'hurricane', 'Corpus Christi': 'storm', 'San Diego': 'fog', 'Los Angeles': 'fog',
+    'San Francisco': 'fog', Eureka: 'storm', Astoria: 'storm', Seattle: 'fog', Victoria: 'fog', Vancouver: 'fog',
   };
   const hazardAt = (i) => HAZARD_KINDS[PORT_HAZARD[ROUTE.ports[i].name]] ? PORT_HAZARD[ROUTE.ports[i].name] : ['storm', 'reef', 'doldrums'][i % 3];
   const CAT_LABEL = { geo: 'Geography', history: 'History', sports: 'Sports', culture: 'Culture' };
@@ -78,7 +89,7 @@
   function createEngine(cfg, emit) {
     const S = {
       v: 1, gid: Math.random().toString(36).slice(2, 8), online: !!cfg.online, room: cfg.room || null,
-      phase: 'pick', cats: cfg.cats, geoType: cfg.geoType || 'all', n: N,
+      phase: 'pick', cats: cfg.cats, geoType: cfg.geoType || 'all', scope: cfg.scope || 'world', route: cfg.scope === 'na' && ROUTES.na ? 'na' : 'world', n: N,
       players: cfg.players.map((p, i) => ({
         id: p.id, name: p.name, color: COLORS[i % COLORS.length], ship: SHIP_NAMES[i % SHIP_NAMES.length],
         pos: 0, dist: 0, correct: 0, asked: 0, streak: 0, best: 0, knew: 0, connected: true, tokens: TOKENS_START, found: 0, hints: 0, skip: 0, hazards: 0, bot: BOTS[p.bot] ? p.bot : null, auto: false,
@@ -122,6 +133,7 @@
       const p = active();
       if (S.phase !== 'pick' || S.skipped || pid !== p.id || !(level >= 1 && level <= 6)) return;
       clearTimer();
+      Quiz.setScope(S.scope || 'world');
       secret = Quiz.next(level, mode(), S.cats, S.geoType || 'all');
       const long = ['history', 'sports', 'culture', 'geoq'].includes(secret.type);
       const time = long ? Q_TIME_LONG : Q_TIME;
@@ -163,7 +175,8 @@
         const acc = Math.min(0.98, botAcc(skillOf(p), S.q.level) + (S.q.hint ? 0.15 : 0));
         let id = c.id;
         if (Math.random() > acc) { // a plausible mistake: a country of the same region
-          const pool = W.countries.filter((x) => x.fame && x.id !== c.id && x.region === c.region);
+          const pool = c.parent ? window.REGIONS.regions.filter((x) => x.fame && x.id !== c.id && x.parent === c.parent)
+            : W.countries.filter((x) => x.fame && x.id !== c.id && x.region === c.region);
           const all = pool.length ? pool : W.countries.filter((x) => x.fame && x.id !== c.id);
           id = all[Math.floor(Math.random() * all.length)].id;
         }
@@ -198,7 +211,7 @@
       if (S.phase !== 'question' || pid !== p.id) return;
       clearTimer();
       const c = secret.country;
-      const ok = countryId === c.id;
+      const ok = WorldMap.matches(countryId, c.id); // a state counts for its country
       p.asked++;
       const from = p.pos;
       let to = from;
@@ -233,7 +246,7 @@
         }
         p.hazards++;
       }
-      const knew = S.players.filter((o) => o !== p && guesses[o.id] === c.id);
+      const knew = S.players.filter((o) => o !== p && WorldMap.matches(guesses[o.id], c.id));
       knew.forEach((o) => { o.knew++; });
       const clicked = countryId ? byId(countryId) : null;
       S.res = {
@@ -258,10 +271,10 @@
       const p = active();
       if (S.phase !== 'question' || pid !== p.id || S.q.hint || p.tokens <= 0) return;
       const c = secret.country;
-      const ids = W.countries.filter((x) => x.fame && x.region === c.region).map((x) => x.id);
+      const h = WorldMap.hintFor(c.id);
       p.tokens--; p.hints++;
-      S.q.hint = { region: c.region, ids: ids.length > 1 ? ids : [c.id] };
-      log(`🧭 ${p.name} used a compass: the answer is in ${c.region}.`);
+      S.q.hint = { region: h.name, ids: h.ids };
+      log(`🧭 ${p.name} used a compass: the answer is in ${h.name}.`);
       publish();
     }
 
@@ -327,7 +340,7 @@
     }
 
     return {
-      start() { if (cfg.resume) startPick(); else { log('⛵ The voyage begins in Lisbon!'); startPick(); } },
+      start() { if (cfg.resume) startPick(); else { log(`⛵ The voyage begins in ${ROUTE.ports[0].name}!`); startPick(); } },
       handle, setConnected,
       get state() { return S; },
       snapshot() { return JSON.parse(JSON.stringify(S)); },
@@ -354,7 +367,27 @@
   let unit = 1; // map units per screen pixel
   const ships = new Map(); // pid -> { g, at: [x, y] }
 
-  (function drawRoute() {
+  /** Switch the route (and redraw it) for a game: 'world' or 'na'. */
+  let drawnRoute = null;
+  function useRoute(key) {
+    if (!ROUTES[key]) key = 'world';
+    if (drawnRoute === key) return;
+    drawnRoute = key;
+    ROUTE = ROUTES[key];
+    N = ROUTE.ports.length - 1;
+    TREASURE = treasureSet();
+    ships.forEach((x) => x.g.remove());
+    ships.clear();
+    drawRoute();
+  }
+  /** Map and route of a game: the scope (world / + US states & Canada / only those) decides both. */
+  function applyScope(scope) {
+    useRoute(scope === 'na' ? 'na' : 'world');
+    WorldMap.setScope(scope || 'world');
+  }
+  function drawRoute() {
+    routeLayer.innerHTML = '';
+    portLayer.innerHTML = '';
     let d = '';
     ROUTE.legs.forEach((leg) => {
       let pen = false;
@@ -367,7 +400,7 @@
     mk('path', { d, class: 'route-glow', 'vector-effect': 'non-scaling-stroke' }, routeLayer);
     mk('path', { d, class: 'route-line', 'vector-effect': 'non-scaling-stroke' }, routeLayer);
     ROUTE.ports.forEach((pt, i) => {
-      if (i === N) return; // finish = start
+      if (i === N && isLoop()) return; // finish = start
       const g = mk('g', { class: 'port' + (i === 0 ? ' home' : ''), 'data-i': i }, portLayer);
       mk('circle', { cx: pt.p[0], cy: pt.p[1], r: 3, class: 'port-dot', 'vector-effect': 'non-scaling-stroke' }, g);
       if (TREASURE.has(i)) {
@@ -378,10 +411,16 @@
       }
       if (i === 0) {
         const t = mk('text', { x: pt.p[0], y: pt.p[1], class: 'port-label home-label' }, g);
-        t.textContent = '⚓ Lisbon · start & finish';
+        t.textContent = isLoop() ? `⚓ ${pt.name} · start & finish` : `⚓ ${pt.name} · start`;
+      } else if (i === N) {
+        g.classList.add('home');
+        const t = mk('text', { x: pt.p[0], y: pt.p[1], class: 'port-label home-label' }, g);
+        t.textContent = `🏁 ${pt.name} · finish`;
       }
     });
-  })();
+  }
+  drawnRoute = 'world';
+  drawRoute();
 
   function shipSvg(color, label) {
     const g = mk('g', { class: 'ship' });
@@ -591,6 +630,7 @@
     if (s.phase === 'lobby') return;
     show('game');
     if (s.phase !== 'over') $('finish').hidden = true;
+    if (!prev || prev.gid !== s.gid) applyScope(s.scope || 'world'); // a new game: its map and route
     syncShips(s);
     renderTop(s);
     const p = activeP(s);
@@ -726,7 +766,7 @@
     $('result-icon').textContent = r.ok ? '✓' : r.timeout ? '⏱' : '✗';
     const who = view.hotseat ? p.name : (p.id === view.me ? 'You' : p.name);
     $('result-title').textContent = r.ok
-      ? (r.to >= N ? `${who} reached Lisbon! 🏁` : `${who}: correct! ⛵ +${r.to - r.from}`)
+      ? (r.to >= N ? `${who} reached ${ROUTE.ports[N].name}! 🏁` : `${who}: correct! ⛵ +${r.to - r.from}`)
       : r.timeout ? `${who}: time's up` : `${who}: not ${r.clickedName}`;
     let sub = r.fact;
     if (r.knew.length) sub += ` <span class="knew">👀 Also knew it: ${r.knew.map(esc).join(', ')}</span>`;
@@ -801,6 +841,15 @@
   const SAVE_KEY = 'voyage.save.v1';
   const setup = Object.assign({ cats: ['geo'], format: 'hotseat', count: 2, names: ['', '', '', '', '', ''], types: ['human', 'explorer', 'human', 'human', 'human', 'human'], myName: '', geoType: 'all' }, store.get(SETUP_KEY) || {});
   if (!Quiz.GEO_TYPES[setup.geoType]) setup.geoType = 'all';
+  if (!Quiz.SCOPES.some((x) => x.value === setup.scope)) setup.scope = 'world';
+  // US states & Canadian provinces only: geography questions about them (other categories step aside)
+  const gameCats = () => (setup.scope === 'na' ? ['geo'] : setup.cats.slice());
+  $('scope-btn').addEventListener('click', async () => {
+    const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, setup.scope);
+    if (v == null || v === setup.scope) return;
+    setup.scope = v;
+    syncSetup();
+  });
   /** "Geography (Flags)" when the geography questions are limited to one type. */
   const catLabel = (c, geoType) => (c === 'geo' && geoType && geoType !== 'all' ? `Geography (${Quiz.GEO_TYPES[geoType]})` : CAT_LABEL[c]);
   if (!Array.isArray(setup.types) || setup.types.length < MAX_PLAYERS) setup.types = ['human', 'explorer', 'human', 'human', 'human', 'human'];
@@ -819,6 +868,11 @@
       ? `Mixed: ${setup.cats.map((c) => catLabel(c, setup.geoType)).join(' + ')}, in equal shares.`
       : `${catLabel(setup.cats[0], setup.geoType)} questions only. Pick more to mix them.`;
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
+    const na = setup.scope === 'na';
+    $('scope-btn').textContent = `${Quiz.SCOPES.find((x) => x.value === setup.scope).label} ▾`;
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => { b.disabled = na && b.dataset.cat !== 'geo'; if (na) b.classList.toggle('active', b.dataset.cat === 'geo'); });
+    $('cat-all').disabled = na;
+    if (na) $('cat-hint').textContent = `Geography of the US states and Canadian provinces${setup.geoType !== 'all' ? ` (${Quiz.GEO_TYPES[setup.geoType].toLowerCase()})` : ''}, on a map of North America · route: From Sea to Sea, Montreal → Vancouver.`;
     $('geo-type').textContent = `${Quiz.GEO_TYPES[setup.geoType]} ▾`;
     document.querySelectorAll('.format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
     // an invitation link always shows the join form
@@ -889,7 +943,9 @@
     });
     view.hotseat = true; view.me = null; view.isHost = true; view.state = null; view.shownRes = null;
     Quiz.newGame();
-    engine = createEngine({ cats: resume ? resume.cats : setup.cats.slice(), geoType: resume ? resume.geoType : setup.geoType, players, resume }, (s) => {
+    const scope = resume ? resume.scope || 'world' : setup.scope;
+    applyScope(scope);
+    engine = createEngine({ cats: resume ? resume.cats : gameCats(), geoType: resume ? resume.geoType : setup.geoType, scope, players, resume }, (s) => {
       if (s.phase === 'pick') store.set(SAVE_KEY, s);
       render(s);
     });
@@ -932,7 +988,7 @@
     return u.toString();
   }
 
-  function renderLobby(players, cats, code, isHost, geoType) {
+  function renderLobby(players, cats, code, isHost, geoType, scope = lobby.scope) {
     show('lobby');
     $('room-code').textContent = code;
     $('share-link').value = shareUrl(code);
@@ -954,7 +1010,7 @@
         hostLobbyUpdate();
       }));
     }
-    $('lobby-cats').textContent = `Questions: ${cats.map((c) => catLabel(c, geoType)).join(' + ')}`;
+    $('lobby-cats').textContent = `Questions: ${cats.map((c) => catLabel(c, geoType)).join(' + ')} · Map: ${(Quiz.SCOPES.find((x) => x.value === (scope || 'world')) || Quiz.SCOPES[0]).label}`;
     $('lobby-start-btn').hidden = !isHost;
     $('lobby-start-btn').disabled = players.length < 2;
     $('lobby-start-btn').textContent = players.length < 2 ? 'Waiting for players…' : `Start the voyage with ${players.length} ⛵`;
@@ -990,8 +1046,9 @@
     $('net-status').textContent = 'Opening a room…';
     view.hotseat = false; view.isHost = true; view.me = uid(); view.state = null; view.shownRes = null;
     lobby.players = [{ id: view.me, name, connected: true }];
-    lobby.cats = setup.cats.slice();
+    lobby.cats = gameCats();
     lobby.geoType = setup.geoType;
+    lobby.scope = setup.scope;
     net = Net.host({
       onReady(code, relayKey) {
         lobby.code = code;
@@ -1027,7 +1084,7 @@
 
   function hostLobbyUpdate() {
     renderLobby(lobby.players, lobby.cats, lobby.code, true, lobby.geoType);
-    net.broadcast({ t: 'lobby', players: lobby.players, cats: lobby.cats, geoType: lobby.geoType, code: lobby.code });
+    net.broadcast({ t: 'lobby', players: lobby.players, cats: lobby.cats, geoType: lobby.geoType, scope: lobby.scope, code: lobby.code });
   }
 
   function hostMessage(conn, msg) {
@@ -1075,7 +1132,8 @@
   $('lobby-start-btn').addEventListener('click', () => {
     if (!view.isHost || lobby.players.length < 2) return;
     Quiz.newGame();
-    engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, players: lobby.players }, (s) => {
+    applyScope(lobby.scope);
+    engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, scope: lobby.scope, players: lobby.players }, (s) => {
       net.broadcast({ t: 'state', s, remaining: remainingFor(s) });
       s.q && (s.q.remaining = remainingFor(s));
       render(s);
@@ -1127,7 +1185,7 @@
           if (msg.pid) store.set(seatKey(joinCode), msg.pid);
           banner(null);
         } else if (msg.t === 'lobby') {
-          renderLobby(msg.players, msg.cats, msg.code, false, msg.geoType);
+          renderLobby(msg.players, msg.cats, msg.code, false, msg.geoType, msg.scope);
         } else if (msg.t === 'full') {
           $('join-btn').disabled = false;
           $('net-status').textContent = 'This voyage is full (6 ships).';
@@ -1172,7 +1230,7 @@
     if (view.isHost && engine) {
       engine.stop();
       const players = engine.state.players.filter((p) => p.connected).map((p) => ({ id: p.id, name: p.name }));
-      engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, players }, (s) => {
+      engine = createEngine({ online: true, room: lobby.code, cats: lobby.cats, geoType: lobby.geoType, scope: lobby.scope, players }, (s) => {
         net.broadcast({ t: 'state', s, remaining: remainingFor(s) });
         render(s);
       });

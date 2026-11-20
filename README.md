@@ -59,6 +59,22 @@ Under the hood, the host's browser runs the game. All devices exchange messages 
 - Public relays are shared services without guarantees, and anyone who knew the room code could in theory send messages. That's fine for a game among friends.
 - On a portrait phone the world map is small: pinch to zoom, or turn the phone sideways.
 
+## 🇺🇸 US states and Canadian provinces
+
+Every game's setup (Geo Ludo, Geo Voyage, Training) has a **Map** menu with three options:
+
+| Map | What is asked | The map |
+|-----|---------------|---------|
+| 🌍 **World** | countries, as before | the world |
+| 🌎 **World + US states & Canada** | countries **and** the 50 US states, 10 Canadian provinces and 3 territories | the USA and Canada split into states and provinces; a tapped state counts for its country in a country question |
+| 🇺🇸 **US states & Canadian provinces** | only those (geography questions) | North America; other countries are greyed out |
+
+The same question types as for countries: **find it on the map, flag, capital** (with a 📍 pin after the answer), **cities** (`data/na-cities.json`, 50) and **landmarks & facts** (`data/na-questions.json`, 50). Difficulty comes from a fame level per state/province (`data/na-regions.json`): finding it = fame, its flag = fame + 2 (state flags are hard), its capital = fame + 1, adjusted for famous capitals (−1) and traps like Sacramento or Albany (+1). The "show region" hint names a US census region (Northeast, Midwest, South, West) or a part of Canada (Western, Central, Atlantic, Northern).
+
+**Geo Voyage** with "US states & Canadian provinces" sails its own route, **From Sea to Sea** (`data/route-na.json`, 25 legs): Montreal → Quebec City → Halifax → Saint John → Portland → Boston → New York → … → Miami → Key West → the Gulf of Mexico → (Panama Canal) → San Diego → Los Angeles → San Francisco → … → Seattle → Victoria → **Vancouver**, with hurricanes in the Gulf, fog on the Pacific coast and ice in the St. Lawrence. The other two maps keep the round-the-world route from Lisbon.
+
+Data: `data/regions.js` is built by `tools/build-data.js` from Natural Earth's admin-1 outlines (`ne_50m_admin_1_states_provinces_lakes.geojson`, placed in `<node_modules>/natural-earth/`), projected exactly like the countries. Flags in `flags/regions/` are public domain (the `region-flags` package), optimised with svgo.
+
 ## ⏳ Geo Time Travel (`timetravel.html`)
 
 A history race through five eras: **Prehistory → Antiquity → Middle Ages → Early Modern → Modern → today**.

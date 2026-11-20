@@ -89,7 +89,7 @@
   $('opt-fast').checked = !!saved.fast;
 
   function saveSetup() {
-    store.set(SETUP_KEY, { count, mode, geoType, preset, names, types, pieceCounts, mixCats, custom, timer: $('opt-timer').checked, fast: $('opt-fast').checked });
+    store.set(SETUP_KEY, { count, mode, geoType, scope, preset, names, types, pieceCounts, mixCats, custom, timer: $('opt-timer').checked, fast: $('opt-fast').checked });
   }
 
   function renderInputs() {
@@ -152,6 +152,9 @@
   // Categories: pick one, or several to mix them in equal shares (same picker as Voyage).
   let cats = mode === 'mixed' ? mixCats.slice() : [mode];
   let geoType = Quiz.GEO_TYPES[saved.geoType] ? saved.geoType : 'all'; // one type of geography question, or all
+  // the map: world / world + US states & Canada / only those (geography questions only)
+  let scope = Quiz.SCOPES.some((x) => x.value === saved.scope) ? saved.scope : 'world';
+  const scopeLabel = (sc) => (Quiz.SCOPES.find((x) => x.value === sc) || Quiz.SCOPES[0]).label;
   const catPick = MultiPick({ order: Quiz.CATEGORIES, get: () => cats, set: (v) => { cats = v; }, onChange: () => { applyCats(); syncMode(); saveSetup(); } });
   function applyCats() {
     mode = cats.length > 1 ? 'mixed' : cats[0];
@@ -165,7 +168,19 @@
       : `${nm(cats[0], CAT_NAMES)} questions only. Pick more to mix them.`;
     $('cat-all').setAttribute('aria-pressed', catPick.isAll());
     $('geo-type').textContent = `${Quiz.GEO_TYPES[geoType]} ▾`;
+    const na = scope === 'na';
+    $('scope-btn').textContent = `${scopeLabel(scope)} ▾`;
+    document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => { b.disabled = na && b.dataset.cat !== 'geo'; if (na) b.classList.toggle('active', b.dataset.cat === 'geo'); });
+    $('cat-all').disabled = na;
+    if (na) $('cat-hint').textContent = `Geography of the US states and Canadian provinces${geoType !== 'all' ? ` (${Quiz.GEO_TYPES[geoType].toLowerCase()})` : ''}, on a map of North America.`;
   }
+  $('scope-btn').addEventListener('click', async () => {
+    const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, scope);
+    if (v == null || v === scope) return;
+    scope = v;
+    syncMode();
+    saveSetup();
+  });
   document.querySelectorAll('#cat-chips .cat-btn').forEach((b) => b.addEventListener('click', () => catPick.toggle(b.dataset.cat)));
   $('cat-all').addEventListener('click', () => catPick.all());
   // the type of geography questions, chosen on the Geography tile itself
@@ -249,7 +264,7 @@
     const rules = preset === 'custom' ? { ...custom } : { ...PRESETS[preset] };
     return {
       opts: { ...rules, timer: $('opt-timer').checked },
-      preset, mode, cats: cats.slice(), geoType,
+      preset, mode: scope === 'na' ? 'geo' : mode, cats: scope === 'na' ? ['geo'] : cats.slice(), geoType, scope,
       pieces: [0, 1, 2, 3].map((seat) => (preset === 'custom' ? pieceCounts[seat] : rules.pieces)),
     };
   }
@@ -270,6 +285,7 @@
       mode: cfg.mode,
       cats: cfg.cats.slice(),
       geoType: cfg.geoType || 'all',
+      scope: cfg.scope || 'world',
       opts,
       preset: cfg.preset,
       stamps: [],
@@ -298,6 +314,8 @@
     Object.assign(state, { phase: 'roll', roll: 0, attempts: 0, choice: null, q: null, outcome: null, pending: null, stealer: null, gen: Math.random(), step: 0, waiting: null, actor: null });
     FX.setFast(state.opts.fast);
     Quiz.newGame(); // keeps the record of questions asked in earlier games
+    Quiz.setScope(state.scope || 'world');
+    WorldMap.setScope(state.scope || 'world');
     $('setup').classList.remove('active');
     if ($('lobby')) $('lobby').classList.remove('active');
     $('game').classList.add('active');
@@ -308,16 +326,16 @@
     prism.classList.add('flat');
     $('result').hidden = true;
     $('level-picker').hidden = true;
-    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats, state.geoType);
+    $('mode-chip').textContent = modeLabelFor(state.mode, state.cats, state.geoType) + (state.scope && state.scope !== 'world' ? (state.scope === 'na' ? ' · US & Canada' : ' · + US & Canada') : '');
     $('zone-legend').hidden = !state.opts.rescue;
     Board.render(state.players);
   }
 
   function saveGame() {
     if (!state || state.phase === 'over' || NET.on) return;
-    const { players, turn, mode: m, cats, geoType: gt, opts, preset: pr, stamps } = state;
+    const { players, turn, mode: m, cats, geoType: gt, scope: sc, opts, preset: pr, stamps } = state;
     const items = [...$('log').children].slice(0, 40).map((li) => li.outerHTML).join('');
-    store.set(SAVE_KEY, { v: 1, state: { players, turn, mode: m, cats, geoType: gt, opts, preset: pr, stamps }, log: items });
+    store.set(SAVE_KEY, { v: 1, state: { players, turn, mode: m, cats, geoType: gt, scope: sc, opts, preset: pr, stamps }, log: items });
   }
 
   const current = () => state.players[state.turn];
@@ -758,7 +776,7 @@
     const q = state.q;
     if (rnd() <= botAcc(skill, level)) return q.country.id;
     const [x, y] = q.country.c;
-    const near = window.WORLD.countries
+    const near = (q.country.parent ? window.REGIONS.regions : window.WORLD.countries)
       .filter((c) => c.fame && c.id !== q.country.id && !excluded.includes(c.id))
       .map((c) => ({ id: c.id, d: Math.hypot(c.c[0] - x, c.c[1] - y) }))
       .sort((a, b) => a.d - b.d).slice(0, 5);
@@ -892,11 +910,11 @@
     a.tokens--;
     state.hintUsed = true;
     const c = state.q.country;
-    const region = window.WORLD.countries.filter((x) => x.fame && x.region === c.region).map((x) => x.id);
-    WorldMap.hint(region.length > 1 ? region : [c.id]);
+    const h = WorldMap.hintFor(c.id);
+    WorldMap.hint(h.ids);
     Sound.tone(660, 0.15, 'triangle', 0.1);
-    log(`🧭 ${who(a)} used a hint: the answer is in ${esc(c.region)}.`, a.seat);
-    $('q-kind').textContent = `🧭 Hint: it's somewhere in ${c.region}`;
+    log(`🧭 ${who(a)} used a hint: the answer is in ${esc(h.name)}.`, a.seat);
+    $('q-kind').textContent = `🧭 Hint: it's somewhere in ${h.name}`;
     syncHint();
     renderStandings();
   }
@@ -926,7 +944,7 @@
     const { ctx } = state.pending;
     const q = state.q;
     const c = q.country;
-    const ok = clickedId === c.id;
+    const ok = WorldMap.matches(clickedId, c.id); // a state counts for its country
     const clicked = clickedId ? WorldMap.byId.get(clickedId) : null;
 
     /* --- a steal attempt resolves --- */

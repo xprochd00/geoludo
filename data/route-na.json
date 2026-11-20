@@ -1,0 +1,32 @@
+{
+  "name": "From Sea to Sea",
+  "about": "A North American voyage for the 'US states & Canadian provinces' map: from Montreal down the St. Lawrence, along the Atlantic coast, round Florida and the Gulf of Mexico, through the Panama Canal and up the Pacific coast to Vancouver. Each port is one space (25 legs); 'via' are sea waypoints (lat, lon). Start and finish differ.",
+  "ports": [
+    { "name": "Montreal", "iso2": "CA", "lat": 45.5, "lon": -73.55 },
+    { "name": "Quebec City", "iso2": "CA", "lat": 46.81, "lon": -71.2, "via": [[46.35, -72.55]] },
+    { "name": "Halifax", "iso2": "CA", "lat": 44.65, "lon": -63.57, "via": [[47.4, -70.1], [48.6, -68.3], [49.3, -64.8], [48.3, -62.0], [47.2, -59.8], [45.6, -59.7], [44.4, -61.9]] },
+    { "name": "Saint John", "iso2": "CA", "lat": 45.26, "lon": -66.06, "via": [[43.4, -65.7], [44.6, -66.4]] },
+    { "name": "Portland", "iso2": "US", "lat": 43.66, "lon": -70.25, "via": [[44.4, -66.7], [43.5, -68.5]] },
+    { "name": "Boston", "iso2": "US", "lat": 42.36, "lon": -71.05, "via": [[42.6, -70.4]] },
+    { "name": "New York", "iso2": "US", "lat": 40.7, "lon": -74.02, "via": [[42.2, -70.2], [41.4, -69.8], [40.9, -71.2], [40.45, -73.4]] },
+    { "name": "Norfolk", "iso2": "US", "lat": 36.95, "lon": -76.33, "via": [[40.2, -73.8], [38.5, -74.7], [37.0, -75.8]] },
+    { "name": "Charleston", "iso2": "US", "lat": 32.75, "lon": -79.88, "via": [[35.1, -75.3], [33.6, -77.8]] },
+    { "name": "Savannah", "iso2": "US", "lat": 32.03, "lon": -80.85 },
+    { "name": "Jacksonville", "iso2": "US", "lat": 30.39, "lon": -81.4, "via": [[31.0, -81.0]] },
+    { "name": "Miami", "iso2": "US", "lat": 25.77, "lon": -80.13, "via": [[28.4, -80.3], [26.8, -79.95]] },
+    { "name": "Key West", "iso2": "US", "lat": 24.55, "lon": -81.8, "via": [[24.9, -80.4]] },
+    { "name": "Tampa", "iso2": "US", "lat": 27.6, "lon": -82.75, "via": [[25.0, -82.4], [26.6, -82.6]] },
+    { "name": "Mobile", "iso2": "US", "lat": 30.2, "lon": -88.05, "via": [[28.4, -84.0], [29.8, -86.6]] },
+    { "name": "New Orleans", "iso2": "US", "lat": 29.95, "lon": -90.07, "via": [[29.4, -88.4], [29.1, -89.2]] },
+    { "name": "Houston", "iso2": "US", "lat": 29.3, "lon": -94.79, "via": [[28.8, -90.6], [29.0, -93.3]] },
+    { "name": "Corpus Christi", "iso2": "US", "lat": 27.8, "lon": -97.4, "via": [[28.3, -95.9]] },
+    { "name": "San Diego", "iso2": "US", "lat": 32.7, "lon": -117.17, "via": [[25.5, -94.5], [22.0, -86.2], [17.5, -82.5], [11.5, -80.5], [9.35, -79.92], [8.9, -79.55], [7.4, -79.9], [9.5, -86.5], [13.5, -92.0], [16.0, -98.5], [19.0, -105.5], [22.5, -109.8], [26.5, -114.0], [30.5, -116.6]] },
+    { "name": "Los Angeles", "iso2": "US", "lat": 33.72, "lon": -118.27, "via": [[32.9, -117.6]] },
+    { "name": "San Francisco", "iso2": "US", "lat": 37.8, "lon": -122.42, "via": [[33.8, -119.4], [34.4, -120.7], [36.0, -122.0], [37.7, -122.7]] },
+    { "name": "Eureka", "iso2": "US", "lat": 40.8, "lon": -124.17, "via": [[38.6, -123.5], [40.4, -124.6]] },
+    { "name": "Astoria", "iso2": "US", "lat": 46.19, "lon": -123.83, "via": [[43.4, -124.7], [46.2, -124.2]] },
+    { "name": "Seattle", "iso2": "US", "lat": 47.6, "lon": -122.34, "via": [[48.35, -124.8], [48.2, -123.2], [47.9, -122.55]] },
+    { "name": "Victoria", "iso2": "CA", "lat": 48.42, "lon": -123.37, "via": [[48.1, -122.6], [48.3, -123.1]] },
+    { "name": "Vancouver", "iso2": "CA", "lat": 49.29, "lon": -123.12, "via": [[48.6, -123.2], [49.0, -123.3]] }
+  ]
+}
