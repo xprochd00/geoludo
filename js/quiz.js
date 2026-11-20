@@ -23,6 +23,8 @@
   // Tag shown on the question card: the culture subcategory, in title case ("art & architecture" -> "Art & Architecture").
   const titleCase = (s) => s.replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 
+  // flag images live next to the site root (Geo Ludo's page is one folder down)
+  const FLAGS = /\/ludo\//.test(location.pathname) ? '../flags/' : 'flags/';
   const W = window.WORLD;
   const countries = W.countries.filter((c) => c.fame);
   const byId = new Map(W.countries.map((c) => [c.id, c]));
@@ -102,7 +104,16 @@
     const saved = JSON.parse(localStorage.getItem(STORE));
     if (saved && saved.keys) history = saved;
   } catch (e) { /* storage unavailable: keep the history in memory only */ }
-  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
+  const save = () => { if (!shared) try { localStorage.setItem(STORE, JSON.stringify(history)); } catch (e) { /* ignore */ } };
+  // Online games: every device must draw the same questions, so they use a shared random source and a
+  // fresh in-memory history (this device's own record is left untouched and restored afterwards).
+  let rand = Math.random;
+  let shared = null;
+  function setShared(rng) {
+    if (rng) { if (!shared) shared = history; history = { seq: 0, keys: {} }; } // every online game starts fresh
+    else if (shared) { history = shared; shared = null; }
+    rand = rng || Math.random;
+  }
 
   const catCount = { geo: 0, history: 0, sports: 0, culture: 0 };
   const RECENT = 8; // avoid answer countries used in the last few questions
@@ -121,7 +132,7 @@
     const geoTypes = ['name', 'flag', 'capital', 'city'];
     const varied = candidates.filter((q) => !recent.includes(q.c.id) && (q.type !== lastType || !geoTypes.includes(q.type)));
     const list = varied.length ? varied : candidates;
-    const q = list[Math.floor(Math.random() * list.length)];
+    const q = list[Math.floor(rand() * list.length)];
     history.keys[q.key] = ++history.seq;
     save();
     recent = [q.c.id, ...recent].slice(0, RECENT);
@@ -134,7 +145,7 @@
     const avail = cats.filter((cat) => POOLS[cat] && POOLS[cat][level].length);
     const min = Math.min(...avail.map((cat) => catCount[cat]));
     const behind = avail.filter((cat) => catCount[cat] === min);
-    return behind[Math.floor(Math.random() * behind.length)];
+    return behind[Math.floor(rand() * behind.length)];
   }
 
   /** cats: the categories combined in Mixed mode (default: all three). */
@@ -176,19 +187,19 @@
         q.kind = 'In which country is this city?'; q.prompt = pick.city.name; q.city = pick.city.name;
         q.pin = pick.city.p; q.tag = 'City'; break;
       case 'flag':
-        q.kind = 'Which country does this flag belong to?'; q.prompt = 'Click its country'; q.flag = `flags/${c.flag}.svg`; q.tag = 'Flag'; break;
+        q.kind = 'Which country does this flag belong to?'; q.prompt = 'Click its country'; q.flag = `${FLAGS}${c.flag}.svg`; q.tag = 'Flag'; break;
       case 'history':
         q.tag = pick.h.cat === 'geopolitics' ? 'Geopolitics' : 'History';
-        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'sports':
         q.tag = 'Sport';
-        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'culture':
         q.tag = pick.h.sub ? titleCase(pick.h.sub) : 'Culture';
-        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
       case 'geoq':
         q.tag = 'Geography';
-        q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
+        q.kind = 'Click the answer on the map'; q.prompt = pick.h.q; q.ref = pick.h; break;
     }
     return q;
   }
@@ -201,7 +212,7 @@
       case 'name': q.kind = `Find this ${what} on the map`; q.prompt = c.name; break;
       case 'capital': q.kind = 'Which state or province has this capital?'; q.prompt = c.capital; q.tag += ' · capital'; if (c.cp) { q.pin = c.cp; q.city = c.capital; } break;
       case 'city': q.kind = 'In which state or province is this city?'; q.prompt = pick.city.name; q.city = pick.city.name; q.pin = pick.city.p; q.tag += ' · city'; break;
-      case 'flag': q.kind = 'Which state or province has this flag?'; q.prompt = 'Click it on the map'; q.flag = `flags/${c.flag}.svg`; q.tag += ' · flag'; break;
+      case 'flag': q.kind = 'Which state or province has this flag?'; q.prompt = 'Click it on the map'; q.flag = `${FLAGS}${c.flag}.svg`; q.tag += ' · flag'; break;
       default:
         q.kind = 'Click the state or province on the map'; q.prompt = pick.h.q; q.ref = pick.h;
         if (pick.type !== 'geoq') q.tag = `${c.parent === 'USA' ? 'US' : 'Canada'} · ${{ history: 'History', sports: 'Sport', culture: 'Culture' }[pick.type] || ''}`;
@@ -227,5 +238,5 @@
   const poolSizes = () => [1, 2, 3, 4, 5, 6].map((l) => ({ level: l, ...Object.fromEntries(CATEGORIES.map((cat) => [cat, POOLS[cat][l].length])) }));
   const stats = () => ({ ...catCount });
 
-  window.Quiz = { SCOPES, setScope, inScope: (q) => inScope(q), get scope() { return scope; }, GEO_TYPES, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
+  window.Quiz = { SCOPES, setScope, inScope: (q) => inScope(q), get scope() { return scope; }, GEO_TYPES, setShared, next, describe, pools: POOLS, LEVELS, MODES, CATEGORIES, newGame, clearHistory, unseenCount, totalCount, poolSizes, stats, skippedCities };
 })();
