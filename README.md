@@ -83,7 +83,7 @@ A history race through five eras: **Prehistory → Antiquity → Middle Ages →
 - Each era needs a number of correct answers before you travel on: **Short 2, Standard 3, Long 4**.
 - **Lives:** you start with 3. A wrong answer or a timeout costs one; arriving in a new era gives one back (up to 5).
 - **Eliminated** at 0 lives, by a threat of your era, with a short animated scene: a sabre-toothed cat, mammoths or a volcano; Spartan warriors, the arena's lions or a legion; the Black Death, Vikings or arrows from castle walls; pirates, cannon fire or the Great Fire of London; the Titanic's iceberg, a runaway train or a time machine failure.
-- **Winning:** the first traveller to reach today ends the journey once the round is complete, so everyone has had the same number of turns. Otherwise the one who got furthest wins; a lone survivor who is already ahead of everyone wins at once.
+- **Winning:** the first traveller to reach today ends the journey once the round is complete, so everyone has had the same number of turns. Eliminated travellers sit out and the others play on; if nobody reaches today, the journey ends when the last traveller is out, and the one who got furthest wins.
 - Questions come from their own pool, `data/timetravel-questions.json` (450 questions: prehistory 45, antiquity 78, Middle Ages 83, early modern 118, modern 126). They are not graded by difficulty, are drawn at random and never repeat in a game. `node tools/build-timetravel.js` turns the file into `data/timetravel.js` (checks IDs, duplicates and that every answer is a playable country).
 - Hot seat (1–6 players, bots) or online (same rooms as Voyage, on their own channel; a bot plays for a player who goes offline after 20 s).
 
@@ -91,7 +91,7 @@ A history race through five eras: **Prehistory → Antiquity → Middle Ages →
 
 A phone-friendly practice page with just the questions and the map, no board. Open it from the start screen, or go to `train.html` directly.
 
-- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). Each row has an **All** chip; tapping it again keeps only the option you chose last.
+- Choose categories, levels and geography question types (countries, flags, capitals, cities, landmarks). **⏳ Time Travel** is a category too: Geo Time Travel's 450 history questions, chosen by era (prehistory … modern) instead of by level. Each row has an **All** chip; tapping it again keeps only the option you chose last.
 - **Parts of the world:** practise Europe, Africa, Asia (without South-East Asia), Oceania & South-East Asia, or the Americas (with Tonga, Samoa and Kiribati, which sit next to them on the map), in any combination. A question belongs to the part where its answer country is, and the map opens on the chosen parts.
 - New questions come first. **Missed questions come back** a few questions later (never straight away) until you get them right twice in a row; then they count as *mastered*. Every 6th question revisits a mastered one (the one practised longest ago), and questions from the last few turns are avoided, so a fully mastered set keeps rotating.
 - "🔁 Practise my mistakes" drills only the questions you've missed. There are also an optional timer, a free region hint and an "I don't know" button.

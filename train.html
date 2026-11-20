@@ -23,7 +23,7 @@
   <!-- ============ HOME ============ -->
   <section id="home" class="t-screen active">
     <header class="t-head">
-      <a href="voyage.html" class="t-back" id="back-link">← Voyage</a>
+      <span class="t-head-gap" aria-hidden="true"></span>
       <h1>🎯 Training</h1>
       <button type="button" id="sound-btn" class="icon-btn" aria-label="Toggle sound">🔊</button>
     </header>
@@ -47,6 +47,7 @@
         <button type="button" class="chip-btn" data-cat="history">📜 History</button>
         <button type="button" class="chip-btn" data-cat="sports">⚽ Sports</button>
         <button type="button" class="chip-btn" data-cat="culture">🎭 Culture</button>
+        <button type="button" class="chip-btn" data-cat="timetravel">⏳ Time Travel</button>
       </div>
       <div id="type-row">
         <h3>Geography question types</h3>
@@ -59,6 +60,19 @@
           <button type="button" class="chip-btn" data-type="geoq">Landmarks &amp; facts</button>
         </div>
       </div>
+      <div id="era-row">
+        <h3>Time Travel eras</h3>
+        <div class="chips small" id="era-chips">
+          <button type="button" class="chip-btn all-chip" data-all="eras">All</button>
+          <button type="button" class="chip-btn" data-era="0">🦴 Prehistory</button>
+          <button type="button" class="chip-btn" data-era="1">🏛️ Antiquity</button>
+          <button type="button" class="chip-btn" data-era="2">🏰 Middle Ages</button>
+          <button type="button" class="chip-btn" data-era="3">⛵ Early Modern</button>
+          <button type="button" class="chip-btn" data-era="4">🏭 Modern</button>
+        </div>
+        <p class="area-note">The questions of Geo Time Travel: not graded by level, so the level chips don't apply to them.</p>
+      </div>
+      <div id="area-row">
       <h3>Parts of the world</h3>
       <div class="chips small" id="area-chips">
         <button type="button" class="chip-btn all-chip" data-all="areas">All</button>
@@ -69,6 +83,7 @@
         <button type="button" class="chip-btn" data-area="americas">Americas</button>
       </div>
       <p class="area-note">Asia here is without South-East Asia, which is practised with Oceania. Tonga, Samoa and Kiribati are practised with the Americas. Questions count by the country that is the answer.</p>
+      </div>
       <h3>Levels</h3>
       <div class="chips levels" id="level-chips">
         <button type="button" class="chip-btn all-chip" data-all="levels" style="--c:var(--accent)">All</button>
@@ -173,6 +188,7 @@
   <script src="data/sports.js"></script>
   <script src="data/geo-extra.js"></script>
   <script src="data/regions.js"></script>
+  <script src="data/timetravel.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/map.js"></script>
   <script src="js/quiz.js"></script>

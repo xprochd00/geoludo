@@ -4,7 +4,8 @@
  * on the map. Each era needs `need` correct answers (2, 3 or 4) before the player travels on; arriving in
  * a new era gives a life back (up to 5). A wrong answer or a timeout costs a life; at 0 the era claims the
  * player (a sabre-toothed cat, Spartans, the plague...). The first player to reach today ends the journey
- * once the round is complete (everyone gets as many turns); otherwise the one who got furthest wins.
+ * once the round is complete (everyone gets as many turns). Eliminated players sit out; the others play on
+ * until the last one is out, and then the one who got furthest wins.
  * Questions come from their own pool (data/timetravel.js), drawn at random, never twice in a game.
  *
  * Like Voyage: a host-run engine (hot seat: on this device; online: on the host's device, the state is
@@ -182,10 +183,9 @@
     function advance() {
       clearTimer();
       const n = S.players.length;
-      // a lone survivor who is already ahead of everyone wins at once
-      const left = S.players.filter(playing);
-      if (!left.length) return finish();
-      if (n > 1 && left.length === 1 && !S.finishers.length && S.players.every((o) => o === left[0] || progress(o) < progress(left[0]))) return finish();
+      // the journey goes on while anyone is still travelling; it ends when the last one is out
+      // (or, once someone has reached today, at the end of that round)
+      if (!S.players.some(playing)) return finish();
       let t = S.turn;
       for (let k = 0; k < n; k++) {
         if (t === n - 1) { if (S.finalRound) return finish(); S.round++; }

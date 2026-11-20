@@ -15,8 +15,13 @@
   const TIMER_SECS = 30;
   const STORE = 'geoludo.train.v1';
   const SETTINGS = 'geoludo.train-settings.v1';
-  const CATS = ['geo', 'history', 'sports', 'culture'];
-  const CAT_LABEL = { geo: '🗺️ Geography', history: '📜 History', sports: '⚽ Sports', culture: '🎭 Culture' };
+  const CATS = ['geo', 'history', 'sports', 'culture', 'timetravel'];
+  const CAT_LABEL = { geo: '🗺️ Geography', history: '📜 History', sports: '⚽ Sports', culture: '🎭 Culture', timetravel: '⏳ Time Travel' };
+  // Geo Time Travel's own questions (data/timetravel.js): practised by era instead of by level
+  const ERAS = [
+    { name: 'Prehistory', icon: '🦴', color: '#c98b4a' }, { name: 'Antiquity', icon: '🏛️', color: '#e0b04a' },
+    { name: 'Middle Ages', icon: '🏰', color: '#8fa7c9' }, { name: 'Early Modern', icon: '⛵', color: '#4ab0c9' }, { name: 'Modern', icon: '🏭', color: '#9a7cff' },
+  ];
   const GEO_TYPES = ['name', 'flag', 'capital', 'city', 'geoq'];
   /* Parts of the world to practise, by the answer's country. Tonga, Samoa and Kiribati sit next to the
    * Americas on this map (west of the date line), so they are practised with them. */
@@ -41,34 +46,30 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
   let prog = load(STORE, { n: 0, items: {} });
-  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], areas: AREAS.slice(), scope: 'world', timer: false, sound: true }, load(SETTINGS, {}));
+  const settings = Object.assign({ cats: ['geo'], types: GEO_TYPES.slice(), levels: [1, 2, 3, 4, 5, 6], areas: AREAS.slice(), eras: [0, 1, 2, 3, 4], scope: 'world', timer: false, sound: true }, load(SETTINGS, {}));
   if (!Quiz.SCOPES.some((x) => x.value === settings.scope)) settings.scope = 'world';
   // US states & Canadian provinces only: geography questions about them, so the other categories and parts of the world step aside
   const naOnly = () => settings.scope === 'na';
   const inScope = (e) => (e.pick.na ? settings.scope !== 'world' : settings.scope !== 'na');
   settings.areas = (settings.areas || []).filter((a) => AREAS.includes(a));
   if (!settings.areas.length) settings.areas = AREAS.slice();
+  settings.eras = (settings.eras || []).filter((x) => x >= 0 && x <= 4);
+  if (!settings.eras.length) settings.eras = [0, 1, 2, 3, 4];
   Sound.enabled = settings.sound;
   let picks = null; // the option rows (set up below)
 
-  /* "← back" returns to the game the player came from (remembered for this tab, so a reload keeps it). */
-  (function backLink() {
-    const GAMES = { voyage: { href: 'voyage.html', label: '← Voyage' }, ludo: { href: 'ludo/', label: '← GeoLudo' } };
-    let from = new URLSearchParams(location.search).get('from');
-    try {
-      if (GAMES[from]) sessionStorage.setItem('geoludo.train.from', from);
-      else from = sessionStorage.getItem('geoludo.train.from');
-    } catch (e) { /* storage unavailable */ }
-    if (!GAMES[from]) from = /\/ludo\//.test(document.referrer) ? 'ludo' : 'voyage';
-    $('back-link').href = GAMES[from].href;
-    $('back-link').textContent = GAMES[from].label;
-  })();
+
 
   /* ---------- Question catalogue ---------- */
   // Every question once (a question text appearing in two files is one entry).
   const ALL = [];
   const seenKey = new Set();
+  for (const q of window.TIME_TRAVEL_QUESTIONS || []) {
+    const c = window.WORLD.countries.find((x) => x.id === q.a);
+    if (c) ALL.push({ pick: { type: 'tt', c, h: { q: q.q }, era: q.era, key: 'tt:' + q.id }, cat: 'timetravel', lvl: 0, key: 'tt:' + q.id });
+  }
   for (const cat of CATS) {
+    if (!Quiz.pools[cat]) continue;
     for (let lvl = 1; lvl <= 6; lvl++) {
       for (const pick of Quiz.pools[cat][lvl]) {
         if (seenKey.has(pick.key)) continue;
@@ -83,7 +84,8 @@
 
   function filtered() {
     const allAreas = settings.areas.length === AREAS.length || naOnly();
-    return ALL.filter((e) => inScope(e) && (naOnly() || settings.cats.includes(e.cat)) && settings.levels.includes(e.lvl)
+    return ALL.filter((e) => inScope(e) && (naOnly() ? e.cat === 'geo' : settings.cats.includes(e.cat))
+      && (e.cat === 'timetravel' ? settings.eras.includes(e.pick.era) : settings.levels.includes(e.lvl))
       && (e.cat !== 'geo' || settings.types.includes(e.pick.type))
       && (allAreas || settings.areas.includes(areaOf(e.pick.c))));
   }
@@ -98,11 +100,15 @@
     $('scope-btn').textContent = `${sc.label} ▾`;
     document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => { b.disabled = naOnly() && b.dataset.cat !== 'geo'; });
     if (naOnly()) document.querySelectorAll('#cat-chips .chip-btn').forEach((b) => b.classList.toggle('active', b.dataset.cat === 'geo'));
-    $('area-chips').closest('.t-card').querySelectorAll('#area-chips, #area-chips + .area-note').forEach((x) => { x.hidden = naOnly(); });
-    const ah = $('area-chips').previousElementSibling;
-    if (ah && ah.tagName === 'H3') ah.hidden = naOnly();
+    document.querySelector('#type-chips [data-type="name"]').textContent = naOnly() ? 'States & provinces' : 'Countries';
+    $('area-row').hidden = naOnly(); // parts of the world don't apply to the US states & Canadian provinces
+    $('era-row').hidden = naOnly() || !settings.cats.includes('timetravel');
+    $('type-row').hidden = !naOnly() && !settings.cats.includes('geo');
+    document.querySelectorAll('#era-chips .chip-btn[data-era]').forEach((b) => b.classList.toggle('active', settings.eras.includes(+b.dataset.era)));
     document.querySelectorAll('.all-chip').forEach((b) => {
-      const on = !!picks && picks[b.dataset.all].isAll();
+      // only Geography applies to the US states & Canadian provinces: the categories' "All" is then off and unavailable
+      const on = !!picks && picks[b.dataset.all].isAll() && !(naOnly() && b.dataset.all === 'cats');
+      b.disabled = naOnly() && b.dataset.all === 'cats';
       b.classList.toggle('active', on);
       b.setAttribute('aria-pressed', on);
     });
@@ -126,11 +132,13 @@
     types: MultiPick({ order: GEO_TYPES, get: () => settings.types, set: (v) => { settings.types = v; }, onChange: syncChips }),
     levels: MultiPick({ order: [1, 2, 3, 4, 5, 6], get: () => settings.levels, set: (v) => { settings.levels = v; }, onChange: syncChips }),
     areas: MultiPick({ order: AREAS, get: () => settings.areas, set: (v) => { settings.areas = v; }, onChange: syncChips }),
+    eras: MultiPick({ order: [0, 1, 2, 3, 4], get: () => settings.eras, set: (v) => { settings.eras = v; }, onChange: syncChips }),
   };
   document.querySelectorAll('#cat-chips .chip-btn[data-cat]').forEach((b) => b.addEventListener('click', () => picks.cats.toggle(b.dataset.cat)));
   document.querySelectorAll('#type-chips .chip-btn[data-type]').forEach((b) => b.addEventListener('click', () => picks.types.toggle(b.dataset.type)));
   document.querySelectorAll('#level-chips .chip-btn[data-l]').forEach((b) => b.addEventListener('click', () => picks.levels.toggle(+b.dataset.l)));
   document.querySelectorAll('#area-chips .chip-btn[data-area]').forEach((b) => b.addEventListener('click', () => picks.areas.toggle(b.dataset.area)));
+  document.querySelectorAll('#era-chips .chip-btn[data-era]').forEach((b) => b.addEventListener('click', () => picks.eras.toggle(+b.dataset.era)));
   document.querySelectorAll('.all-chip').forEach((b) => b.addEventListener('click', () => picks[b.dataset.all].all()));
   $('scope-btn').addEventListener('click', async () => {
     const v = await Dialog.menu($('scope-btn'), Quiz.SCOPES, settings.scope);
@@ -155,6 +163,16 @@
     $('ring-fg').style.strokeDashoffset = 326.7 * (1 - m / Math.max(1, total));
     // progress table: category x level
     const rows = CATS.map((cat) => {
+      if (cat === 'timetravel') { // by era, not by level
+        const cells = [0, 1, 2, 3, 4].map((era) => {
+          const list = ALL.filter((e) => e.cat === cat && e.pick.era === era);
+          const mm = list.filter((e) => mastered(rec(e.key))).length;
+          const p = list.length ? mm / list.length : 0;
+          return `<div class="pt-cell" style="--c:${ERAS[era].color}" title="${ERAS[era].name}: ${mm} of ${list.length} mastered">
+            <i style="height:${Math.round(p * 100)}%"></i><span>${ERAS[era].icon} ${mm}/${list.length}</span></div>`;
+        }).join('') + '<div></div>';
+        return `<div class="pt-row"><div class="pt-name">${CAT_LABEL[cat]}</div>${cells}</div>`;
+      }
       const cells = [1, 2, 3, 4, 5, 6].map((l) => {
         const list = ALL.filter((e) => e.cat === cat && e.lvl === l);
         const mm = list.filter((e) => mastered(rec(e.key))).length;
@@ -244,7 +262,9 @@
     clearInterval(timerHandle);
     const e = choose();
     if (!e) return finish(true);
-    const q = Quiz.describe(e.pick, e.lvl, e.cat);
+    const q = e.cat === 'timetravel'
+      ? { level: 0, levelLabel: '', country: e.pick.c, type: 'tt', category: 'timetravel', key: e.key, kind: 'Tap the country on the map', prompt: e.pick.h.q, tag: 'Time Travel' }
+      : Quiz.describe(e.pick, e.lvl, e.cat);
     session.cur = { e, q, hinted: false, done: false };
     session.last = e.key;
     session.recent = [e.key, ...(session.recent || [])].slice(0, RECENT);
@@ -252,8 +272,13 @@
     session.lastCountry = q.country.id;
     const r = rec(e.key);
     const diff = $('q-diff');
-    diff.style.setProperty('--c', `var(--l${e.lvl})`);
-    diff.textContent = `${e.lvl} · ${q.levelLabel}`;
+    if (e.cat === 'timetravel') { // an era, not a level
+      diff.style.setProperty('--c', ERAS[e.pick.era].color);
+      diff.textContent = `${ERAS[e.pick.era].icon} ${ERAS[e.pick.era].name}`;
+    } else {
+      diff.style.setProperty('--c', `var(--l${e.lvl})`);
+      diff.textContent = `${e.lvl} · ${q.levelLabel}`;
+    }
     $('q-tag').textContent = q.tag;
     $('q-status').textContent = !r ? '✨ New' : isMistake(r) ? '🔁 Missed before' : mastered(r) ? '⭐ Mastered' : '📖 Practising';
     $('q-kind').textContent = q.kind.replace('Click', 'Tap');
