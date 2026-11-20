@@ -17,7 +17,7 @@
   const QUESTIONS = window.TIME_TRAVEL_QUESTIONS || [];
   const COLORS = ['#ef476f', '#06c167', '#ffb703', '#3a86ff', '#b15cff', '#00c2d1'];
   const MAX_PLAYERS = 6;
-  const START_LIVES = 3, MAX_LIVES = 5;
+  const START_LIVES = 3, MAX_LIVES = 3; // a new era gives back a lost life, never more than 3
   const Q_TIME = 45;
   const AUTO_NEXT = 5200, DOOM_MS = 3600;
   const TAKEOVER = 20; // online: seconds after going offline before a bot plays for the player
@@ -436,7 +436,7 @@
 
   function syncSetup() {
     document.querySelectorAll('#length-grid .format-btn').forEach((b) => b.classList.toggle('active', +b.dataset.need === setup.need));
-    $('length-hint').textContent = `${setup.need * NE} correct answers to reach today · 3 lives, +1 in each new era`;
+    $('length-hint').textContent = `${setup.need * NE} correct answers to reach today · 3 lives, a lost one back in each new era`;
     document.querySelectorAll('#format-section .format-btn').forEach((b) => b.classList.toggle('active', b.dataset.format === setup.format));
     $('hotseat-section').hidden = !!joinCode || setup.format !== 'hotseat';
     $('online-section').hidden = !joinCode && setup.format !== 'online';

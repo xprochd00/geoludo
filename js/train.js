@@ -240,7 +240,7 @@
   $('start-btn').addEventListener('click', () => startSession(false));
   $('mistakes-btn').addEventListener('click', () => startSession(true));
 
-  const REVIEW_EVERY = 6; // every 6th question revisits a mastered one (practised longest ago)
+  const REVIEW_EVERY = 8; // every 8th question revisits a mastered one (practised longest ago)
   const RECENT = 4; // questions from the last few turns are avoided while there is any alternative
   function choose() {
     const pool = session.pool;
