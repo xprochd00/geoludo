@@ -1,0 +1,552 @@
+[
+  {
+    "id": "R001",
+    "difficulty": 1,
+    "category": "regions",
+    "question": "In which US state is Hollywood, the centre of the American film industry?",
+    "answer": {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R002",
+    "difficulty": 1,
+    "category": "regions",
+    "question": "In which US state is the Grand Canyon?",
+    "answer": {
+      "code": "US-AZ",
+      "name": "Arizona",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R003",
+    "difficulty": 1,
+    "category": "regions",
+    "question": "In which US state is Las Vegas, famous for its casinos?",
+    "answer": {
+      "code": "US-NV",
+      "name": "Nevada",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R004",
+    "difficulty": 1,
+    "category": "regions",
+    "question": "In which US state is Walt Disney World near Orlando?",
+    "answer": {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R005",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which Canadian province can you see Niagara Falls from the Canadian side?",
+    "answer": {
+      "code": "CA-ON",
+      "name": "Ontario",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R006",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which US state did Japan attack Pearl Harbor in 1941?",
+    "answer": {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R007",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "Which is the largest US state by area?",
+    "answer": {
+      "code": "US-AK",
+      "name": "Alaska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R008",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which US state does most of Yellowstone National Park lie?",
+    "answer": {
+      "code": "US-WY",
+      "name": "Wyoming",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R009",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which US state is the Alamo, site of an 1836 siege?",
+    "answer": {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R010",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "Which Canadian province has French as its only official language?",
+    "answer": {
+      "code": "CA-QC",
+      "name": "Quebec",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R011",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which US state is New Orleans, famous for jazz and Mardi Gras?",
+    "answer": {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R012",
+    "difficulty": 2,
+    "category": "regions",
+    "question": "In which US state is Times Square in Manhattan?",
+    "answer": {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R013",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Mount Rushmore, with the faces of four presidents?",
+    "answer": {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R014",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Churchill Downs, where the most famous American horse race is run each May?",
+    "answer": {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R015",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which Canadian province is Banff, Canada's oldest national park?",
+    "answer": {
+      "code": "CA-AB",
+      "name": "Alberta",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R016",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which Canadian province is Stanley Park in Vancouver?",
+    "answer": {
+      "code": "CA-BC",
+      "name": "British Columbia",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R017",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Nashville, the home of country music?",
+    "answer": {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R018",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Mount Rainier, a glacier-covered volcano near Seattle?",
+    "answer": {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R019",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Salt Lake City, headquarters of the Mormon church?",
+    "answer": {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R020",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is the Liberty Bell in Philadelphia?",
+    "answer": {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R021",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is the Gateway Arch in St. Louis?",
+    "answer": {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R022",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which Canadian province is the novel 'Anne of Green Gables' set?",
+    "answer": {
+      "code": "CA-PE",
+      "name": "Prince Edward Island",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R023",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Chicago, the 'Windy City'?",
+    "answer": {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R024",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Detroit, the 'Motor City'?",
+    "answer": {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R025",
+    "difficulty": 3,
+    "category": "regions",
+    "question": "In which US state is Harvard University?",
+    "answer": {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R026",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which Canadian territory did the Klondike Gold Rush of 1896–1899 take place?",
+    "answer": {
+      "code": "CA-YT",
+      "name": "Yukon",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R027",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which Canadian province are the Hopewell Rocks, shaped by the world's highest tides in the Bay of Fundy?",
+    "answer": {
+      "code": "CA-NB",
+      "name": "New Brunswick",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R028",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which Canadian province is Churchill, the 'Polar Bear Capital of the World'?",
+    "answer": {
+      "code": "CA-MB",
+      "name": "Manitoba",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R029",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which Canadian province is L'Anse aux Meadows, the Viking settlement site?",
+    "answer": {
+      "code": "CA-NL",
+      "name": "Newfoundland and Labrador",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R030",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state is Crater Lake, the deepest lake in the United States?",
+    "answer": {
+      "code": "US-OR",
+      "name": "Oregon",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R031",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state is the Rock and Roll Hall of Fame in Cleveland?",
+    "answer": {
+      "code": "US-OH",
+      "name": "Ohio",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R032",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state did the Wright brothers make the first powered flight, at Kitty Hawk in 1903?",
+    "answer": {
+      "code": "US-NC",
+      "name": "North Carolina",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R033",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state are the cliff dwellings of Mesa Verde National Park?",
+    "answer": {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R034",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state is Glacier National Park, on the border with Canada?",
+    "answer": {
+      "code": "US-MT",
+      "name": "Montana",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R035",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state was Martin Luther King Jr. born, in Atlanta?",
+    "answer": {
+      "code": "US-GA",
+      "name": "Georgia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R036",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "Which US state is nicknamed the 'Land of 10,000 Lakes'?",
+    "answer": {
+      "code": "US-MN",
+      "name": "Minnesota",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R037",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which US state are the Carlsbad Caverns?",
+    "answer": {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R038",
+    "difficulty": 4,
+    "category": "regions",
+    "question": "In which Canadian province is Regina, home of the training academy of the Royal Canadian Mounted Police?",
+    "answer": {
+      "code": "CA-SK",
+      "name": "Saskatchewan",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R039",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "Which Canadian territory was created in 1999 as a homeland for the Inuit?",
+    "answer": {
+      "code": "CA-NU",
+      "name": "Nunavut",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R040",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "In which Canadian territory is Yellowknife, near large diamond mines?",
+    "answer": {
+      "code": "CA-NT",
+      "name": "Northwest Territories",
+      "country": "CA"
+    }
+  },
+  {
+    "id": "R041",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "In which US state is Acadia National Park, on the Atlantic coast?",
+    "answer": {
+      "code": "US-ME",
+      "name": "Maine",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R042",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "In which US state was the ice cream brand Ben & Jerry's founded, in Burlington?",
+    "answer": {
+      "code": "US-VT",
+      "name": "Vermont",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R043",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "Which US state is most famous for growing potatoes?",
+    "answer": {
+      "code": "US-ID",
+      "name": "Idaho",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R044",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "Which US state grows the most corn?",
+    "answer": {
+      "code": "US-IA",
+      "name": "Iowa",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R045",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "Which was the first state to ratify the US Constitution, in 1787?",
+    "answer": {
+      "code": "US-DE",
+      "name": "Delaware",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R046",
+    "difficulty": 5,
+    "category": "regions",
+    "question": "Which is the smallest US state by area?",
+    "answer": {
+      "code": "US-RI",
+      "name": "Rhode Island",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R047",
+    "difficulty": 6,
+    "category": "regions",
+    "question": "Which is the only US state with a one-chamber (unicameral) legislature?",
+    "answer": {
+      "code": "US-NE",
+      "name": "Nebraska",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R048",
+    "difficulty": 6,
+    "category": "regions",
+    "question": "In which US state is Crater of Diamonds State Park, where the public can dig for diamonds?",
+    "answer": {
+      "code": "US-AR",
+      "name": "Arkansas",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R049",
+    "difficulty": 6,
+    "category": "regions",
+    "question": "In which US state is the New River Gorge Bridge, one of the longest single-span arch bridges in the world?",
+    "answer": {
+      "code": "US-WV",
+      "name": "West Virginia",
+      "country": "US"
+    }
+  },
+  {
+    "id": "R050",
+    "difficulty": 6,
+    "category": "regions",
+    "question": "In which US state is the town of Rugby, which claims to be the geographic centre of North America?",
+    "answer": {
+      "code": "US-ND",
+      "name": "North Dakota",
+      "country": "US"
+    }
+  }
+]
