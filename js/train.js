@@ -49,7 +49,7 @@
 
   /* "← back" returns to the game the player came from (remembered for this tab, so a reload keeps it). */
   (function backLink() {
-    const GAMES = { voyage: { href: 'index.html', label: '← Voyage' }, ludo: { href: 'ludo/', label: '← GeoLudo' } };
+    const GAMES = { voyage: { href: 'voyage.html', label: '← Voyage' }, ludo: { href: 'ludo/', label: '← GeoLudo' } };
     let from = new URLSearchParams(location.search).get('from');
     try {
       if (GAMES[from]) sessionStorage.setItem('geoludo.train.from', from);

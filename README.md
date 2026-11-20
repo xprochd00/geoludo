@@ -1,20 +1,22 @@
-# ⛵ GeoLudo Voyage — Sail Around the World
+# 🌍 GeoGames — Geography games on a real world map
 
-A geography race around the world. On your turn you **choose how hard your question is**, answer it by tapping the right country on an interactive world map, and your ship sails one port per level. Play on one device (hot seat) or **online, each on your own device** (phone, tablet or computer), by sharing a room link.
-
-The site has three parts:
+Geography board and race games: every move is earned by finding the right place on an interactive world map (countries, flags, capitals, cities, landmarks, history, sports and culture). Play on one device (hot seat) or **online, each on your own device** (phone, tablet or computer), by sharing a room link.
 
 | Page | What it is |
 |------|------------|
-| `index.html` | ⛵ **GeoLudo Voyage**, the main game |
-| `train.html` | 🎯 **Solo training**: questions and map only, to practise on your own |
-| `ludo/` | 🎲 **GeoLudo Classic**, the earlier Ludo-board version, kept unchanged |
+| `index.html` | 🌍 **GeoGames home**: a card per game, with a short description and the rules |
+| `ludo/` | 🎲 **Geo Ludo**: the board race (Quick / Classic / Custom), hot seat or online |
+| `voyage.html` | ⛵ **Geo Voyage**: sail around the world in 30 ports, hot seat or online |
+| `timetravel.html` | ⏳ **Geo Time Travel**: from prehistory to today (coming next) |
+| `train.html` | 🎯 **Training**: questions and map only, to practise on your own |
+
+Every page has the same top bar (`js/nav.js`, `css/nav.css`): **← Home**, the GeoGames logo (also home), a **Games** menu and a **💬 Feedback** form (bug / wrong information / suggestion / general; it opens a prefilled GitHub issue, or the text can be copied). The bar steps aside while a game is being played, so the map keeps the room on phones. Old Voyage invitation links (`index.html?room=…`) are forwarded to `voyage.html`.
 
 ## Play
 
 There's nothing to install or build. Either:
 
-- open `index.html` in a browser, or
+- open `index.html` (the GeoGames home) in a browser, or
 - serve the folder, e.g. `python3 -m http.server` and open <http://localhost:8000>.
 
 Online play needs the page to be served over the web (e.g. GitHub Pages, below), not opened as a file.
@@ -166,7 +168,9 @@ All 197 countries are included: the 193 UN members plus Vatican City, Palestine,
 ## Project layout
 
 ```
-index.html          ⛵ GeoLudo Voyage (setup, lobby, game)
+index.html          🌍 GeoGames home (css/hub.css)
+voyage.html         ⛵ Geo Voyage (setup, lobby, game)
+js/nav.js           top bar on every page: Home, logo, Games menu, Feedback form (css/nav.css)
 js/voyage.js        Voyage: rules engine (runs on the host), rendering, ships & route, hot seat and online wiring
 js/net.js           online rooms through a public MQTT relay (a small built-in client): host / join / reconnect
 css/voyage.css      Voyage styles

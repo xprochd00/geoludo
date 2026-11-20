@@ -1146,7 +1146,7 @@
     let b = $('net-banner');
     if (!text) { if (b) b.remove(); return; }
     if (!b) { b = document.createElement('div'); b.id = 'net-banner'; b.className = 'net-banner'; document.body.appendChild(b); }
-    b.innerHTML = `${esc(text)}${fatal ? ' <a href="index.html">Menu</a>' : ''}`;
+    b.innerHTML = `${esc(text)}${fatal ? ' <a href="voyage.html">Menu</a>' : ''}`;
   }
 
   /* ======================================================================
@@ -1190,7 +1190,7 @@
     }
     clearInterval(pingTimer);
     stopTimer();
-    location.href = 'index.html';
+    location.href = 'voyage.html';
   }
   $('hint-btn').addEventListener('click', askHint);
   $('sound-btn').addEventListener('click', () => { Sound.enabled = !Sound.enabled; $('sound-btn').textContent = Sound.enabled ? '🔊' : '🔇'; });
